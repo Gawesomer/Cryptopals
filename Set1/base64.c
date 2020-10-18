@@ -12,7 +12,7 @@ size_t binaryfromhex_size(size_t hexlen)
 	return round_up_div(hexlen, 2);
 }
 
-/* Returns hex value of `c` if within range [0x0, 0xF] ortherwise 255 */
+/* Returns hex value of `c` if within range [0x0, 0xF], otherwise 255 */
 uint8_t hexchar_destringify(char c)
 {
 	if ('0' <= c && c <= '9')
@@ -125,6 +125,22 @@ uint8_t *binarytobase64(uint8_t *bits, size_t numbytes)
 	return base64;
 }
 
+/* Returns char representation of `i` if within range [0, 63], otherwise '\0' */
+char base64int_stringify(uint8_t i)
+{
+	if (0 <= i && i <= 25)
+		return i+'A';
+	if (26 <= i && i <= 51)
+		return i+'a';
+	if (52 <= i && i <= 61)
+		return i+'0';
+	if (i == 62)
+		return '+';
+	if (i == 63)
+		return '/';
+	return '\0';
+}
+
 /* Encodes uint8_t array in base64 representation to base64 encoding
  * params:
  * 	- base64: uint8_t array in base64 representation (i.e. all elements are
@@ -138,7 +154,25 @@ uint8_t *binarytobase64(uint8_t *bits, size_t numbytes)
  */
 char *base64stringify(uint8_t *base64, size_t numbytes)
 {
-	return NULL;
+	char *base64str;
+	char base64int;
+	int i;
+
+	if (!base64)
+		return NULL;
+
+	base64str = calloc(numbytes, sizeof(char));
+
+	for (i = 0; i < numbytes; ++i) {
+		base64int = base64int_stringify(base64[i]);
+		if (base64int == '\0') {
+			free(base64str);
+			return NULL;
+		}
+		base64str[i] = base64int;
+	}
+
+	return base64str;
 }
 
 /* Returns length of base64 translated string for given `hexlen` */
