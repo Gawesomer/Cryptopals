@@ -161,7 +161,7 @@ char *base64stringify(uint8_t *base64, size_t numbytes)
 	if (!base64)
 		return NULL;
 
-	base64str = calloc(numbytes, sizeof(char));
+	base64str = calloc(numbytes+1, sizeof(char));
 
 	for (i = 0; i < numbytes; ++i) {
 		base64int = base64int_stringify(base64[i]);
@@ -171,6 +171,7 @@ char *base64stringify(uint8_t *base64, size_t numbytes)
 		}
 		base64str[i] = base64int;
 	}
+	base64str[i] = '\0';
 
 	return base64str;
 }
