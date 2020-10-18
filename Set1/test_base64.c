@@ -212,7 +212,7 @@ void test_hextobase64_empty(void)
 {
 	printf("%s\n", __func__);
 
-	assert(strcmp(hextobase64(""), "") == 0);
+	assert(hextobase64("") == NULL);
 }
 
 void test_hextobase64_wholebyte(void)

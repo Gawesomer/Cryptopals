@@ -176,10 +176,11 @@ char *base64stringify(uint8_t *base64, size_t numbytes)
 	return base64str;
 }
 
-/* Returns length of base64 translated string for given `hexlen` */
-size_t base64fromhex_len(size_t hexlen)
+/* Returns amount of padding that should be added to a base64 string of length
+ * `base64len` */
+size_t base64padding_len(size_t base64len)
 {
-	return 0;
+	return (base64len%4) ? 4-(base64len%4) : 0;
 }
 
 /* Convert hex string to base64 string
@@ -188,11 +189,43 @@ size_t base64fromhex_len(size_t hexlen)
  * 		  representing a hex string
  * returns:
  * 	C-string representing base64 translation of `hexstr`,
- * 	or NULL if `hexstr` is NULL or contains invalid hex codes.
+ * 	or NULL if `hexstr` is NULL, empty or contains invalid hex codes.
  * 	returned array has been dynamically allocated and should be freed by
  * 	user
  */
 char *hextobase64(char *hexstr)
 {
-	return NULL;
+	size_t hexlen, binarysize, base64size, base64padding;
+	uint8_t *binary, *base64;
+	char *base64str, *base64padded;
+	int i;
+
+	if (!hexstr)
+		return NULL;
+	hexlen = strlen(hexstr);
+
+	binarysize = binaryfromhex_size(hexlen);
+	binary = hextobinary(hexstr);
+
+	base64size = base64frombinary_size(binarysize);
+	base64 = binarytobase64(binary, binarysize);
+	free(binary);
+
+	base64str = base64stringify(base64, base64size);
+	free(base64);
+
+	if (!base64str)
+		return NULL;
+
+	base64padding = base64padding_len(base64size);
+	if (base64padding != 0)
+		base64padded = realloc(base64str, base64size+base64padding+1);
+	else
+		base64padded = base64str;
+
+	for (i = 0; i < base64padding; ++i)
+		base64padded[base64size+i] = '=';
+	base64padded[base64size+base64padding] = '\0';
+
+	return base64padded;
 }
