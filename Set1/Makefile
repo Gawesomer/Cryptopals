@@ -6,9 +6,11 @@ ARFLAGS  = rvu
 
 .PHONEY: all clean
 
-all: test_base64
+all: test_hex test_base64
 
-test: test_base64.o
+test_hex: test_hex.o div.o
+
+test_base64: test_base64.o hex.o div.o
 
 clean: 
-	rm -f *.o *.a test_base64
+	rm -f *.o *.a test_hex test_base64

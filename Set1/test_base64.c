@@ -13,87 +13,6 @@ void assert_bytes_eq(size_t expectedlen, uint8_t *expected, uint8_t *actual)
 		assert(actual[i] == expected[i]);
 }
 
-/*** hextobinary ***/
-
-void test_hextobinary_null(void)
-{
-	printf("%s\n", __func__);
-
-	assert(hextobinary(NULL) == NULL);
-}
-
-void test_hextobinary_empty(void)
-{
-	printf("%s\n", __func__);
-
-	assert(hextobinary("") == NULL);
-}
-
-void test_hextobinary_wholebyte(void)
-{
-	printf("%s\n", __func__);
-
-	char *hexstr = "49";
-	uint8_t expectedbinary[1] = {0x49};
-	uint8_t *actualbinary = hextobinary(hexstr);
-
-	assert_bytes_eq(1, expectedbinary, actualbinary);
-
-	free(actualbinary);
-}
-
-void test_hextobinary_halfbyte(void)
-{
-	printf("%s\n", __func__);
-
-	char *hexstr = "A";
-	uint8_t expectedbinary[1] = {0x0A};
-	uint8_t *actualbinary = hextobinary(hexstr);
-
-	assert_bytes_eq(1, expectedbinary, actualbinary);
-
-	free(actualbinary);
-}
-
-void test_hextobinary_lowercase(void)
-{
-	printf("%s\n", __func__);
-
-	char *hexstr = "a";
-	uint8_t expectedbinary[1] = {0x0a};
-	uint8_t *actualbinary = hextobinary(hexstr);
-
-	assert_bytes_eq(1, expectedbinary, actualbinary);
-
-	free(actualbinary);
-}
-
-void test_hextobinary_invalidhex(void)
-{
-	printf("%s\n", __func__);
-
-	assert(hextobinary("G") == NULL);
-}
-
-void test_hextobinary_cryptopals_example(void)
-{
-	printf("%s\n", __func__);
-
-	char *hexstr = "49276d206b696c6c696e6720796f757220627261696e206c696b" \
-			"65206120706f69736f6e6f7573206d757368726f6f6d";
-	uint8_t expectedbinary[48] = {0x49, 0x27, 0x6d, 0x20, 0x6b, 0x69, \
-		0x6c, 0x6c, 0x69, 0x6e, 0x67, 0x20, 0x79, 0x6f, 0x75, 0x72, \
-		0x20, 0x62, 0x72, 0x61, 0x69, 0x6e, 0x20, 0x6c, 0x69, 0x6b, \
-		0x65, 0x20, 0x61, 0x20, 0x70, 0x6f, 0x69, 0x73, 0x6f, 0x6e, \
-		0x6f, 0x75, 0x73, 0x20, 0x6d, 0x75, 0x73, 0x68, 0x72, 0x6f, \
-		0x6f, 0x6d};
-	uint8_t *actualbinary = hextobinary(hexstr);
-
-	assert_bytes_eq(48, expectedbinary, actualbinary);
-
-	free(actualbinary);
-}
-
 /*** binarytobase64 ***/
 
 void test_binarytobase64_null(void)
@@ -278,14 +197,6 @@ void test_hextobase64_cryptopals_example(void)
 
 int main(void)
 {
-	test_hextobinary_null();
-	test_hextobinary_empty();
-	test_hextobinary_wholebyte();
-	test_hextobinary_halfbyte();
-	test_hextobinary_lowercase();
-	test_hextobinary_invalidhex();
-	test_hextobinary_cryptopals_example();
-
 	test_binarytobase64_null();
 	test_binarytobase64_wholebyte();
 	test_binarytobase64_halfbyte();
