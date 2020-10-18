@@ -131,9 +131,9 @@ char base64int_stringify(uint8_t i)
 	if (0 <= i && i <= 25)
 		return i+'A';
 	if (26 <= i && i <= 51)
-		return i+'a';
+		return i+'a'-26;
 	if (52 <= i && i <= 61)
-		return i+'0';
+		return i+'0'-52;
 	if (i == 62)
 		return '+';
 	if (i == 63)

@@ -164,6 +164,32 @@ void test_base64stringify_twobytes(void)
 	free(actualbase64str);
 }
 
+void test_base64stringify_lowercase(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t base64[1] = {34};
+	char *expectedbase64str = "i";
+	char *actualbase64str = base64stringify(base64, 1);
+
+	assert(strcmp(expectedbase64str, actualbase64str) == 0);
+
+	free(actualbase64str);
+}
+
+void test_base64stringify_digit(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t base64[1] = {56};
+	char *expectedbase64str = "4";
+	char *actualbase64str = base64stringify(base64, 1);
+
+	assert(strcmp(expectedbase64str, actualbase64str) == 0);
+
+	free(actualbase64str);
+}
+
 void test_base64stringify_invalidbyte(void)
 {
 	printf("%s\n", __func__);
@@ -267,6 +293,8 @@ int main(void)
 
 	test_base64stringify_null();
 	test_base64stringify_twobytes();
+	test_base64stringify_lowercase();
+	test_base64stringify_digit();
 	test_base64stringify_invalidbyte();
 
 	test_hextobase64_null();
