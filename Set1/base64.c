@@ -13,7 +13,7 @@ size_t binaryfromhex_size(size_t hexlen)
 }
 
 /* Returns hex value of `c` if within range [0x0, 0xF], otherwise 255 */
-uint8_t hexchar_destringify(char c)
+uint8_t hex_chartoint(char c)
 {
 	if ('0' <= c && c <= '9')
 		return c-'0';
@@ -39,7 +39,7 @@ uint8_t *hextobinary(char *hexstr)
 {
 	uint8_t *bits;
 	size_t numbytes;
-	uint8_t c;
+	uint8_t hexchar;
 	int ihex, ibin;
 
 	if (!hexstr)
@@ -54,12 +54,12 @@ uint8_t *hextobinary(char *hexstr)
 
 	ibin = ihex = 0;
 	while (hexstr[ihex] != '\0') {
-		c = hexchar_destringify(hexstr[ihex]);
-		if (c > 15) {
+		hexchar = hex_chartoint(hexstr[ihex]);
+		if (hexchar > 15) {
 			free(bits);
 			return NULL;
 		}
-		bits[ibin] += c;
+		bits[ibin] += hexchar;
 
 		if (ihex%2 == 0)
 			bits[ibin] <<= 4;
@@ -126,7 +126,7 @@ uint8_t *binarytobase64(uint8_t *bits, size_t numbytes)
 }
 
 /* Returns char representation of `i` if within range [0, 63], otherwise '\0' */
-char base64int_stringify(uint8_t i)
+char base64_inttochar(uint8_t i)
 {
 	if (0 <= i && i <= 25)
 		return i+'A';
@@ -152,10 +152,10 @@ char base64int_stringify(uint8_t i)
  * 	returned C-string has been dynamically allocated and should be freed by
  * 	user
  */
-char *base64stringify(uint8_t *base64, size_t numbytes)
+char *base64_tostring(uint8_t *base64, size_t numbytes)
 {
 	char *base64str;
-	char base64int;
+	char base64char;
 	int i;
 
 	if (!base64)
@@ -164,12 +164,12 @@ char *base64stringify(uint8_t *base64, size_t numbytes)
 	base64str = calloc(numbytes+1, sizeof(char));
 
 	for (i = 0; i < numbytes; ++i) {
-		base64int = base64int_stringify(base64[i]);
-		if (base64int == '\0') {
+		base64char = base64_inttochar(base64[i]);
+		if (base64char == '\0') {
 			free(base64str);
 			return NULL;
 		}
-		base64str[i] = base64int;
+		base64str[i] = base64char;
 	}
 	base64str[i] = '\0';
 
@@ -211,7 +211,7 @@ char *hextobase64(char *hexstr)
 	base64 = binarytobase64(binary, binarysize);
 	free(binary);
 
-	base64str = base64stringify(base64, base64size);
+	base64str = base64_tostring(base64, base64size);
 	free(base64);
 
 	if (!base64str)

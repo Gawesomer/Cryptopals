@@ -142,61 +142,61 @@ void test_binarytobase64_twobytes(void)
 	free(actualbase64);
 }
 
-/*** base64stringify ***/
+/*** base64_tostring ***/
 
-void test_base64stringify_null(void)
+void test_base64_tostring_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(base64stringify(NULL, 0) == NULL);
+	assert(base64_tostring(NULL, 0) == NULL);
 }
 
-void test_base64stringify_twobytes(void)
+void test_base64_tostring_twobytes(void)
 {
 	printf("%s\n", __func__);
 
 	uint8_t base64[2] = {18, 16};
 	char *expectedbase64str = "SQ";
-	char *actualbase64str = base64stringify(base64, 2);
+	char *actualbase64str = base64_tostring(base64, 2);
 
 	assert(strcmp(expectedbase64str, actualbase64str) == 0);
 
 	free(actualbase64str);
 }
 
-void test_base64stringify_lowercase(void)
+void test_base64_tostring_lowercase(void)
 {
 	printf("%s\n", __func__);
 
 	uint8_t base64[1] = {34};
 	char *expectedbase64str = "i";
-	char *actualbase64str = base64stringify(base64, 1);
+	char *actualbase64str = base64_tostring(base64, 1);
 
 	assert(strcmp(expectedbase64str, actualbase64str) == 0);
 
 	free(actualbase64str);
 }
 
-void test_base64stringify_digit(void)
+void test_base64_tostring_digit(void)
 {
 	printf("%s\n", __func__);
 
 	uint8_t base64[1] = {56};
 	char *expectedbase64str = "4";
-	char *actualbase64str = base64stringify(base64, 1);
+	char *actualbase64str = base64_tostring(base64, 1);
 
 	assert(strcmp(expectedbase64str, actualbase64str) == 0);
 
 	free(actualbase64str);
 }
 
-void test_base64stringify_invalidbyte(void)
+void test_base64_tostring_invalidbyte(void)
 {
 	printf("%s\n", __func__);
 
 	uint8_t base64[1] = {65};
 	
-	assert(base64stringify(base64, 1) == NULL);
+	assert(base64_tostring(base64, 1) == NULL);
 }
 
 /*** hextobase64 ***/
@@ -291,11 +291,11 @@ int main(void)
 	test_binarytobase64_halfbyte();
 	test_binarytobase64_twobytes();
 
-	test_base64stringify_null();
-	test_base64stringify_twobytes();
-	test_base64stringify_lowercase();
-	test_base64stringify_digit();
-	test_base64stringify_invalidbyte();
+	test_base64_tostring_null();
+	test_base64_tostring_twobytes();
+	test_base64_tostring_lowercase();
+	test_base64_tostring_digit();
+	test_base64_tostring_invalidbyte();
 
 	test_hextobase64_null();
 	test_hextobase64_empty();
