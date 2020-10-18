@@ -78,7 +78,7 @@ uint8_t *hextobinary(char *hexstr)
  */
 size_t base64frombinary_size(size_t numbytes)
 {
-	return 0;
+	return round_up_div(numbytes*4, 3);
 }
 
 /* Convert binary representation to base64
@@ -93,7 +93,36 @@ size_t base64frombinary_size(size_t numbytes)
  */
 uint8_t *binarytobase64(uint8_t *bits, size_t numbytes)
 {
-	return NULL;
+	uint8_t *base64;
+	size_t base64size;
+	uint8_t base64mask, binarymask;
+	int ibase64, ibin;
+
+	if (!bits || numbytes == 0)
+		return NULL;
+
+	base64size = base64frombinary_size(numbytes);
+	base64 = calloc(base64size, sizeof(uint8_t));
+
+	base64mask = 1<<5;
+	binarymask = 1<<7;
+	ibase64 = ibin = 0;
+	while (ibin < numbytes) {
+		if (bits[ibin]&binarymask)
+			base64[ibase64] |= base64mask;
+		base64mask >>= 1;
+		if (!base64mask) {
+			base64mask = 1<<5;
+			++ibase64;
+		}
+		binarymask >>= 1;
+		if (!binarymask) {
+			binarymask = 1<<7;
+			++ibin;
+		}
+	}
+
+	return base64;
 }
 
 /* Encodes uint8_t array in base64 representation to base64 encoding
