@@ -109,9 +109,9 @@ void test_binarytobase64_wholebyte(void)
 
 	uint8_t binary[1] = {0x49};
 	uint8_t expectedbase64[2] = {18, 16};
-	uint8_t *actualbase64 = binarytobase64(binary, 2);
+	uint8_t *actualbase64 = binarytobase64(binary, 1);
 
-	assert_bytes_eq(2, expectedbase64, actualbase64);
+	assert_bytes_eq(1, expectedbase64, actualbase64);
 
 	free(actualbase64);
 }
@@ -122,7 +122,7 @@ void test_binarytobase64_halfbyte(void)
 
 	uint8_t binary[1] = {0xA};
 	uint8_t expectedbase64[2] = {2, 32};
-	uint8_t *actualbase64 = binarytobase64(binary, 2);
+	uint8_t *actualbase64 = binarytobase64(binary, 1);
 
 	assert_bytes_eq(1, expectedbase64, actualbase64);
 
