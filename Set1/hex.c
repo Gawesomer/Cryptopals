@@ -69,5 +69,3 @@ uint8_t *hextobinary(char *hexstr)
 
 	return bits;
 }
-
-
