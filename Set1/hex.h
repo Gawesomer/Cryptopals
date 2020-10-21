@@ -16,6 +16,6 @@ size_t binaryfromhex_size(size_t hexlen);
  * 	returned array has been dynamically allocated and should be freed by
  * 	user
  */
-uint8_t *hextobinary(char *hexstr);
+uint8_t *hextobinary(const char *hexstr);
 
 #endif

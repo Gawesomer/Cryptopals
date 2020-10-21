@@ -32,7 +32,7 @@ uint8_t hex_chartoint(char c)
  * 	returned array has been dynamically allocated and should be freed by
  * 	user
  */
-uint8_t *hextobinary(char *hexstr)
+uint8_t *hextobinary(const char *hexstr)
 {
 	uint8_t *bits;
 	size_t numbytes;

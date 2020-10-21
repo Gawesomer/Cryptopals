@@ -11,6 +11,6 @@
  * 	returned array has been dynamically allocated and should be freed by
  * 	user
  */
-char *hextobase64(char *hexstr);
+char *hextobase64(const char *hexstr);
 
 #endif

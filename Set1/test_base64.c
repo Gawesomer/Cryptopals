@@ -68,7 +68,7 @@ void test_base64_tostring_twobytes(void)
 	printf("%s\n", __func__);
 
 	uint8_t base64[2] = {18, 16};
-	char *expectedbase64str = "SQ";
+	char expectedbase64str[] = "SQ";
 	char *actualbase64str = base64_tostring(base64, 2);
 
 	assert(strcmp(expectedbase64str, actualbase64str) == 0);
@@ -81,7 +81,7 @@ void test_base64_tostring_lowercase(void)
 	printf("%s\n", __func__);
 
 	uint8_t base64[1] = {34};
-	char *expectedbase64str = "i";
+	char expectedbase64str[] = "i";
 	char *actualbase64str = base64_tostring(base64, 1);
 
 	assert(strcmp(expectedbase64str, actualbase64str) == 0);
@@ -94,7 +94,7 @@ void test_base64_tostring_digit(void)
 	printf("%s\n", __func__);
 
 	uint8_t base64[1] = {56};
-	char *expectedbase64str = "4";
+	char expectedbase64str[] = "4";
 	char *actualbase64str = base64_tostring(base64, 1);
 
 	assert(strcmp(expectedbase64str, actualbase64str) == 0);
@@ -131,8 +131,8 @@ void test_hextobase64_wholebyte(void)
 {
 	printf("%s\n", __func__);
 
-	char *hexstr = "89";
-	char *expectedstr = "iQ==";
+	char hexstr[] = "89";
+	char expectedstr[] = "iQ==";
 	char *base64str = hextobase64(hexstr);
 
 	assert(strcmp(expectedstr, base64str) == 0);
@@ -144,8 +144,8 @@ void test_hextobase64_halfbyte(void)
 {
 	printf("%s\n", __func__);
 
-	char *hexstr = "A";
-	char *expectedstr = "Cg==";
+	char hexstr[] = "A";
+	char expectedstr[] = "Cg==";
 	char *base64str = hextobase64(hexstr);
 
 	assert(strcmp(expectedstr, base64str) == 0);
@@ -157,8 +157,8 @@ void test_hextobase64_lowercase(void)
 {
 	printf("%s\n", __func__);
 
-	char *hexstr = "a";
-	char *expectedstr = "Cg==";
+	char hexstr[] = "a";
+	char expectedstr[] = "Cg==";
 	char *base64str = hextobase64(hexstr);
 
 	assert(strcmp(expectedstr, base64str) == 0);
@@ -177,10 +177,10 @@ void test_hextobase64_cryptopals_example(void)
 {
 	printf("%s\n", __func__);
 
-	char *hexstr = "49276d206b696c6c696e6720796f757220627261696e206c696b" \
-			"65206120706f69736f6e6f7573206d757368726f6f6d";
-	char *expectedstr = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29" \
-			     "ub3VzIG11c2hyb29t";
+	char hexstr[] = "49276d206b696c6c696e6720796f757220627261696e206c696" \
+			"b65206120706f69736f6e6f7573206d757368726f6f6d";
+	char expectedstr[] = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc2" \
+			     "9ub3VzIG11c2hyb29t";
 	char *base64str = hextobase64(hexstr);
 
 	assert(strcmp(expectedstr, base64str) == 0);

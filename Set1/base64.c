@@ -22,7 +22,7 @@ size_t base64frombinary_size(size_t numbytes)
  * 	returned array has been dynamically allocated and should be freed by
  * 	user
  */
-uint8_t *binarytobase64(uint8_t *bits, size_t numbytes)
+uint8_t *binarytobase64(const uint8_t *bits, size_t numbytes)
 {
 	uint8_t *base64;
 	size_t base64size;
@@ -83,7 +83,7 @@ char base64_inttochar(uint8_t i)
  * 	returned C-string has been dynamically allocated and should be freed by
  * 	user
  */
-char *base64_tostring(uint8_t *base64, size_t numbytes)
+char *base64_tostring(const uint8_t *base64, size_t numbytes)
 {
 	char *base64str;
 	char base64char;
@@ -124,7 +124,7 @@ size_t base64padding_len(size_t base64len)
  * 	returned array has been dynamically allocated and should be freed by
  * 	user
  */
-char *hextobase64(char *hexstr)
+char *hextobase64(const char *hexstr)
 {
 	size_t hexlen, binarysize, base64size, base64padding;
 	uint8_t *binary, *base64;
