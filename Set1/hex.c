@@ -69,3 +69,17 @@ uint8_t *hextobinary(const char *hexstr)
 
 	return bits;
 }
+
+/* Convert binary to hex string
+ * params:
+ * 	- bits: uint8_t array binary buffer
+ * returns:
+ * 	C-string with characters in range [0, 1, ..., 9, A, ..., F]
+ * 	representing hex translation of `bits`, or NULL if `bits` is NULL
+ * 	returned C-string has been dynamically allocated and shoould be freed
+ * 	by user
+ */
+char *binarytohex(const uint8_t *bits)
+{
+	return NULL;
+}
