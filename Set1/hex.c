@@ -70,6 +70,17 @@ uint8_t *hextobinary(const char *hexstr)
 	return bits;
 }
 
+/* Returns char representation of hex value if within range [0x0, 0xF],
+ * otherwise '\0' */
+char hex_inttochar(uint8_t i)
+{
+	if (0 <= i && i <= 9)
+		return i+'0';
+	if (10 <= i && i <= 15)
+		return i+'A'-10;
+	return '\0';
+}
+
 /* Convert binary to hex string
  * params:
  * 	- bits: bits to translate to hex
@@ -82,5 +93,30 @@ uint8_t *hextobinary(const char *hexstr)
  */
 char *binarytohex(const uint8_t *bits, size_t numbytes)
 {
-	return NULL;
+	char *hexstr;
+	char hexchar;
+	int i;
+
+	if (!bits)
+		return NULL;
+
+	hexstr = calloc((2*numbytes)+1, sizeof(char));
+
+	for (i = 0; i < 2*numbytes; ++i) {
+		hexchar = hex_inttochar(bits[i]>>4);
+		if (hexchar == '\0') {
+			free(hexstr);
+			return NULL;
+		}
+		hexstr[2*i] = hexchar;
+		hexchar = hex_inttochar(bits[i]&0xF);
+		if (hexchar == '\0') {
+			free(hexstr);
+			return NULL;
+		}
+		hexstr[(2*i)+1] = hexchar;
+	}
+	hexstr[i] = '\0';
+
+	return hexstr;
 }

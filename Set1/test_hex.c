@@ -131,8 +131,8 @@ void test_binarytohex_cryptopals_example(void)
 		0x72, 0x61, 0x69, 0x6e, 0x20, 0x6c, 0x69, 0x6b, 0x65, 0x20, \
 		0x61, 0x20, 0x70, 0x6f, 0x69, 0x73, 0x6f, 0x6e, 0x6f, 0x75, \
 		0x73, 0x20, 0x6d, 0x75, 0x73, 0x68, 0x72, 0x6f, 0x6f, 0x6d};
-	char expectedhex[] = "49276d206b696c6c696e6720796f757220627261696e20" \
-			"6c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+	char expectedhex[] = "49276D206B696C6C696E6720796F757220627261696E20" \
+			"6C696B65206120706F69736F6E6F7573206D757368726F6F6D";
 	char *actualhex = binarytohex(binary, 48);
 
 	assert(strcmp(expectedhex, actualhex) == 0);
