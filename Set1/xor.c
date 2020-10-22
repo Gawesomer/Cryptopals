@@ -11,7 +11,17 @@
  */
 uint8_t *xor_binarrays(const uint8_t *a, const uint8_t *b, size_t size)
 {
-	return NULL;
+	uint8_t *res;
+	int i;
+
+	if (!a || !b)
+		return NULL;
+
+	res = calloc(size, sizeof(uint8_t));
+	for (i = 0; i < size; ++i)
+		res[i] = a[i] ^ b[i];
+
+	return res;
 }
 
 /* XOR two equal length C-string representing hex strings
