@@ -1,0 +1,28 @@
+Bug:
+	It looks like the `free(res_bin)` in `xor.c:xor_hexstrs()` is running
+	into trouble in `test_xor_hexstrs_cryptopals_example` but only when
+	the test is run with the other tests.
+
+	➜  Set1 git:(main) ✗ ./test_xor
+	test_xor_binarrays_null
+	test_xor_binarrays_single_byte
+	test_xor_binarrays_two_bytes
+	test_xor_hexstrs_null
+	test_xor_hexstrs_empty
+	test_xor_hexstrs_single_bytes
+	0x7f8e1b4058c0
+	test_xor_hexstrs_results_in_letters
+	0x7f8e1b4058d0
+	test_xor_hexstrs_lowercase
+	0x7f8e1b4058b0
+	test_xor_hexstrs_odd_length
+	0x7f8e1b4058c0
+	test_xor_hexstrs_different_sizes
+	0x7f8e1b4058b0
+	0x7f8e1b4058c0
+	test_xor_hexstrs_cryptopals_example
+	0x7f8e1b4058b0
+	test_xor(1307,0x113ef2dc0) malloc: Incorrect checksum for freed object 0x7f8e1b4058e0: probably modified after being freed.
+	Corrupt value: 0x3030303030303030
+	test_xor(1307,0x113ef2dc0) malloc: *** set a breakpoint in malloc_error_break to debug
+	[1]    1307 abort      ./test_xor

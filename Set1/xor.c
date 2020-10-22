@@ -67,7 +67,6 @@ char *xor_hexstrs(const char *a, const char *b)
 	free(b_bin);
 
 	res = binarytohex(res_bin, min_size);
-	printf("%p\n", res);
 	free(res_bin);
 
 	if (min_len%2 != 0) {
