@@ -61,6 +61,19 @@ void test_hextobinary_lowercase(void)
 	free(actualbinary);
 }
 
+void test_hextobinary_odd_length(void)
+{
+	printf("%s\n", __func__);
+
+	char hexstr[] = "FFF";
+	uint8_t expectedbinary[] = {0x0F, 0xFF};
+	uint8_t *actualbinary = hextobinary(hexstr);
+
+	assert_bytes_eq(2, expectedbinary, actualbinary);
+
+	free(actualbinary);
+}
+
 void test_hextobinary_invalidhex(void)
 {
 	printf("%s\n", __func__);
@@ -147,6 +160,7 @@ int main(void)
 	test_hextobinary_wholebyte();
 	test_hextobinary_halfbyte();
 	test_hextobinary_lowercase();
+	test_hextobinary_odd_length();
 	test_hextobinary_invalidhex();
 	test_hextobinary_cryptopals_example();
 

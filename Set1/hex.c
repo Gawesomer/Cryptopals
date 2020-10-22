@@ -29,6 +29,8 @@ uint8_t hex_chartoint(char c)
  * 	uint8_t array of size `binaryfromhex_size` representing binary
  * 	translation of `hexstr`, or NULL if `hexstr` is NULL or contains
  * 	invalid hex codes.
+ * 	note, array will be padded right (i.e. will begin with four zero bits)
+ * 	if the length of `hexstr` is odd
  * 	returned array has been dynamically allocated and should be freed by
  * 	user
  */
@@ -38,11 +40,15 @@ uint8_t *hextobinary(const char *hexstr)
 	size_t numbytes;
 	uint8_t hexchar;
 	int ihex, ibin;
+	int oddlen;
+	size_t len;
 
 	if (!hexstr)
 		return NULL;
 
-	numbytes = binaryfromhex_size(strlen(hexstr));
+	len = strlen(hexstr);
+	oddlen = (len%2 != 0);
+	numbytes = binaryfromhex_size(len);
 
 	if (numbytes == 0)
 		return NULL;
@@ -58,14 +64,12 @@ uint8_t *hextobinary(const char *hexstr)
 		}
 		bits[ibin] += hexchar;
 
-		if (ihex%2 == 0)
+		if ((ihex+oddlen)%2 == 0)
 			bits[ibin] <<= 4;
 		else
 			++ibin;
 		++ihex;
 	}
-	if (ibin%2 == 0)
-		bits[ibin] >>= 4;
 
 	return bits;
 }
