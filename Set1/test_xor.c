@@ -62,15 +62,8 @@ void test_xor_hexstrs_empty(void)
 {
 	printf("%s\n", __func__);
 
-	char *res;
-
-	res = xor_hexstrs("", "b");
-	assert(strcmp(res, "") == 0);
-	free(res);
-
-	res = xor_hexstrs("a", "");
-	assert(strcmp(res, "") == 0);
-	free(res);
+	assert(xor_hexstrs("", "b") == NULL);
+	assert(xor_hexstrs("a", "") == NULL);
 }
 
 void test_xor_hexstrs_single_bytes(void)
@@ -115,7 +108,7 @@ void test_xor_hexstrs_odd_length(void)
 
 	char *res;
 
-	res = xor_hexstrs("fff", "aaa");
+	res = xor_hexstrs("FFF", "AAA");
 	assert(strcmp(res, "555") == 0);
 
 	free(res);
@@ -127,11 +120,11 @@ void test_xor_hexstrs_different_sizes(void)
 
 	char *res;
 
-	res = xor_hexstrs("ffaa", "aaffcc");
+	res = xor_hexstrs("FFAA", "AAFFCC");
 	assert(strcmp(res, "5555") == 0);
 	free(res);
 
-	res = xor_hexstrs("aaffcc", "ffaa");
+	res = xor_hexstrs("AAFFCC", "FFAA");
 	assert(strcmp(res, "5555") == 0);
 	free(res);
 }

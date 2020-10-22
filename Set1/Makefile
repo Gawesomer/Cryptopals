@@ -8,7 +8,7 @@ ARFLAGS  = rvu
 
 all: test_xor test_hex test_base64 main
 
-test_xor: test_xor.o cassert.o
+test_xor: test_xor.o hex.o div.o cassert.o
 
 test_hex: test_hex.o div.o cassert.o
 

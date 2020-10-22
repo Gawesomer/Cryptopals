@@ -1,3 +1,5 @@
+#include "hex.h"
+
 /* XOR two equal length binary arrays
  * params:
  * 	- a: binary array of size `size`
@@ -40,5 +42,40 @@ uint8_t *xor_binarrays(const uint8_t *a, const uint8_t *b, size_t size)
  */
 char *xor_hexstrs(const char *a, const char *b)
 {
-	return NULL;
+	char *res, *resoddlen;
+	uint8_t *a_bin, *b_bin;
+	size_t a_len, b_len, min_len;
+	size_t a_bin_size, b_bin_size, min_size;
+	uint8_t *res_bin;
+
+	a_bin = hextobinary(a);
+	b_bin = hextobinary(b);
+
+	if (!a || !b || !a_bin || !b_bin)
+		return NULL;
+
+	a_len = strlen(a);
+	b_len = strlen(b);
+	min_len = (a_len <= b_len) ? a_len : b_len;
+
+	a_bin_size = binaryfromhex_size(a_len);
+	b_bin_size = binaryfromhex_size(b_len);
+	min_size = (a_bin_size <= b_bin_size) ? a_bin_size : b_bin_size;
+
+	res_bin = xor_binarrays(a_bin, b_bin, min_size);
+	free(a_bin);
+	free(b_bin);
+
+	res = binarytohex(res_bin, min_size);
+	printf("%p\n", res);
+	free(res_bin);
+
+	if (min_len%2 != 0) {
+		resoddlen = calloc(min_len+1, sizeof(char));
+		strcpy(resoddlen, res+1);
+		free(res);
+		return resoddlen;
+	}
+
+	return res;
 }
