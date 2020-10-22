@@ -4,7 +4,7 @@ CPPFLAGS = -Wall -pedantic
 
 ARFLAGS  = rvu
 
-.PHONEY: all clean
+.PHONY: all clean
 
 all: test_xor test_hex test_base64 main
 
