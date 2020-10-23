@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
-
-#include "div.h"
+#include "hex.h"
 
 /* Returns size in bytes of binary translation from hex for given `hexlen` */
 size_t binaryfromhex_size(size_t hexlen)

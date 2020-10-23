@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <assert.h>
+#include "cassert.h"
 
 void assert_bytes_eq(size_t expectedlen, const uint8_t *expected, const uint8_t *actual)
 {
