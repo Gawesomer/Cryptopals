@@ -1,20 +1,30 @@
 CC	 = gcc
 CFLAGS	 = -g -ggdb3
-CPPFLAGS = -Wall -pedantic
+CPPFLAGS = -Wall -pedantic -I ./include
 
 ARFLAGS  = rvu
 
 .PHONY: all clean
 
-all: test_xor test_hex test_base64 main
+SRCS = $(shell find . -name "*.c")
+OBJS = $(SRCS:%.c=%.o)
 
-test_xor: test_xor.o hex.o div.o cassert.o
+PROGRAMS=set1/challenge1/main set1/challenge1/tests/test_base64 \
+	 set1/challenge1/tests/test_hex set1/challenge2/tests/test_xor
 
-test_hex: test_hex.o div.o cassert.o
+all: $(PROGRAMS)
 
-test_base64: test_base64.o hex.o div.o cassert.o
+set1/challenge1/main: set1/challenge1/main.o set1/challenge1/base64.o \
+	set1/challenge1/hex.o util/div.o
 
-main: main.o base64.o hex.o div.o
+set1/challenge1/tests/test_base64: set1/challenge1/tests/test_base64.o \
+	set1/challenge1/hex.o util/div.o util/cassert.o
+
+set1/challenge1/tests/test_hex: set1/challenge1/tests/test_hex.o util/div.o \
+	util/cassert.o
+
+set1/challenge2/tests/test_xor: set1/challenge2/tests/test_xor.o \
+	set1/challenge1/hex.o util/div.o util/cassert.o
 
 clean: 
-	rm -f *.o *.a test_xor test_hex test_base64 main
+	$(RM) *.o *.a $(PROGRAMS) $(OBJS)

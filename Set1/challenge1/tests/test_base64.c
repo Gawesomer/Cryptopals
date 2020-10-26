@@ -5,7 +5,7 @@
 #include <assert.h>
 
 #include "cassert.h"
-#include "base64.c"
+#include "../base64.c"
 
 /*** binarytobase64 ***/
 

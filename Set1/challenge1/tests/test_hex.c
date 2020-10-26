@@ -5,7 +5,7 @@
 #include <assert.h>
 
 #include "cassert.h"
-#include "hex.c"
+#include "../hex.c"
 
 /*** hextobinary ***/
 

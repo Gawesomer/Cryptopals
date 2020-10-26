@@ -5,7 +5,7 @@
 #include <assert.h>
 
 #include "cassert.h"
-#include "xor.c"
+#include "../xor.c"
 
 /*** xor_binarrays ***/
 
