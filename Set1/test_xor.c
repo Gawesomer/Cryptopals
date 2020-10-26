@@ -91,18 +91,6 @@ void test_xor_hexstrs_results_in_letters(void)
 	free(res);
 }
 
-void test_xor_hexstrs_lowercase(void)
-{
-	printf("%s\n", __func__);
-
-	char *res;
-
-	res = xor_hexstrs("ff", "aa");
-	assert(strcmp(res, "55") == 0);
-
-	free(res);
-}
-
 void test_xor_hexstrs_odd_length(void)
 {
 	printf("%s\n", __func__);
@@ -111,6 +99,18 @@ void test_xor_hexstrs_odd_length(void)
 
 	res = xor_hexstrs("FFF", "AAA");
 	assert(strcmp(res, "555") == 0);
+
+	free(res);
+}
+
+void test_xor_hexstrs_lowercase(void)
+{
+	printf("%s\n", __func__);
+
+	char *res;
+
+	res = xor_hexstrs("ff", "aa");
+	assert(strcmp(res, "55") == 0);
 
 	free(res);
 }
@@ -154,8 +154,8 @@ int main(void)
 	test_xor_hexstrs_empty();
 	test_xor_hexstrs_single_bytes();
 	test_xor_hexstrs_results_in_letters();
-	test_xor_hexstrs_lowercase();
 	test_xor_hexstrs_odd_length();
+	test_xor_hexstrs_lowercase();
 	test_xor_hexstrs_different_sizes();
 	test_xor_hexstrs_cryptopals_example();
 
