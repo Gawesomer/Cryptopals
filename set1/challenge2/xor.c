@@ -1,4 +1,4 @@
-#include "hex.h"
+#include "xor.h"
 
 /* XOR two equal length binary arrays
  * params:
