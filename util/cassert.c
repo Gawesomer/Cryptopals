@@ -1,4 +1,5 @@
 #include "cassert.h"
+#include <stdio.h>
 
 void assert_floats_eq(float expected, float actual, float eps)
 {
@@ -9,8 +10,8 @@ void assert_floats_eq(float expected, float actual, float eps)
 	else
 		upper = expected+eps;
 
-	if ((FLT_MIN+eps) >= expected)
-		lower = FLT_MIN;
+	if ((-1)*(FLT_MAX+eps) >= expected)
+		lower = (-1)*FLT_MAX;
 	else
 		lower = expected-eps;
 
