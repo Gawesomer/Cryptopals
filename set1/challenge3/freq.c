@@ -4,26 +4,22 @@
  * params:
  * 	- bits: binary array
  * 	- size: size of `bits`
- * 	- numletters: return buffer will hold number of letters found in `bits`
  * returns:
  * 	int array of size 26 with values at index `i` set to the number of
  * 	occurences of the `i`th letter in the latin alphabet, in `bits`
- * 	or NULL if `bits` or `numletters` is NULL
- * 	`numletters` will have been set to the number of latin letters found in
- * 	`bits`
+ * 	or NULL if `bits` is NULL
  * 	returned array has been dynamically allocated and should be freed by
  * 	user
  */
-int *occmap_from_binary(const uint8_t *bits, size_t size, int *numletters)
+int *occmap_from_binary(const uint8_t *bits, size_t size)
 {
 	int *occmap;
 	int i, c;
 
-	if (!bits || !numletters)
+	if (!bits)
 		return NULL;
 
 	occmap = calloc(26, sizeof(int));
-	(*numletters) = 0;
 
 	for (i = 0; i < size; ++i) {
 		if ('A' <= bits[i] && bits[i] <= 'Z')
@@ -33,7 +29,6 @@ int *occmap_from_binary(const uint8_t *bits, size_t size, int *numletters)
 		else
 			continue;
 		occmap[c]++;
-		(*numletters)++;
 	}
 
 	return occmap;
