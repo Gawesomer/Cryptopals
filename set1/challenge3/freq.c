@@ -82,7 +82,16 @@ float *occmap_to_freqmap(const int occmap[26])
  */
 float *freqmap_from_binary(const uint8_t *bits, size_t size)
 {
-	return NULL;
+	int *occmap;
+	float *freqmap;
+
+	occmap = occmap_from_binary(bits, size);
+	freqmap = occmap_to_freqmap(occmap);
+
+	if (occmap)
+		free(occmap);
+
+	return freqmap;
 }
 
 /* Compute frequency score of `actual_freq` relative to `lang_freq`

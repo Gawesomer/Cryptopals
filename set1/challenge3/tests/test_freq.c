@@ -188,6 +188,87 @@ void test_freqmap_from_binary_null(void)
 	assert(freqmap_from_binary(NULL, 0) == NULL);
 }
 
+void test_freqmap_from_binary_empty(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t bits[] = {0};
+	float *actual_map;
+	float expected_map[26] = {0.00f};
+
+	actual_map = freqmap_from_binary(bits, 0);
+
+	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+
+	free(actual_map);
+}
+
+void test_freqmap_from_binary_single_byte(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t bits[] = {'E'};
+	float *actual_map;
+	float expected_map[26] = {0.00f};
+	expected_map[4] = 100.00f;
+
+	actual_map = freqmap_from_binary(bits, 1);
+
+	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+
+	free(actual_map);
+}
+
+void test_freqmap_from_binary_lowercase(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t bits[] = {'e'};
+	float *actual_map;
+	float expected_map[26] = {0.00f};
+	expected_map[4] = 100.00f;
+
+	actual_map = freqmap_from_binary(bits, 1);
+
+	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+
+	free(actual_map);
+}
+
+void test_freqmap_from_binary_nonletter(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t bits[] = {'7'};
+	float *actual_map;
+	float expected_map[26] = {0.00f};
+
+	actual_map = freqmap_from_binary(bits, 1);
+
+	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+
+	free(actual_map);
+}
+
+void test_freqmap_from_binary_multiple_bytes(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t bits[] = {'h', 'e', 'y', ',', ' ', 'b', 'y', 'e', '.'};
+	float *actual_map;
+	float expected_map[26] = {0.00f};
+	expected_map[1] = 16.67f;
+	expected_map[4] = 33.33f;
+	expected_map[7] = 16.67f;
+	expected_map[24] = 33.33f;
+
+	actual_map = freqmap_from_binary(bits, 9);
+
+	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+
+	free(actual_map);
+}
+
 int main(void)
 {
 	test_occmap_from_binary_null();
@@ -204,6 +285,11 @@ int main(void)
 	test_occmap_to_freqmap_multiple_bytes();
 
 	test_freqmap_from_binary_null();
+	test_freqmap_from_binary_empty();
+	test_freqmap_from_binary_single_byte();
+	test_freqmap_from_binary_lowercase();
+	test_freqmap_from_binary_nonletter();
+	test_freqmap_from_binary_multiple_bytes();
 
 	return EXIT_SUCCESS;
 }
