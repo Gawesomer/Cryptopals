@@ -39,6 +39,41 @@ int *occmap_from_binary(const uint8_t *bits, size_t size, int *numletters)
 	return occmap;
 }
 
+/* Compute frequency map for given occurence map
+ * params:
+ * 	- occmap: occupation map for latin alphabet
+ * returns:
+ * 	float array of size 26 with values at index `i` set to the frequency
+ * 	of the `i`th letter in the latin alphabet
+ * 	or NULL if `occmap` is NULL or contains negative elements,
+ */
+float *occmap_to_freqmap(const int occmap[26])
+{
+	float *freqmap;
+	int numletters;
+	int i;
+
+	if (!occmap)
+		return NULL;
+
+	numletters = 0;
+	for (i = 0; i < 26; ++i) {
+		if (occmap[i] < 0)
+			return NULL;
+		numletters += occmap[i];
+	}
+
+	freqmap = calloc(26, sizeof(float));
+
+	if (numletters == 0)
+		return freqmap;
+
+	for (i = 0; i < 26; ++i)
+		freqmap[i] = ((float)occmap[i])/numletters*100.00f;
+
+	return freqmap;
+}
+
 /* Compute character frequency of binary array
  * params:
  * 	- bits: binary array
