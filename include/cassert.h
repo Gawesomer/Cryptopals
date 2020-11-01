@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <float.h>
 #include <assert.h>
 
 /* Assert that `expected` and `actual` floats are equal

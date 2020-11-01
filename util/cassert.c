@@ -2,8 +2,19 @@
 
 void assert_floats_eq(float expected, float actual, float eps)
 {
-	assert((expected-eps) <= actual);
-	assert(actual <= (expected+eps));
+	float lower, upper;
+
+	if ((FLT_MAX-eps) <= expected)
+		upper = FLT_MAX;
+	else
+		upper = expected+eps;
+
+	if ((FLT_MIN+eps) >= expected)
+		lower = FLT_MIN;
+	else
+		lower = expected-eps;
+
+	assert(lower <= actual && actual <= upper);
 }
 
 void assert_bytes_eq(size_t expectedlen, const uint8_t *expected, \
