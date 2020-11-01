@@ -1,0 +1,3 @@
+Add tests to util
+Implement hextoascii
+Implement freq_score_from_binary
