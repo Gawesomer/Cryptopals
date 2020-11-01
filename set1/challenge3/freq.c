@@ -104,12 +104,21 @@ float *freqmap_from_binary(const uint8_t *bits, size_t size)
  * 	float frequency score computed by summing the difference in frequency
  * 	of the letters in the latin alphabet between `actual_freq` and
  * 	`lang_freq`
- * 	or NULL if either `actual_freq` or `lang_freq` is NULL
+ * 	or FLT_MAX if either `actual_freq` or `lang_freq` is NULL
  * notes:
  * 	a lower frequency score indicates a closer resemblence to the given
  * 	language frequency
  */
 float freq_score(const float actual_freq[26], const float lang_freq[26])
 {
-	return 0;
+	float score = 0.00f;
+	int i;
+
+	if (!actual_freq || !lang_freq)
+		return FLT_MAX;
+
+	for (i = 0; i < 26; ++i)
+		score += fabs(lang_freq[i] - actual_freq[i]);
+
+	return score;
 }

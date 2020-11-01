@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <float.h>
+#include <math.h>
 
 /* English letter frequency based on a sample of 40,000 words obtained from:
  * http://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
