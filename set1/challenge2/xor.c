@@ -2,8 +2,8 @@
 
 /* XOR two equal length binary arrays
  * params:
- * 	- a: binary array of size `size`
- * 	- b: binary array of size `size`
+ * 	- a: binary array
+ * 	- b: binary array
  * 	- size: size of `a` and `b`
  * returns:
  * 	uint8_t binary array of size `size` containing the result of a^b,
