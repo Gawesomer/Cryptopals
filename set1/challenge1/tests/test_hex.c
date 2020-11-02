@@ -252,6 +252,52 @@ void test_hextoascii_multiple_bytes(void)
 	free(actual);
 }
 
+/*** asciitohex ***/
+
+void test_asciitohex_null(void)
+{
+	printf("%s\n", __func__);
+
+	assert(asciitohex(NULL) == NULL);
+}
+
+void test_asciitohex_empty(void)
+{
+	printf("%s\n", __func__);
+
+	assert(asciitohex("") == NULL);
+}
+
+void test_asciitohex_single_letter(void)
+{
+	printf("%s\n", __func__);
+
+	char ascii[] = "A";
+	char expected[] = "41";
+	char *actual;
+
+	actual = asciitohex(ascii);
+
+	assert(strcmp(expected, actual) == 0);
+
+	free(actual);
+}
+
+void test_asciitohex_multiple_letters(void)
+{
+	printf("%s\n", __func__);
+
+	char ascii[] = "Hello world!";
+	char expected[] = "48656C6C6F20776F726C6421";
+	char *actual;
+
+	actual = asciitohex(ascii);
+
+	assert(strcmp(expected, actual) == 0);
+
+	free(actual);
+}
+
 int main(void)
 {
 	test_hextobinary_null();
@@ -276,6 +322,11 @@ int main(void)
 	test_hextoascii_odd_length();
 	test_hextoascii_invalidhex();
 	test_hextoascii_multiple_bytes();
+
+	test_asciitohex_null();
+	test_asciitohex_empty();
+	test_asciitohex_single_letter();
+	test_asciitohex_multiple_letters();
 
 	return EXIT_SUCCESS;
 }

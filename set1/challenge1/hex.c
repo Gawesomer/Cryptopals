@@ -173,5 +173,23 @@ char *hextoascii(const char *hexstr)
  */
 char *asciitohex(const char *ascii)
 {
-	return NULL;
+	char *hex;
+	size_t len;
+	uint8_t *binary;
+	int i;
+
+	if (!ascii || ascii[0] == '\0')
+		return NULL;
+
+	len = strlen(ascii);
+
+	binary = calloc(len, sizeof(uint8_t));
+	for (i = 0; i < len; ++i)
+		binary[i] = ascii[i];
+
+	hex = binarytohex(binary, len);
+
+	free(binary);
+
+	return hex;
 }
