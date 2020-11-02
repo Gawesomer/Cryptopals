@@ -154,6 +154,104 @@ void test_binarytohex_cryptopals_example(void)
 	free(actualhex);
 }
 
+/*** hextoascii ***/
+
+void test_hextoascii_null(void)
+{
+	printf("%s\n", __func__);
+
+	assert(hextoascii(NULL) == NULL);
+}
+
+void test_hextoascii_empty(void)
+{
+	printf("%s\n", __func__);
+
+	assert(hextoascii("") == NULL);
+}
+
+void test_hextoascii_halfbyte(void)
+{
+	printf("%s\n", __func__);
+
+	char hexstr[] = "9";
+	char expected[] = "\t";
+	char *actual;
+
+	actual = hextoascii(hexstr);
+
+	assert(strcmp(expected, actual) == 0);
+
+	free(actual);
+}
+
+void test_hextoascii_wholebyte(void)
+{
+	printf("%s\n", __func__);
+
+	char hexstr[] = "4B";
+	char expected[] = "K";
+	char *actual;
+
+	actual = hextoascii(hexstr);
+
+	assert(strcmp(expected, actual) == 0);
+
+	free(actual);
+}
+
+void test_hextoascii_lowercase(void)
+{
+	printf("%s\n", __func__);
+
+	char hexstr[] = "4b";
+	char expected[] = "K";
+	char *actual;
+
+	actual = hextoascii(hexstr);
+
+	assert(strcmp(expected, actual) == 0);
+
+	free(actual);
+}
+
+void test_hextoascii_odd_length(void)
+{
+	printf("%s\n", __func__);
+
+	char hexstr[] = "94b";
+	char expected[] = "\tK";
+	char *actual;
+
+	actual = hextoascii(hexstr);
+
+	assert(strcmp(expected, actual) == 0);
+
+	free(actual);
+}
+
+void test_hextoascii_invalidhex(void)
+{
+	printf("%s\n", __func__);
+
+	assert(hextoascii("G") == NULL);
+}
+
+void test_hextoascii_multiple_bytes(void)
+{
+	printf("%s\n", __func__);
+
+	char hexstr[] = "48656C6C6F20776F726C6421";
+	char expected[] = "Hello world!";
+	char *actual;
+
+	actual = hextoascii(hexstr);
+
+	assert(strcmp(expected, actual) == 0);
+
+	free(actual);
+}
+
 int main(void)
 {
 	test_hextobinary_null();
@@ -169,6 +267,15 @@ int main(void)
 	test_binarytohex_wholebyte();
 	test_binarytohex_letter();
 	test_binarytohex_cryptopals_example();
+
+	test_hextoascii_null();
+	test_hextoascii_empty();
+	test_hextoascii_halfbyte();
+	test_hextoascii_wholebyte();
+	test_hextoascii_lowercase();
+	test_hextoascii_odd_length();
+	test_hextoascii_invalidhex();
+	test_hextoascii_multiple_bytes();
 
 	return EXIT_SUCCESS;
 }

@@ -121,3 +121,57 @@ char *binarytohex(const uint8_t *bits, size_t numbytes)
 
 	return hexstr;
 }
+
+/* Convert hex string to ASCII representation
+ * params:
+ * 	- hexstr: C-string with characters in range [0, 1, ..., 9, A, ..., F]
+ * 		  representing a hex string 
+ * returns:
+ * 	C-string representing ascii translation of `hexstr`
+ * 	or NULL if `hexstr` is NULL or empty, or contains invalid hex codes.
+ * 	returned C-string has been dynamically allocated and should be freed by
+ * 	user
+ * notes:
+ * 	does not support extended ASCII, translation of hex values larger than
+ * 	`7F` should not be expected to be correct
+ * 	this is due to the fact that whether `char` is signed or unsigned is
+ * 	machine dependent hence, values larger than 127 may be negated
+ */
+char *hextoascii(const char *hexstr)
+{
+	char *ascii;
+	size_t ascii_len;
+	uint8_t *binary;
+	int i;
+
+	binary = hextobinary(hexstr);
+	if (!binary || hexstr[0] == '\0')
+		return NULL;
+
+	ascii_len = binaryfromhex_size(strlen(hexstr));
+	ascii = calloc(ascii_len+1, sizeof(char));
+
+	for (i = 0; i < ascii_len; ++i) {
+		ascii[i] = binary[i];
+	}
+	ascii[i] = '\0';
+
+	free(binary);
+
+	return ascii;
+}
+
+/* Convert ASCII string to hex string
+ * params:
+ * 	- ascii: C-string
+ * returns:
+ * 	C-string with characters in range [0, 1, ..., 9, A, ..., F]
+ * 	representing the hex translation of `ascii`
+ * 	or NULL if `ascii` is NULL or empty
+ * 	returned C-string has been dynamically allocated and should be freed by
+ * 	user
+ */
+char *asciitohex(const char *ascii)
+{
+	return NULL;
+}
