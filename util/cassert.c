@@ -1,5 +1,4 @@
 #include "cassert.h"
-#include <stdio.h>
 
 void assert_floats_eq(float expected, float actual, float eps)
 {
