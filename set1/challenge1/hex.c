@@ -96,28 +96,30 @@ char *binarytohex(const uint8_t *bits, size_t numbytes)
 {
 	char *hexstr;
 	char hexchar;
-	int i;
+	int i, j;
 
 	if (!bits)
 		return NULL;
 
 	hexstr = calloc((2*numbytes)+1, sizeof(char));
 
-	for (i = 0; i < 2*numbytes; ++i) {
-		hexchar = hex_inttochar(bits[i]>>4);
-		if (hexchar == '\0') {
-			free(hexstr);
-			return NULL;
-		}
-		hexstr[2*i] = hexchar;
-		hexchar = hex_inttochar(bits[i]&0xF);
-		if (hexchar == '\0') {
-			free(hexstr);
-			return NULL;
-		}
-		hexstr[(2*i)+1] = hexchar;
-	}
-	hexstr[i] = '\0';
+        i = j = 0;
+        while (i < 2*numbytes) {
+                hexchar = hex_inttochar(bits[j]>>4);
+                if (hexchar == '\0') {
+                        free(hexstr);
+                        return NULL;
+                }
+                hexstr[i++] = hexchar;
+                hexchar = hex_inttochar(bits[j]&0xF);
+                if (hexchar == '\0') {
+                        free(hexstr);
+                        return NULL;
+                }
+                hexstr[i++] = hexchar;
+                j++;
+        }
+        hexstr[i] = '\0';
 
 	return hexstr;
 }
