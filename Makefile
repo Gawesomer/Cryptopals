@@ -13,7 +13,8 @@ DEPS = $(OBJS:%.o=%.d)
 PROGRAMS=set1/challenge1/main set1/challenge1/tests/test_base64 \
 	 set1/challenge1/tests/test_hex set1/challenge2/tests/test_xor \
 	 set1/challenge2/main set1/challenge3/tests/test_freq \
-	 set1/challenge3/tests/test_single_xor set1/challenge3/main
+	 set1/challenge3/tests/test_single_xor set1/challenge3/main \
+	 util/tests/test_div
 
 all: $(PROGRAMS)
 
@@ -40,6 +41,8 @@ set1/challenge3/tests/test_single_xor: set1/challenge3/tests/test_single_xor.o \
 
 set1/challenge3/main: set1/challenge3/main.o set1/challenge3/single_xor.o \
 	set1/challenge3/freq.o set1/challenge1/hex.o util/div.o
+
+util/tests/test_div: util/tests/test_div.o
 
 clean:
 	$(RM) *.o *.a $(PROGRAMS) $(OBJS) $(DEPS)

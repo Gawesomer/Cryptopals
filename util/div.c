@@ -1,7 +1,7 @@
 #include "div.h"
 
 /* Returns integer division a/b rounded up. Returns 0 if b is 0 */
-size_t round_up_div(size_t a, size_t b)
+int round_up_div(int a, int b)
 {
 	if (a == 0 || b == 0)
 		return 0;
