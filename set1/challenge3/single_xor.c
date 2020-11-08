@@ -44,5 +44,43 @@ uint8_t *xor_binary_singlebyte(const uint8_t *bits, size_t size, uint8_t byte)
  */
 char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 {
-	return NULL;
+	char *plain;
+	uint8_t *bin;
+	unsigned int byte;
+	size_t hexlen, binsize;
+	uint8_t *xor_res;
+	float *freqmap;
+	float min_freqscore, curr;
+	uint8_t min_key;
+
+	if (!hex || !lang_freq || hex[0] == '\0')
+		return NULL;
+
+	bin = hextobinary(hex);
+	if (!bin)
+		return NULL;
+
+	hexlen = strlen(hex);
+	binsize = binaryfromhex_size(hexlen);
+
+	min_freqscore = FLT_MAX;
+	for (byte = 1; byte < 256; ++byte) {
+		xor_res = xor_binary_singlebyte(bin, binsize, byte);
+		freqmap = freqmap_from_binary(xor_res, binsize);
+		free(xor_res);
+		curr = freq_score(freqmap, lang_freq);
+		free(freqmap);
+		if (curr < min_freqscore) {
+			min_freqscore = curr;
+			min_key = byte;
+		}
+	}
+
+	xor_res = xor_binary_singlebyte(bin, binsize, min_key);
+	free(bin);
+
+	plain = binarytohex(xor_res, binsize);
+	free(xor_res);
+
+	return plain;
 }

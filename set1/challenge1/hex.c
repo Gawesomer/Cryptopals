@@ -153,9 +153,8 @@ char *hextoascii(const char *hexstr)
 	ascii_len = binaryfromhex_size(strlen(hexstr));
 	ascii = calloc(ascii_len+1, sizeof(char));
 
-	for (i = 0; i < ascii_len; ++i) {
+	for (i = 0; i < ascii_len; ++i)
 		ascii[i] = binary[i];
-	}
 	ascii[i] = '\0';
 
 	free(binary);
