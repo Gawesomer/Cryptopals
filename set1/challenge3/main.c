@@ -12,14 +12,11 @@ int main(void)
 			  "78373e783a393b3736";
 	char *decoded = decrypt_singlebytexor_on_hex(encoded, \
 				ENGLISH_LETTER_FREQ);
+	char *ascii = hextoascii(decoded);
 
-	uint8_t *binary = hextobinary(decoded);
-	size_t binsize = binaryfromhex_size(strlen(decoded));
 	free(decoded);
 
-	for (int i = 0; (size_t)i < binsize; ++i)
-		printf("%c", binary[i]);
-	printf("\n");
+	printf("%s\n", ascii);
 
-	free(binary);
+	free(ascii);
 }
