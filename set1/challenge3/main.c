@@ -17,9 +17,8 @@ int main(void)
 	size_t binsize = binaryfromhex_size(strlen(decoded));
 	free(decoded);
 
-	for (int i = 0; i < binsize; ++i) {
+	for (int i = 0; (size_t)i < binsize; ++i)
 		printf("%c", binary[i]);
-	}
 	printf("\n");
 
 	free(binary);

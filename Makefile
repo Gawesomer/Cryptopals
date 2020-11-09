@@ -1,50 +1,25 @@
-CC	 = gcc
-CFLAGS	 = -g -ggdb3
-CPPFLAGS = -Wall -pedantic -I ./include -MMD -MP
+UTILDIR = ./util
 
-ARFLAGS  = rvu
+CC	 := gcc
+CFLAGS	 := -g -ggdb3 -Wall -Wextra -Werror -pedantic
+CPPFLAGS := -I ./include -MMD -MP
+
+ARFLAGS  := rvu
 
 .PHONY: all clean
 
-SRCS = $(shell find . -name "*.c")
-OBJS = $(SRCS:%.c=%.o)
-DEPS = $(OBJS:%.o=%.d)
+SRCS := $(shell find . -name "*.c")
+OBJS := $(SRCS:%.c=%.o)
+DEPS := $(OBJS:%.o=%.d)
 
-PROGRAMS=set1/challenge1/main set1/challenge1/tests/test_base64 \
-	 set1/challenge1/tests/test_hex set1/challenge2/tests/test_xor \
-	 set1/challenge2/main set1/challenge3/tests/test_freq \
-	 set1/challenge3/tests/test_single_xor set1/challenge3/main \
-	 util/tests/test_div
+# each module will add to this
+PROGRAMS =
+
+include $(shell find . -name "module.mk")
+
+-include $(DEPS)
 
 all: $(PROGRAMS)
 
-set1/challenge1/main: set1/challenge1/main.o set1/challenge1/base64.o \
-	set1/challenge1/hex.o util/div.o
-
-set1/challenge1/tests/test_base64: set1/challenge1/tests/test_base64.o \
-	set1/challenge1/hex.o util/div.o util/cassert.o
-
-set1/challenge1/tests/test_hex: set1/challenge1/tests/test_hex.o util/div.o \
-	util/cassert.o
-
-set1/challenge2/tests/test_xor: set1/challenge2/tests/test_xor.o \
-	set1/challenge1/hex.o util/div.o util/cassert.o
-
-set1/challenge2/main: set1/challenge2/main.o set1/challenge2/xor.o \
-	set1/challenge1/hex.o util/div.o
-
-set1/challenge3/tests/test_freq: set1/challenge3/tests/test_freq.o \
-	util/cassert.o
-
-set1/challenge3/tests/test_single_xor: set1/challenge3/tests/test_single_xor.o \
-	set1/challenge3/freq.o set1/challenge1/hex.o util/div.o util/cassert.o
-
-set1/challenge3/main: set1/challenge3/main.o set1/challenge3/single_xor.o \
-	set1/challenge3/freq.o set1/challenge1/hex.o util/div.o
-
-util/tests/test_div: util/tests/test_div.o
-
 clean:
-	$(RM) *.o *.a $(PROGRAMS) $(OBJS) $(DEPS)
-
--include $(DEPS)
+	$(RM) $(PROGRAMS) $(OBJS) $(DEPS)

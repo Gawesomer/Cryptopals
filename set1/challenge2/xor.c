@@ -20,7 +20,7 @@ uint8_t *xor_binarrays(const uint8_t *a, const uint8_t *b, size_t size)
 		return NULL;
 
 	res = calloc(size, sizeof(uint8_t));
-	for (i = 0; i < size; ++i)
+	for (i = 0; (size_t)i < size; ++i)
 		res[i] = a[i] ^ b[i];
 
 	return res;

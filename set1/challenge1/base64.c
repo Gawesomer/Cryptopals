@@ -34,7 +34,7 @@ uint8_t *binarytobase64(const uint8_t *bits, size_t numbytes)
 	base64mask = 1<<5;
 	binarymask = 1<<7;
 	ibase64 = ibin = 0;
-	while (ibin < numbytes) {
+	while ((size_t)ibin < numbytes) {
 		if (bits[ibin]&binarymask)
 			base64[ibase64] |= base64mask;
 		base64mask >>= 1;
@@ -90,7 +90,7 @@ char *base64_tostring(const uint8_t *base64, size_t numbytes)
 
 	base64str = calloc(numbytes+1, sizeof(char));
 
-	for (i = 0; i < numbytes; ++i) {
+	for (i = 0; (size_t)i < numbytes; ++i) {
 		base64char = base64_inttochar(base64[i]);
 		if (base64char == '\0') {
 			free(base64str);
@@ -150,7 +150,7 @@ char *hextobase64(const char *hexstr)
 	else
 		base64padded = base64str;
 
-	for (i = 0; i < base64padding; ++i)
+	for (i = 0; (size_t)i < base64padding; ++i)
 		base64padded[base64size+i] = '=';
 	base64padded[base64size+base64padding] = '\0';
 

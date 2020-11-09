@@ -53,7 +53,7 @@ int *occmap_from_binary(const uint8_t *bits, size_t size)
 
 	occmap = calloc(26, sizeof(int));
 
-	for (i = 0; i < size; ++i) {
+	for (i = 0; (size_t)i < size; ++i) {
 		if ('A' <= bits[i] && bits[i] <= 'Z')
 			c = bits[i] - 'A';
 		else if ('a' <= bits[i] && bits[i] <= 'z')

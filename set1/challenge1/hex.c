@@ -104,7 +104,7 @@ char *binarytohex(const uint8_t *bits, size_t numbytes)
 	hexstr = calloc((2*numbytes)+1, sizeof(char));
 
         i = j = 0;
-        while (i < 2*numbytes) {
+        while ((size_t)i < 2*numbytes) {
                 hexchar = hex_inttochar(bits[j]>>4);
                 if (hexchar == '\0') {
                         free(hexstr);
@@ -153,7 +153,7 @@ char *hextoascii(const char *hexstr)
 	ascii_len = binaryfromhex_size(strlen(hexstr));
 	ascii = calloc(ascii_len+1, sizeof(char));
 
-	for (i = 0; i < ascii_len; ++i)
+	for (i = 0; (size_t)i < ascii_len; ++i)
 		ascii[i] = binary[i];
 	ascii[i] = '\0';
 
@@ -185,7 +185,7 @@ char *asciitohex(const char *ascii)
 	len = strlen(ascii);
 
 	binary = calloc(len, sizeof(uint8_t));
-	for (i = 0; i < len; ++i)
+	for (i = 0; (size_t)i < len; ++i)
 		binary[i] = ascii[i];
 
 	hex = binarytohex(binary, len);

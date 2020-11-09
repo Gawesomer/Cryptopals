@@ -22,7 +22,7 @@ uint8_t *xor_binary_singlebyte(const uint8_t *bits, size_t size, uint8_t byte)
 
 	res = calloc(size, sizeof(uint8_t));
 
-	for (i = 0; i < size; ++i)
+	for (i = 0; (size_t)i < size; ++i)
 		res[i] = bits[i] ^ byte;
 
 	return res;
