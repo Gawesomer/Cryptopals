@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <assert.h>
 
 #include "cassert.h"
 #include "../hex.c"
@@ -12,14 +11,14 @@ void test_hextobinary_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(hextobinary(NULL) == NULL);
+	TEST_BYTES_EQ(0, hextobinary(NULL), NULL);
 }
 
 void test_hextobinary_empty(void)
 {
 	printf("%s\n", __func__);
 
-	assert(hextobinary("") == NULL);
+	TEST_BYTES_EQ(0, hextobinary(""), NULL);
 }
 
 void test_hextobinary_wholebyte(void)
@@ -78,7 +77,7 @@ void test_hextobinary_invalidhex(void)
 {
 	printf("%s\n", __func__);
 
-	assert(hextobinary("G") == NULL);
+	TEST_BYTES_EQ(0, hextobinary("G"), NULL);
 }
 
 void test_hextobinary_cryptopals_example(void)

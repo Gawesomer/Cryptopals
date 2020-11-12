@@ -63,23 +63,38 @@ int test_bytes_eq(const char *f, int l, const char *fun, \
 		  size_t len, const uint8_t *a, const uint8_t *b)
 {
 	int i;
-	for (i = 0; (size_t)i < len && a[i] == b[i]; ++i)
-		;
 
-	if ((size_t)i == len)
+	if (!a && !b) {
 		return 0;
+	} else if (a && b) {
+		for (i = 0; (size_t)i < len && a[i] == b[i]; ++i)
+			;
+
+		if ((size_t)i == len)
+			return 0;
+	}
 
 	printf("==========================================================\n");
 	printf("FAIL: %s\n", fun);
 	printf("----------------------------------------------------------\n");
 	printf("\tFile \"%s\", line %d:\n", f, l);
 	printf("\t\tTEST_BYTES_EQ(%s, %s, %s)\n", len_tk, a_tk, b_tk);
-	printf("\t\t\t[");
-	for (i = 0; (size_t)i < len; ++i)
-		printf("%x%s", a[i], ((size_t)i == len-1) ? "]\n" : ", ");
-	printf("\t\t!=\t[");
-	for (i = 0; (size_t)i < len; ++i)
-		printf("%x%s", b[i], ((size_t)i == len-1) ? "]\n" : ", ");
+	if (a) {
+		printf("\t\t\t[");
+		for (i = 0; (size_t)i < len-1; ++i)
+			printf("%x%s", a[i], ((size_t)i == len-1) ? "" : ", ");
+		printf("]\n");
+	} else {
+		printf("\t\t\tNULL\n");
+	}
+	if (b) {
+		printf("\t\t!=\t[");
+		for (i = 0; (size_t)i < len; ++i)
+			printf("%x%s", b[i], ((size_t)i == len-1) ? "" : ", ");
+		printf("]\n");
+	} else {
+		printf("\t\t!=\tNULL\n");
+	}
 	printf("----------------------------------------------------------\n");
 
 	return 1;

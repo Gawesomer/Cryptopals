@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <assert.h>
 
 #include "cassert.h"
 #include "../base64.c"
@@ -12,7 +11,7 @@ void test_binarytobase64_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(binarytobase64(NULL, 0) == NULL);
+	TEST_BYTES_EQ(0, binarytobase64(NULL, 0), NULL);
 }
 
 void test_binarytobase64_wholebyte(void)

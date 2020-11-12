@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <assert.h>
 
 #include "cassert.h"
 #include "../xor.c"
@@ -14,9 +13,9 @@ void test_xor_binarrays_null(void)
 
 	uint8_t bits[] = {0xFF};
 
-	assert(xor_binarrays(NULL, NULL, 0) == NULL);
-	assert(xor_binarrays(bits, NULL, 1) == NULL);
-	assert(xor_binarrays(NULL, bits, 1) == NULL);
+	TEST_BYTES_EQ(0, xor_binarrays(NULL, NULL, 0), NULL);
+	TEST_BYTES_EQ(0, xor_binarrays(bits, NULL, 1), NULL);
+	TEST_BYTES_EQ(0, xor_binarrays(NULL, bits, 1), NULL);
 }
 
 void test_xor_binarrays_single_byte(void)

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <assert.h>
 
 #include "cassert.h"
 #include "../single_xor.c"
@@ -44,7 +43,7 @@ void test_xor_binary_singlebyte_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(xor_binary_singlebyte(NULL, 0, 0x00) == NULL);
+	TEST_BYTES_EQ(0, xor_binary_singlebyte(NULL, 0, 0x00), NULL);
 }
 
 void test_xor_binary_singlebyte_empty(void)
@@ -53,7 +52,7 @@ void test_xor_binary_singlebyte_empty(void)
 
 	uint8_t bits[] = {0};
 
-	assert(xor_binary_singlebyte(bits, 0, 0x00) == NULL);
+	TEST_BYTES_EQ(0, xor_binary_singlebyte(bits, 0, 0x00), NULL);
 }
 
 void test_xor_binary_singlebyte_single_byte(void)
