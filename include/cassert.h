@@ -8,18 +8,6 @@
 #include <string.h>
 #include <assert.h>
 
-/* Assert that `expected` and `actual` floats are equal
- * params:
- * 	- expected: float to compare to
- * 	- actual: float to be compared
- * 	- eps: positive epsilon to specify the acceptable range within which
- * 	       floats may be considered equal
- * returns:
- * 	ends execution on failure
- * 	otherwise nothing
- */
-void assert_floats_eq(float expected, float actual, float eps);
-
 /* Assert that `expected` and `actual` float arrays are pairwise equal
  * params:
  * 	- expectedlen: length of `expected`
@@ -43,15 +31,18 @@ void assert_farrs_eq(size_t expectedlen, const float *expected, \
 int test_true(const char *f, int l, const char *fun, const char *tk, int exp);
 int test_int_eq(const char *f, int l, const char *fun, \
 		const char *a_tk, const char *b_tk, int a, int b);
+int test_float_eq(const char *f, int l, const char *fun, \
+		  const char *a_tk, const char *b_tk, const char *exp_tk, \
+		  float a, float b, float eps);
 int test_bytes_eq(const char *f, int l, const char *fun, \
 		  const char *len_tk, const char *a_tk, const char *b_tk, \
 		  size_t len, const uint8_t *a, const uint8_t *b);
 int test_int_arr_eq(const char *f, int l, const char *fun, \
-		  const char *len_tk, const char *a_tk, const char *b_tk, \
-		  size_t len, const int *a, const int *b);
+		    const char *len_tk, const char *a_tk, const char *b_tk, \
+		    size_t len, const int *a, const int *b);
 int test_str_eq(const char *f, int l, const char *fun, \
-		  const char *s1_tk, const char *s2_tk, \
-		  const char *s1, const char *s2);
+		const char *s1_tk, const char *s2_tk, \
+		const char *s1, const char *s2);
 
 /* Tests boolean to be true, prints error message if `exp` is false
  * params:
@@ -70,6 +61,18 @@ int test_str_eq(const char *f, int l, const char *fun, \
  */
 #define TEST_INT_EQ(a, b)	test_int_eq(__FILE__, __LINE__, __FUNCTION__, \
 					#a, #b, a, b)
+
+/* Tests floats to be equal, prints error message if `a` is not equal to `b`
+ * params:
+ * 	- a: float
+ * 	- b: float
+ * 	- eps: positive epsilon to specify the acceptable range within which
+ * 	       floats may be considered equal
+ * returns:
+ * 	0 if `a` == `b`, 1 otherwise
+ */
+#define TEST_FLOAT_EQ(a, b, eps)	test_float_eq(__FILE__, __LINE__, \
+					__FUNCTION__, #a, #b, #eps, a, b, eps)
 
 /* Tests byte arrays to be equal, prints error message if `a` is not equal to
  * `b`

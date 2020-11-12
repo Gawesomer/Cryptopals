@@ -303,9 +303,9 @@ void test_freq_score_null(void)
 
 	float freq[26] = {0.00f};
 	
-	assert_floats_eq(freq_score(freq, NULL), FLT_MAX, FLOAT_EPS);
-	assert_floats_eq(freq_score(NULL, freq), FLT_MAX, FLOAT_EPS);
-	assert_floats_eq(freq_score(NULL, NULL), FLT_MAX, FLOAT_EPS);
+	TEST_FLOAT_EQ(freq_score(freq, NULL), FLT_MAX, FLOAT_EPS);
+	TEST_FLOAT_EQ(freq_score(NULL, freq), FLT_MAX, FLOAT_EPS);
+	TEST_FLOAT_EQ(freq_score(NULL, NULL), FLT_MAX, FLOAT_EPS);
 }
 
 void test_freq_score_empty(void)
@@ -318,7 +318,7 @@ void test_freq_score_empty(void)
 
 	actual_score = freq_score(freq, TEST_LETTER_FREQ);
 
-	assert_floats_eq(expected_score, actual_score, FLOAT_EPS);
+	TEST_FLOAT_EQ(expected_score, actual_score, FLOAT_EPS);
 }
 
 void test_freq_score_single_letter(void)
@@ -332,7 +332,7 @@ void test_freq_score_single_letter(void)
 
 	actual_score = freq_score(freq, TEST_LETTER_FREQ);
 
-	assert_floats_eq(expected_score, actual_score, FLOAT_EPS);
+	TEST_FLOAT_EQ(expected_score, actual_score, FLOAT_EPS);
 }
 
 void test_freq_score_multiple_letters(void)
@@ -349,7 +349,7 @@ void test_freq_score_multiple_letters(void)
 
 	actual_score = freq_score(freq, TEST_LETTER_FREQ);
 
-	assert_floats_eq(expected_score, actual_score, FLOAT_EPS);
+	TEST_FLOAT_EQ(expected_score, actual_score, FLOAT_EPS);
 }
 
 int main(void)

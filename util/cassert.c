@@ -58,6 +58,36 @@ int test_int_eq(const char *f, int l, const char *fun, \
 	return 1;
 }
 
+int test_float_eq(const char *f, int l, const char *fun, \
+		  const char *a_tk, const char *b_tk, const char *eps_tk, \
+		  float a, float b, float eps)
+{
+	float lower, upper;
+
+	if ((FLT_MAX-eps) <= a)
+		upper = FLT_MAX;
+	else
+		upper = a+eps;
+
+	if ((-1)*(FLT_MAX+eps) >= a)
+		lower = (-1)*FLT_MAX;
+	else
+		lower = a-eps;
+
+	if (lower <= b && b <= upper)
+		return 0;
+
+	printf("==========================================================\n");
+	printf("FAIL: %s\n", fun);
+	printf("----------------------------------------------------------\n");
+	printf("\tFile \"%s\", line %d:\n", f, l);
+	printf ("\t\tTEST_FLOAT_EQ(%s, %s, %s)\n", a_tk, b_tk, eps_tk);
+	printf("\t\t\t%f != %f\n", a, b);
+	printf("----------------------------------------------------------\n");
+
+	return 1;
+}
+
 int test_bytes_eq(const char *f, int l, const char *fun, \
 		  const char *len_tk, const char *a_tk, const char *b_tk, \
 		  size_t len, const uint8_t *a, const uint8_t *b)
