@@ -28,7 +28,7 @@ void assert_farrs_eq(size_t expectedlen, const float *expected,
 int test_true(const char *f, int l, const char *fun, const char *tk, int exp)
 {
 	if (exp)
-		return 1;
+		return 0;
 
 	printf("==========================================================\n");
 	printf("FAIL: %s\n", fun);
@@ -38,14 +38,14 @@ int test_true(const char *f, int l, const char *fun, const char *tk, int exp)
 	printf("\t\t\t`%s` not true\n", tk);
 	printf("----------------------------------------------------------\n");
 
-	return 0;
+	return 1;
 }
 
 int test_int_eq(const char *f, int l, const char *fun, \
 		const char *a_tk, const char *b_tk, int a, int b)
 {
 	if (a == b)
-		return 1;
+		return 0;
 
 	printf("==========================================================\n");
 	printf("FAIL: %s\n", fun);
@@ -55,7 +55,7 @@ int test_int_eq(const char *f, int l, const char *fun, \
 	printf("\t\t\t%d != %d\n", a, b);
 	printf("----------------------------------------------------------\n");
 
-	return 0;
+	return 1;
 }
 
 int test_bytes_eq(const char *f, int l, const char *fun, \
@@ -67,7 +67,7 @@ int test_bytes_eq(const char *f, int l, const char *fun, \
 		;
 
 	if ((size_t)i == len)
-		return 1;
+		return 0;
 
 	printf("==========================================================\n");
 	printf("FAIL: %s\n", fun);
@@ -82,7 +82,7 @@ int test_bytes_eq(const char *f, int l, const char *fun, \
 		printf("%x%s", b[i], ((size_t)i == len-1) ? "]\n" : ", ");
 	printf("----------------------------------------------------------\n");
 
-	return 0;
+	return 1;
 }
 
 int test_str_eq(const char *f, int l, const char *fun, \
@@ -90,9 +90,9 @@ int test_str_eq(const char *f, int l, const char *fun, \
 		 const char *s1, const char *s2)
 {
 	if (!s1 && !s2)
-		return 1;
+		return 0;
 	if ((s1 && s2) && strcmp(s1, s2) == 0)
-		return 1;
+		return 0;
 
 	printf("==========================================================\n");
 	printf("FAIL: %s\n", fun);
@@ -109,5 +109,5 @@ int test_str_eq(const char *f, int l, const char *fun, \
 		printf("\t\t!=\tNULL\n");
 	printf("----------------------------------------------------------\n");
 
-	return 0;
+	return 1;
 }

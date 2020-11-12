@@ -54,7 +54,7 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * params:
  * 	- exp: boolean expression
  * returns:
- * 	1 if `exp` is true, 0 otherwise
+ * 	0 if `exp` is true, 1 otherwise
  */
 #define TEST_TRUE(exp)	test_true(__FILE__, __LINE__, __FUNCTION__, #exp, exp)
 
@@ -63,7 +63,7 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * 	- a: integer
  * 	- b: integer
  * returns:
- * 	1 if `a` == `b`, 0 otherwise
+ * 	0 if `a` == `b`, 1 otherwise
  */
 #define TEST_INT_EQ(a, b)	test_int_eq(__FILE__, __LINE__, __FUNCTION__, \
 					#a, #b, a, b)
@@ -75,7 +75,7 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * 	- a: uint8_t byte array
  * 	- b: uint8_t byte array
  * returns:
- * 	1 if `a` == `b`, 0 otherwise
+ * 	0 if `a` == `b`, 1 otherwise
  * notes:
  * 	assumes that both `a` and `b` are of size `len`;
  * 	in the case where one is shorter, it will cause a read out of bounds,
@@ -91,7 +91,7 @@ int test_str_eq(const char *f, int l, const char *fun, \
  *	- s1: C-string
  *	- s2: C-string
  * returns:
- * 	1 if `s1` == `s2`, 0 otherwise
+ * 	0 if `s1` == `s2`, 1 otherwise
  */
 #define TEST_STR_EQ(s1, s2)	test_str_eq(__FILE__, __LINE__, \
 				__FUNCTION__, #s1, #s2, s1, s2)
