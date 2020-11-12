@@ -47,7 +47,7 @@ void test_occmap_from_binary_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(occmap_from_binary(NULL, 0) == NULL);
+	TEST_INT_ARR_EQ(0, occmap_from_binary(NULL, 0), NULL);
 }
 
 void test_occmap_from_binary_empty(void)
@@ -60,8 +60,7 @@ void test_occmap_from_binary_empty(void)
 
 	actual_map = occmap_from_binary(bits, 0);
 
-	TEST_BYTES_EQ(26*sizeof(int), (uint8_t *)expected_map, \
-			(uint8_t *)actual_map);
+	TEST_INT_ARR_EQ(26, expected_map, actual_map);
 
 	free(actual_map);
 }
@@ -77,8 +76,7 @@ void test_occmap_from_binary_single_byte(void)
 
 	actual_map = occmap_from_binary(bits, 1);
 
-	TEST_BYTES_EQ(26*sizeof(int), (uint8_t *)expected_map, \
-			(uint8_t *)actual_map);
+	TEST_INT_ARR_EQ(26, expected_map, actual_map);
 
 	free(actual_map);
 }
@@ -94,8 +92,7 @@ void test_occmap_from_binary_lowercase(void)
 
 	actual_map = occmap_from_binary(bits, 1);
 
-	TEST_BYTES_EQ(26*sizeof(int), (uint8_t *)expected_map, \
-			(uint8_t *)actual_map);
+	TEST_INT_ARR_EQ(26, expected_map, actual_map);
 
 	free(actual_map);
 }
@@ -110,8 +107,7 @@ void test_occmap_from_binary_nonletter(void)
 
 	actual_map = occmap_from_binary(bits, 1);
 
-	TEST_BYTES_EQ(26*sizeof(int), (uint8_t *)expected_map, \
-			(uint8_t *)actual_map);
+	TEST_INT_ARR_EQ(26, expected_map, actual_map);
 
 	free(actual_map);
 }
@@ -130,8 +126,7 @@ void test_occmap_from_binary_multiple_bytes(void)
 
 	actual_map = occmap_from_binary(bits, 9);
 
-	TEST_BYTES_EQ(26*sizeof(int), (uint8_t *)expected_map, \
-			(uint8_t *)actual_map);
+	TEST_INT_ARR_EQ(26, expected_map, actual_map);
 
 	free(actual_map);
 }
