@@ -84,3 +84,30 @@ int test_bytes_eq(const char *f, int l, const char *fun, \
 
 	return 0;
 }
+
+int test_str_eq(const char *f, int l, const char *fun, \
+		 const char *s1_tk, const char *s2_tk, \
+		 const char *s1, const char *s2)
+{
+	if (!s1 && !s2)
+		return 1;
+	if ((s1 && s2) && strcmp(s1, s2) == 0)
+		return 1;
+
+	printf("==========================================================\n");
+	printf("FAIL: %s\n", fun);
+	printf("----------------------------------------------------------\n");
+	printf("\tFile \"%s\", line %d:\n", f, l);
+	printf("\t\tTEST_STRS_EQ(%s, %s)\n", s1_tk, s2_tk);
+	if (s1)
+		printf("\t\t\t\"%s\"\n", s1);
+	else
+		printf("\t\t\tNULL\n");
+	if (s2)
+		printf("\t\t!=\t\"%s\"\n", s2);
+	else
+		printf("\t\t!=\tNULL\n");
+	printf("----------------------------------------------------------\n");
+
+	return 0;
+}

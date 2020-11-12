@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 #include <assert.h>
 
 #include "cassert.h"
@@ -97,16 +96,17 @@ void test_decrypt_singlebytexor_on_hex_null(void)
 
 	char hex[] = "00";
 
-	assert(decrypt_singlebytexor_on_hex(NULL, TEST_LETTER_FREQ) == NULL);
-	assert(decrypt_singlebytexor_on_hex(hex, NULL) == NULL);
-	assert(decrypt_singlebytexor_on_hex(NULL, NULL) == NULL);
+	TEST_STR_EQ(decrypt_singlebytexor_on_hex(NULL, TEST_LETTER_FREQ), \
+			NULL);
+	TEST_STR_EQ(decrypt_singlebytexor_on_hex(hex, NULL), NULL);
+	TEST_STR_EQ(decrypt_singlebytexor_on_hex(NULL, NULL), NULL);
 }
 
 void test_decrypt_singlebytexor_on_hex_empty(void)
 {
 	printf("%s\n", __func__);
 
-	assert(decrypt_singlebytexor_on_hex("", TEST_LETTER_FREQ) == NULL);
+	TEST_STR_EQ(decrypt_singlebytexor_on_hex("", TEST_LETTER_FREQ), NULL);
 }
 
 void test_decrypt_singlebytexor_on_hex_all_letters(void)
@@ -121,7 +121,7 @@ void test_decrypt_singlebytexor_on_hex_all_letters(void)
 
 	actual = decrypt_singlebytexor_on_hex(hex, TEST_LETTER_FREQ);
 
-	assert(strcmp(expected, actual) == 0);
+	TEST_STR_EQ(expected, actual);
 
 	free(actual);
 }

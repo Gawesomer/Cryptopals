@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 #include <assert.h>
 
 #include "cassert.h"
@@ -61,7 +60,7 @@ void test_base64_tostring_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(base64_tostring(NULL, 0) == NULL);
+	TEST_STR_EQ(base64_tostring(NULL, 0), NULL);
 }
 
 void test_base64_tostring_twobytes(void)
@@ -72,7 +71,7 @@ void test_base64_tostring_twobytes(void)
 	char expectedbase64str[] = "SQ";
 	char *actualbase64str = base64_tostring(base64, 2);
 
-	assert(strcmp(expectedbase64str, actualbase64str) == 0);
+	TEST_STR_EQ(expectedbase64str, actualbase64str);
 
 	free(actualbase64str);
 }
@@ -85,7 +84,7 @@ void test_base64_tostring_lowercase(void)
 	char expectedbase64str[] = "i";
 	char *actualbase64str = base64_tostring(base64, 1);
 
-	assert(strcmp(expectedbase64str, actualbase64str) == 0);
+	TEST_STR_EQ(expectedbase64str, actualbase64str);
 
 	free(actualbase64str);
 }
@@ -98,7 +97,7 @@ void test_base64_tostring_digit(void)
 	char expectedbase64str[] = "4";
 	char *actualbase64str = base64_tostring(base64, 1);
 
-	assert(strcmp(expectedbase64str, actualbase64str) == 0);
+	TEST_STR_EQ(expectedbase64str, actualbase64str);
 
 	free(actualbase64str);
 }
@@ -109,7 +108,7 @@ void test_base64_tostring_invalidbyte(void)
 
 	uint8_t base64[1] = {65};
 	
-	assert(base64_tostring(base64, 1) == NULL);
+	TEST_STR_EQ(base64_tostring(base64, 1), NULL);
 }
 
 /*** hextobase64 ***/
@@ -118,14 +117,14 @@ void test_hextobase64_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(hextobase64(NULL) == NULL);
+	TEST_STR_EQ(hextobase64(NULL), NULL);
 }
 
 void test_hextobase64_empty(void)
 {
 	printf("%s\n", __func__);
 
-	assert(hextobase64("") == NULL);
+	TEST_STR_EQ(hextobase64(""), NULL);
 }
 
 void test_hextobase64_wholebyte(void)
@@ -136,7 +135,7 @@ void test_hextobase64_wholebyte(void)
 	char expectedstr[] = "iQ==";
 	char *base64str = hextobase64(hexstr);
 
-	assert(strcmp(expectedstr, base64str) == 0);
+	TEST_STR_EQ(expectedstr, base64str);
 
 	free(base64str);
 }
@@ -149,7 +148,7 @@ void test_hextobase64_halfbyte(void)
 	char expectedstr[] = "Cg==";
 	char *base64str = hextobase64(hexstr);
 
-	assert(strcmp(expectedstr, base64str) == 0);
+	TEST_STR_EQ(expectedstr, base64str);
 
 	free(base64str);
 }
@@ -162,7 +161,7 @@ void test_hextobase64_lowercase(void)
 	char expectedstr[] = "Cg==";
 	char *base64str = hextobase64(hexstr);
 
-	assert(strcmp(expectedstr, base64str) == 0);
+	TEST_STR_EQ(expectedstr, base64str);
 
 	free(base64str);
 }
@@ -171,7 +170,7 @@ void test_hextobase64_invalidhex(void)
 {
 	printf("%s\n", __func__);
 
-	assert(hextobase64("G") == NULL);
+	TEST_STR_EQ(hextobase64("G"), NULL);
 }
 
 void test_hextobase64_cryptopals_example(void)
@@ -184,7 +183,7 @@ void test_hextobase64_cryptopals_example(void)
 			     "9ub3VzIG11c2hyb29t";
 	char *base64str = hextobase64(hexstr);
 
-	assert(strcmp(expectedstr, base64str) == 0);
+	TEST_STR_EQ(expectedstr, base64str);
 
 	free(base64str);
 }

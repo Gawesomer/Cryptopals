@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 #include <assert.h>
 
 #include "cassert.h"
@@ -54,17 +53,17 @@ void test_xor_hexstrs_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(xor_hexstrs(NULL, NULL) == NULL);
-	assert(xor_hexstrs("a", NULL) == NULL);
-	assert(xor_hexstrs(NULL, "b") == NULL);
+	TEST_STR_EQ(xor_hexstrs(NULL, NULL), NULL);
+	TEST_STR_EQ(xor_hexstrs("a", NULL), NULL);
+	TEST_STR_EQ(xor_hexstrs(NULL, "b"), NULL);
 }
 
 void test_xor_hexstrs_empty(void)
 {
 	printf("%s\n", __func__);
 
-	assert(xor_hexstrs("", "b") == NULL);
-	assert(xor_hexstrs("a", "") == NULL);
+	TEST_STR_EQ(xor_hexstrs("", "b"), NULL);
+	TEST_STR_EQ(xor_hexstrs("a", ""), NULL);
 }
 
 void test_xor_hexstrs_single_bytes(void)
@@ -74,7 +73,7 @@ void test_xor_hexstrs_single_bytes(void)
 	char *res;
 
 	res = xor_hexstrs("FF", "AA");
-	assert(strcmp(res, "55") == 0);
+	TEST_STR_EQ(res, "55");
 
 	free(res);
 }
@@ -86,7 +85,7 @@ void test_xor_hexstrs_results_in_letters(void)
 	char *res;
 
 	res = xor_hexstrs("00", "BC");
-	assert(strcmp(res, "BC") == 0);
+	TEST_STR_EQ(res, "BC");
 
 	free(res);
 }
@@ -98,7 +97,7 @@ void test_xor_hexstrs_lowercase(void)
 	char *res;
 
 	res = xor_hexstrs("ff", "aa");
-	assert(strcmp(res, "55") == 0);
+	TEST_STR_EQ(res, "55");
 
 	free(res);
 }
@@ -110,11 +109,11 @@ void test_xor_hexstrs_different_sizes(void)
 	char *res;
 
 	res = xor_hexstrs("FFAA", "AAFFCC");
-	assert(strcmp(res, "5555") == 0);
+	TEST_STR_EQ(res, "5555");
 	free(res);
 
 	res = xor_hexstrs("AAFFCC", "FFAA");
-	assert(strcmp(res, "5555") == 0);
+	TEST_STR_EQ(res, "5555");
 	free(res);
 }
 
@@ -125,7 +124,7 @@ void test_xor_hexstrs_odd_length(void)
 	char *res;
 
 	res = xor_hexstrs("FFF", "AAA");
-	assert(strcmp(res, "555") == 0);
+	TEST_STR_EQ(res, "555");
 
 	free(res);
 }
@@ -139,7 +138,7 @@ void test_xor_hexstrs_cryptopals_example(void)
 	char expected[] = "746865206B696420646F6E277420706C6179";
 	char *actual = xor_hexstrs(a, b);
 
-	assert(strcmp(expected, actual) == 0);
+	TEST_STR_EQ(expected, actual);
 
 	free(actual);
 }

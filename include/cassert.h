@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <float.h>
+#include <string.h>
 #include <assert.h>
 
 /* Assert that `expected` and `actual` floats are equal
@@ -45,6 +46,9 @@ int test_int_eq(const char *f, int l, const char *fun, \
 int test_bytes_eq(const char *f, int l, const char *fun, \
 		  const char *len_tk, const char *a_tk, const char *b_tk, \
 		  size_t len, const uint8_t *a, const uint8_t *b);
+int test_str_eq(const char *f, int l, const char *fun, \
+		  const char *s1_tk, const char *s2_tk, \
+		  const char *s1, const char *s2);
 
 /* Tests boolean to be true, prints error message if `exp` is false
  * params:
@@ -80,5 +84,16 @@ int test_bytes_eq(const char *f, int l, const char *fun, \
  */
 #define TEST_BYTES_EQ(len, a, b)	test_bytes_eq(__FILE__, __LINE__, \
 					__FUNCTION__, #len, #a, #b, len, a, b)
+
+/* Tests C-strings to be equal, prints error message if `s1` is not equal to \
+ * `s2`
+ * params:
+ *	- s1: C-string
+ *	- s2: C-string
+ * returns:
+ * 	1 if `s1` == `s2`, 0 otherwise
+ */
+#define TEST_STR_EQ(s1, s2)	test_str_eq(__FILE__, __LINE__, \
+				__FUNCTION__, #s1, #s2, s1, s2)
 
 #endif

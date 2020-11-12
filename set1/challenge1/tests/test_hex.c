@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 #include <assert.h>
 
 #include "cassert.h"
@@ -107,7 +106,7 @@ void test_binarytohex_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(binarytohex(NULL, 0) == NULL);
+	TEST_STR_EQ(binarytohex(NULL, 0), NULL);
 }
 
 void test_binarytohex_wholebyte(void)
@@ -118,7 +117,7 @@ void test_binarytohex_wholebyte(void)
 	char expectedhex[] = "49";
 	char *actualhex = binarytohex(binary, 1);
 
-	assert(strcmp(expectedhex, actualhex) == 0);
+	TEST_STR_EQ(expectedhex, actualhex);
 
 	free(actualhex);
 }
@@ -131,7 +130,7 @@ void test_binarytohex_letter(void)
 	char expectedhex[] = "CF";
 	char *actualhex = binarytohex(binary, 1);
 
-	assert(strcmp(expectedhex, actualhex) == 0);
+	TEST_STR_EQ(expectedhex, actualhex);
 
 	free(actualhex);
 }
@@ -149,7 +148,7 @@ void test_binarytohex_cryptopals_example(void)
 			"6C696B65206120706F69736F6E6F7573206D757368726F6F6D";
 	char *actualhex = binarytohex(binary, 48);
 
-	assert(strcmp(expectedhex, actualhex) == 0);
+	TEST_STR_EQ(expectedhex, actualhex);
 
 	free(actualhex);
 }
@@ -160,14 +159,14 @@ void test_hextoascii_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(hextoascii(NULL) == NULL);
+	TEST_STR_EQ(hextoascii(NULL), NULL);
 }
 
 void test_hextoascii_empty(void)
 {
 	printf("%s\n", __func__);
 
-	assert(hextoascii("") == NULL);
+	TEST_STR_EQ(hextoascii(""), NULL);
 }
 
 void test_hextoascii_halfbyte(void)
@@ -180,7 +179,7 @@ void test_hextoascii_halfbyte(void)
 
 	actual = hextoascii(hexstr);
 
-	assert(strcmp(expected, actual) == 0);
+	TEST_STR_EQ(expected, actual);
 
 	free(actual);
 }
@@ -195,7 +194,7 @@ void test_hextoascii_wholebyte(void)
 
 	actual = hextoascii(hexstr);
 
-	assert(strcmp(expected, actual) == 0);
+	TEST_STR_EQ(expected, actual);
 
 	free(actual);
 }
@@ -210,7 +209,7 @@ void test_hextoascii_lowercase(void)
 
 	actual = hextoascii(hexstr);
 
-	assert(strcmp(expected, actual) == 0);
+	TEST_STR_EQ(expected, actual);
 
 	free(actual);
 }
@@ -225,7 +224,7 @@ void test_hextoascii_odd_length(void)
 
 	actual = hextoascii(hexstr);
 
-	assert(strcmp(expected, actual) == 0);
+	TEST_STR_EQ(expected, actual);
 
 	free(actual);
 }
@@ -234,7 +233,7 @@ void test_hextoascii_invalidhex(void)
 {
 	printf("%s\n", __func__);
 
-	assert(hextoascii("G") == NULL);
+	TEST_STR_EQ(hextoascii("G"), NULL);
 }
 
 void test_hextoascii_multiple_bytes(void)
@@ -247,7 +246,7 @@ void test_hextoascii_multiple_bytes(void)
 
 	actual = hextoascii(hexstr);
 
-	assert(strcmp(expected, actual) == 0);
+	TEST_STR_EQ(expected, actual);
 
 	free(actual);
 }
@@ -258,14 +257,14 @@ void test_asciitohex_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(asciitohex(NULL) == NULL);
+	TEST_STR_EQ(asciitohex(NULL), NULL);
 }
 
 void test_asciitohex_empty(void)
 {
 	printf("%s\n", __func__);
 
-	assert(asciitohex("") == NULL);
+	TEST_STR_EQ(asciitohex(""), NULL);
 }
 
 void test_asciitohex_single_letter(void)
@@ -278,7 +277,7 @@ void test_asciitohex_single_letter(void)
 
 	actual = asciitohex(ascii);
 
-	assert(strcmp(expected, actual) == 0);
+	TEST_STR_EQ(expected, actual);
 
 	free(actual);
 }
@@ -293,7 +292,7 @@ void test_asciitohex_multiple_letters(void)
 
 	actual = asciitohex(ascii);
 
-	assert(strcmp(expected, actual) == 0);
+	TEST_STR_EQ(expected, actual);
 
 	free(actual);
 }
