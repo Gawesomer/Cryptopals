@@ -17,14 +17,6 @@ void assert_floats_eq(float expected, float actual, float eps)
 	assert(lower <= actual && actual <= upper);
 }
 
-void assert_bytes_eq(size_t expectedlen, const uint8_t *expected, \
-		     const uint8_t *actual)
-{
-	int i;
-	for (i = 0; (size_t)i < expectedlen; ++i)
-		assert(actual[i] == expected[i]);
-}
-
 void assert_farrs_eq(size_t expectedlen, const float *expected,
 		     const float *actual, float eps)
 {
@@ -61,6 +53,33 @@ int test_int_eq(const char *f, int l, const char *fun, \
 	printf("\tFile \"%s\", line %d:\n", f, l);
 	printf ("\t\tTEST_INT_EQ(%s, %s)\n", a_tk, b_tk);
 	printf("\t\t\t%d != %d\n", a, b);
+	printf("----------------------------------------------------------\n");
+
+	return 0;
+}
+
+int test_bytes_eq(const char *f, int l, const char *fun, \
+		  const char *len_tk, const char *a_tk, const char *b_tk, \
+		  size_t len, const uint8_t *a, const uint8_t *b)
+{
+	int i;
+	for (i = 0; (size_t)i < len && a[i] == b[i]; ++i)
+		;
+
+	if ((size_t)i == len)
+		return 1;
+
+	printf("==========================================================\n");
+	printf("FAIL: %s\n", fun);
+	printf("----------------------------------------------------------\n");
+	printf("\tFile \"%s\", line %d:\n", f, l);
+	printf("\t\tTEST_BYTES_EQ(%s, %s, %s)\n", len_tk, a_tk, b_tk);
+	printf("\t\t\t[");
+	for (i = 0; (size_t)i < len; ++i)
+		printf("%x%s", a[i], ((size_t)i == len-1) ? "]\n" : ", ");
+	printf("\t\t!=\t[");
+	for (i = 0; (size_t)i < len; ++i)
+		printf("%x%s", b[i], ((size_t)i == len-1) ? "]\n" : ", ");
 	printf("----------------------------------------------------------\n");
 
 	return 0;

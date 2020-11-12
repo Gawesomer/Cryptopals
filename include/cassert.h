@@ -19,20 +19,6 @@
  */
 void assert_floats_eq(float expected, float actual, float eps);
 
-/* Assert that `expected` and `actual` byte arrays are pairwise equal
- * params:
- * 	- expectedlen: length of `expected`
- * 	- expected: byte array to compare to
- * 	- actual: byte array to be compared
- * returns:
- * 	ends execution on failure
- * 	otherwise nothing
- * notes:
- * 	fails to notice that `actual` may be larger than `expected`
- */
-void assert_bytes_eq(size_t expectedlen, const uint8_t *expected, \
-		     const uint8_t *actual);
-
 /* Assert that `expected` and `actual` float arrays are pairwise equal
  * params:
  * 	- expectedlen: length of `expected`
@@ -56,6 +42,9 @@ void assert_farrs_eq(size_t expectedlen, const float *expected, \
 int test_true(const char *f, int l, const char *fun, const char *tk, int exp);
 int test_int_eq(const char *f, int l, const char *fun, \
 		const char *a_tk, const char *b_tk, int a, int b);
+int test_bytes_eq(const char *f, int l, const char *fun, \
+		  const char *len_tk, const char *a_tk, const char *b_tk, \
+		  size_t len, const uint8_t *a, const uint8_t *b);
 
 /* Tests boolean to be true, prints error message if `exp` is false
  * params:
@@ -74,5 +63,22 @@ int test_int_eq(const char *f, int l, const char *fun, \
  */
 #define TEST_INT_EQ(a, b)	test_int_eq(__FILE__, __LINE__, __FUNCTION__, \
 					#a, #b, a, b)
+
+/* Tests byte arrays to be equal, prints error message if `a` is not equal to
+ * `b`
+ * params:
+ * 	- len: integer length of both `a` and `b`
+ * 	- a: uint8_t byte array
+ * 	- b: uint8_t byte array
+ * returns:
+ * 	1 if `a` == `b`, 0 otherwise
+ * notes:
+ * 	assumes that both `a` and `b` are of size `len`;
+ * 	in the case where one is shorter, it will cause a read out of bounds,
+ * 	in the case where on is longer, it will fail to notice it, possibly
+ * 	resulting in false positives
+ */
+#define TEST_BYTES_EQ(len, a, b)	test_bytes_eq(__FILE__, __LINE__, \
+					__FUNCTION__, #len, #a, #b, len, a, b)
 
 #endif

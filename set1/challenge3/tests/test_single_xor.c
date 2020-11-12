@@ -68,7 +68,7 @@ void test_xor_binary_singlebyte_single_byte(void)
 
 	actual = xor_binary_singlebyte(bits, 1, byte);
 
-	assert_bytes_eq(1, expected, actual);
+	TEST_BYTES_EQ(1, expected, actual);
 
 	free(actual);
 }
@@ -84,7 +84,7 @@ void test_xor_binary_singlebyte_multiple_bytes(void)
 
 	actual = xor_binary_singlebyte(bits, 4, byte);
 
-	assert_bytes_eq(4, expected, actual);
+	TEST_BYTES_EQ(4, expected, actual);
 
 	free(actual);
 }

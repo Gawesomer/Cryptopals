@@ -29,7 +29,7 @@ void test_xor_binarrays_single_byte(void)
 	uint8_t expected[] = {0x55};
 	uint8_t *actual = xor_binarrays(a, b, 1);
 
-	assert_bytes_eq(1, expected, actual);
+	TEST_BYTES_EQ(1, expected, actual);
 
 	free(actual);
 }
@@ -43,7 +43,7 @@ void test_xor_binarrays_two_bytes(void)
 	uint8_t expected[] = {0x44, 0x4C};
 	uint8_t *actual = xor_binarrays(a, b, 2);
 
-	assert_bytes_eq(2, expected, actual);
+	TEST_BYTES_EQ(2, expected, actual);
 
 	free(actual);
 }

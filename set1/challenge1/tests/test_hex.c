@@ -31,7 +31,7 @@ void test_hextobinary_wholebyte(void)
 	uint8_t expectedbinary[1] = {0x49};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	assert_bytes_eq(1, expectedbinary, actualbinary);
+	TEST_BYTES_EQ(1, expectedbinary, actualbinary);
 
 	free(actualbinary);
 }
@@ -44,7 +44,7 @@ void test_hextobinary_halfbyte(void)
 	uint8_t expectedbinary[1] = {0x0A};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	assert_bytes_eq(1, expectedbinary, actualbinary);
+	TEST_BYTES_EQ(1, expectedbinary, actualbinary);
 
 	free(actualbinary);
 }
@@ -57,7 +57,7 @@ void test_hextobinary_lowercase(void)
 	uint8_t expectedbinary[1] = {0x0a};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	assert_bytes_eq(1, expectedbinary, actualbinary);
+	TEST_BYTES_EQ(1, expectedbinary, actualbinary);
 
 	free(actualbinary);
 }
@@ -70,7 +70,7 @@ void test_hextobinary_odd_length(void)
 	uint8_t expectedbinary[] = {0x0F, 0xFF};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	assert_bytes_eq(2, expectedbinary, actualbinary);
+	TEST_BYTES_EQ(2, expectedbinary, actualbinary);
 
 	free(actualbinary);
 }
@@ -96,7 +96,7 @@ void test_hextobinary_cryptopals_example(void)
 		0x6f, 0x6d};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	assert_bytes_eq(48, expectedbinary, actualbinary);
+	TEST_BYTES_EQ(48, expectedbinary, actualbinary);
 
 	free(actualbinary);
 }
