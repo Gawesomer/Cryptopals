@@ -313,6 +313,122 @@ void test_float_eq_not_eq(void)
 	assert(float_eq(FLT_MAX, -1*FLT_MAX, 10) != 0);
 }
 
+/*** TEST_FLOAT_EQ ***/
+
+void test_TEST_FLOAT_EQ_eq(void)
+{
+	printf("%s\n", __func__);
+
+	assert(TEST_FLOAT_EQ(1.0, 1.1, 0.1) == 0);
+}
+
+void test_TEST_FLOAT_EQ_eq_w_expr(void)
+{
+	printf("%s\n", __func__);
+
+	assert(TEST_FLOAT_EQ(0.0+1.0, 1.0+0.1, 0.1) == 0);
+}
+
+void test_TEST_FLOAT_EQ_not_eq(void)
+{
+	printf("%s\n", __func__);
+
+	FILE *devnull, *tmp;
+
+	devnull = fopen("/dev/null", "w");
+	tmp = stdout;
+	stdout = devnull;
+
+	assert(TEST_FLOAT_EQ(1.0, 1.1, 0.05) != 0);
+
+	stdout = tmp;
+	fclose(devnull);
+}
+
+void test_TEST_FLOAT_EQ_not_eq_w_expr(void)
+{
+	printf("%s\n", __func__);
+
+	FILE *devnull, *tmp;
+
+	devnull = fopen("/dev/null", "w");
+	tmp = stdout;
+	stdout = devnull;
+
+	assert(TEST_FLOAT_EQ(0.0+1.0, 3.0-1.9, 0.05-0.0) != 0);
+
+	stdout = tmp;
+	fclose(devnull);
+}
+
+void test_TEST_FLOAT_EQ_stacktrace(void)
+{
+	printf("%s\n", __func__);
+
+	char *actualstr;
+	char expectedstr[BUFFSIZE];
+	FILE *buffer, *tmp;
+
+	snprintf(expectedstr, BUFFSIZE, \
+		"==========================================================\n"
+		"FAIL: %s\n"
+		"----------------------------------------------------------\n"
+		"\tFile \"%s\", line %d:\n"
+		"\t\tTEST_FLOAT_EQ(%s, %s, %s)\n"
+		"\t\t\t%f != %f\n"
+		"----------------------------------------------------------\n", \
+		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		"1.0", "1.1", "0.05", 1.0, 1.1);
+	actualstr = calloc(BUFFSIZE, sizeof(char));
+	buffer = fmemopen(actualstr, BUFFSIZE, "w");
+
+	tmp = stdout;
+	stdout = buffer;
+
+	TEST_FLOAT_EQ(1.0, 1.1, 0.05);
+
+	stdout = tmp;
+	fclose(buffer);
+
+	assert(strcmp(actualstr, expectedstr) == 0);
+
+	free(actualstr);
+}
+
+void test_TEST_FLOAT_EQ_stacktrace_w_expr(void)
+{
+	printf("%s\n", __func__);
+
+	char *actualstr;
+	char expectedstr[BUFFSIZE];
+	FILE *buffer, *tmp;
+
+	snprintf(expectedstr, BUFFSIZE, \
+		"==========================================================\n"
+		"FAIL: %s\n"
+		"----------------------------------------------------------\n"
+		"\tFile \"%s\", line %d:\n"
+		"\t\tTEST_FLOAT_EQ(%s, %s, %s)\n"
+		"\t\t\t%f != %f\n"
+		"----------------------------------------------------------\n", \
+		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		"0.0+1.0", "3.0-1.9", "0.05-0.0", 1.0, 1.1);
+	actualstr = calloc(BUFFSIZE, sizeof(char));
+	buffer = fmemopen(actualstr, BUFFSIZE, "w");
+
+	tmp = stdout;
+	stdout = buffer;
+
+	TEST_FLOAT_EQ(0.0+1.0, 3.0-1.9, 0.05-0.0);
+
+	stdout = tmp;
+	fclose(buffer);
+
+	assert(strcmp(actualstr, expectedstr) == 0);
+
+	free(actualstr);
+}
+
 int main(void)
 {
 	printf("--- %s ---\n", __FILE__);
@@ -336,6 +452,13 @@ int main(void)
 	test_float_eq_eq_edge_cases();
 	test_float_eq_eq_w_negative_eps();
 	test_float_eq_not_eq();
+
+	test_TEST_FLOAT_EQ_eq();
+	test_TEST_FLOAT_EQ_eq_w_expr();
+	test_TEST_FLOAT_EQ_not_eq();
+	test_TEST_FLOAT_EQ_not_eq_w_expr();
+	test_TEST_FLOAT_EQ_stacktrace();
+	test_TEST_FLOAT_EQ_stacktrace_w_expr();
 
 	return EXIT_SUCCESS;
 }
