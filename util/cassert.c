@@ -17,14 +17,6 @@ void assert_floats_eq(float expected, float actual, float eps)
 	assert(lower <= actual && actual <= upper);
 }
 
-void assert_farrs_eq(size_t expectedlen, const float *expected,
-		     const float *actual, float eps)
-{
-	int i;
-	for (i = 0; (size_t)i < expectedlen; ++i)
-		assert_floats_eq(expected[i], actual[i], eps);
-}
-
 int test_true(const char *f, int l, const char *fun, const char *tk, int exp)
 {
 	if (exp)
@@ -58,9 +50,7 @@ int test_int_eq(const char *f, int l, const char *fun, \
 	return 1;
 }
 
-int test_float_eq(const char *f, int l, const char *fun, \
-		  const char *a_tk, const char *b_tk, const char *eps_tk, \
-		  float a, float b, float eps)
+int float_eq(float a, float b, float eps)
 {
 	float lower, upper;
 
@@ -75,6 +65,15 @@ int test_float_eq(const char *f, int l, const char *fun, \
 		lower = a-eps;
 
 	if (lower <= b && b <= upper)
+		return 0;
+	return 1;
+}
+
+int test_float_eq(const char *f, int l, const char *fun, \
+		  const char *a_tk, const char *b_tk, const char *eps_tk, \
+		  float a, float b, float eps)
+{
+	if (float_eq(a, b, eps) == 0)
 		return 0;
 
 	printf("==========================================================\n");
@@ -141,7 +140,6 @@ int test_int_arr_eq(const char *f, int l, const char *fun, \
 	} else if (a && b) {
 		for (i = 0; (size_t)i < len && a[i] == b[i]; ++i)
 			;
-
 		if ((size_t)i == len)
 			return 0;
 	}
@@ -163,6 +161,49 @@ int test_int_arr_eq(const char *f, int l, const char *fun, \
 		printf("\t\t!=\t[");
 		for (i = 0; (size_t)i < len; ++i)
 			printf("%d%s", b[i], ((size_t)i == len-1) ? "" : ", ");
+		printf("]\n");
+	} else {
+		printf("\t\t!=\tNULL\n");
+	}
+	printf("----------------------------------------------------------\n");
+
+	return 1;
+}
+
+int test_float_arr_eq(const char *f, int l, const char *fun, \
+		const char *a_tk, const char *b_tk, \
+		const char *eps_tk, const char *len_tk, \
+		const float *a, const float *b, float eps, size_t len)
+{
+	int i;
+
+	if (!a && !b) {
+		return 0;
+	} else if (a && b) {
+		for (i=0; (size_t)i<len && float_eq(a[i],b[i],eps)==0; ++i)
+			;
+		if ((size_t)i == len)
+			return 0;
+	}
+
+	printf("==========================================================\n");
+	printf("FAIL: %s\n", fun);
+	printf("----------------------------------------------------------\n");
+	printf("\tFile \"%s\", line %d:\n", f, l);
+	printf("\t\tTEST_FLOAT_ARR_EQ(%s, %s, %s, %s)\n", a_tk, b_tk, \
+			eps_tk, len_tk);
+	if (a) {
+		printf("\t\t\t[");
+		for (i = 0; (size_t)i < len-1; ++i)
+			printf("%f%s", a[i], ((size_t)i == len-1) ? "" : ", ");
+		printf("]\n");
+	} else {
+		printf("\t\t\tNULL\n");
+	}
+	if (b) {
+		printf("\t\t!=\t[");
+		for (i = 0; (size_t)i < len; ++i)
+			printf("%f%s", b[i], ((size_t)i == len-1) ? "" : ", ");
 		printf("]\n");
 	} else {
 		printf("\t\t!=\tNULL\n");

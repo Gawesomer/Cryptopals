@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <float.h>
-#include <assert.h>
 
 #include "cassert.h"
 #include "../freq.c"
@@ -137,7 +136,7 @@ void test_occmap_to_freqmap_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(occmap_to_freqmap(NULL) == NULL);
+	TEST_FLOAT_ARR_EQ(occmap_to_freqmap(NULL), NULL, FLOAT_EPS, 0);
 }
 
 void test_occmap_to_freqmap_empty(void)
@@ -150,7 +149,7 @@ void test_occmap_to_freqmap_empty(void)
 
 	actual_freq = occmap_to_freqmap(occmap);
 
-	assert_farrs_eq(26, expected_freq, actual_freq, FLOAT_EPS);
+	TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, FLOAT_EPS, 26);
 
 	free(actual_freq);
 }
@@ -167,7 +166,7 @@ void test_occmap_to_freqmap_single_letter(void)
 
 	actual_freq = occmap_to_freqmap(occmap);
 
-	assert_farrs_eq(26, expected_freq, actual_freq, FLOAT_EPS);
+	TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, FLOAT_EPS, 26);
 
 	free(actual_freq);
 }
@@ -179,7 +178,7 @@ void test_occmap_to_freqmap_negative_occ(void)
 	int occmap[26] = {0};
 	occmap[4] = -1;
 
-	assert(occmap_to_freqmap(occmap) == NULL);
+	TEST_FLOAT_ARR_EQ(occmap_to_freqmap(occmap), NULL, FLOAT_EPS, 0);
 }
 
 void test_occmap_to_freqmap_multiple_bytes(void)
@@ -200,7 +199,7 @@ void test_occmap_to_freqmap_multiple_bytes(void)
 
 	actual_freq = occmap_to_freqmap(occmap);
 
-	assert_farrs_eq(26, expected_freq, actual_freq, FLOAT_EPS);
+	TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, FLOAT_EPS, 26);
 
 	free(actual_freq);
 }
@@ -211,7 +210,7 @@ void test_freqmap_from_binary_null(void)
 {
 	printf("%s\n", __func__);
 
-	assert(freqmap_from_binary(NULL, 0) == NULL);
+	TEST_FLOAT_ARR_EQ(freqmap_from_binary(NULL, 0), NULL, FLOAT_EPS, 0);
 }
 
 void test_freqmap_from_binary_empty(void)
@@ -224,7 +223,7 @@ void test_freqmap_from_binary_empty(void)
 
 	actual_map = freqmap_from_binary(bits, 0);
 
-	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
 
 	free(actual_map);
 }
@@ -240,7 +239,7 @@ void test_freqmap_from_binary_single_byte(void)
 
 	actual_map = freqmap_from_binary(bits, 1);
 
-	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
 
 	free(actual_map);
 }
@@ -256,7 +255,7 @@ void test_freqmap_from_binary_lowercase(void)
 
 	actual_map = freqmap_from_binary(bits, 1);
 
-	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
 
 	free(actual_map);
 }
@@ -271,7 +270,7 @@ void test_freqmap_from_binary_nonletter(void)
 
 	actual_map = freqmap_from_binary(bits, 1);
 
-	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
 
 	free(actual_map);
 }
@@ -290,7 +289,7 @@ void test_freqmap_from_binary_multiple_bytes(void)
 
 	actual_map = freqmap_from_binary(bits, 9);
 
-	assert_farrs_eq(26, expected_map, actual_map, FLOAT_EPS);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
 
 	free(actual_map);
 }
