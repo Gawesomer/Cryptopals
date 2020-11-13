@@ -12,6 +12,8 @@ int bytecmp(const void *pa, const void *pb);
 
 int float_eq(float a, float b, float eps);
 
+int floatcmp(const void *pa, const void *pb, float eps);
+
 int arrcmp(const void *a_arr, const void *b_arr, size_t nel, size_t width, \
 		int (*compare)(const void *, const void *));
 
