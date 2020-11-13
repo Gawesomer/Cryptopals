@@ -8,22 +8,6 @@
 #include <string.h>
 #include <assert.h>
 
-/* Assert that `expected` and `actual` float arrays are pairwise equal
- * params:
- * 	- expectedlen: length of `expected`
- * 	- expected: float array to compare to
- * 	- actual: float array to be compared
- * 	- eps: positive epsilon to specify the acceptable range within which
- * 	       floats may be considered equal
- * returns:
- * 	ends execution on failure
- * 	otherwise nothing
- * notes:
- * 	fails to notice that `actual` may be larger than `expected`
- */
-void assert_farrs_eq(size_t expectedlen, const float *expected, \
-		     const float *actual, float eps);
-
 /* These are the internal test functions.
  * They should not be called directly and should instead by used by utilizing
  * their respective wrapper macros defined below

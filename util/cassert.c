@@ -1,22 +1,5 @@
 #include "cassert.h"
 
-void assert_floats_eq(float expected, float actual, float eps)
-{
-	float lower, upper;
-
-	if ((FLT_MAX-eps) <= expected)
-		upper = FLT_MAX;
-	else
-		upper = expected+eps;
-
-	if ((-1)*(FLT_MAX+eps) >= expected)
-		lower = (-1)*FLT_MAX;
-	else
-		lower = expected-eps;
-
-	assert(lower <= actual && actual <= upper);
-}
-
 int test_true(const char *f, int l, const char *fun, const char *tk, int exp)
 {
 	if (exp)
