@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <float.h>
+#include <math.h>
 #include <string.h>
 
 /* These are the internal test functions.

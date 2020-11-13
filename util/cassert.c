@@ -36,6 +36,7 @@ int test_int_eq(const char *f, int l, const char *fun, \
 int float_eq(float a, float b, float eps)
 {
 	float lower, upper;
+	eps = fabs(eps);
 
 	if ((FLT_MAX-eps) <= a)
 		upper = FLT_MAX;
