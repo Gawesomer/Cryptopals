@@ -116,6 +116,37 @@ int float_eq(float a, float b, float eps)
 	return 1;
 }
 
+/* Compare two floats
+ * params:
+ * 	- pa: float pointer
+ * 	- pb: float pointer
+ * 	- eps: positive epsilon to specify the acceptable range within which
+ * 	       floats may be considered equal
+ * returns:
+ * 	integer greater than, equal to, or less than 0, accordingly as the
+ * 	float pointed to by `pa` is greater than, equal to, or less than the
+ * 	float pointed to by `pb`
+ * notes:
+ * 	a NULL-pointer will be considered as the smallest element
+ */
+int floatcmp(const void *pa, const void *pb, float eps)
+{
+	int c;
+	const float *a;
+	const float *b;
+
+	if ((c = check_null(pa, pb)) != 0)
+		return c-1;
+
+	a = (float *)pa;
+	b = (float *)pb;
+	if (float_eq(*a, *b, eps) == 0)
+		return 0;
+	if (*a < *b)
+		return -1;
+	return 1;
+}
+
 /* Compare two arrays
  * params:
  * 	- a_arr: array

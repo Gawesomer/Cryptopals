@@ -172,6 +172,57 @@ void test_float_eq_not_eq(void)
 	assert(float_eq(1.0, 1.1, 0.05) != 0);
 	assert(float_eq(FLT_MAX, -1*FLT_MAX, 10) != 0);
 }
+/*** floatcmp ***/
+
+void test_floatcmp_eq(void)
+{
+	printf("%s\n", __func__);
+
+	float a, b;
+
+	a = b = 7.1;
+	assert(floatcmp(&a, &b, 0.0) == 0);
+
+	a = 7.0;
+	b = 7.1;
+	assert(floatcmp(&a, &b, 0.1) == 0);
+}
+
+void test_floatcmp_lt(void)
+{
+	printf("%s\n", __func__);
+
+	float a, b;
+
+	a = 5.0;
+	b = 7.0;
+
+	assert(floatcmp(&a, &b, 0.1) < 0);
+}
+
+void test_floatcmp_gt(void)
+{
+	printf("%s\n", __func__);
+
+	float a, b;
+
+	a = 7.0;
+	b = 5.0;
+
+	assert(floatcmp(&a, &b, 0.1) > 0);
+}
+
+void test_floatcmp_null(void)
+{
+	printf("%s\n", __func__);
+
+	float e = 0;
+
+	assert(floatcmp(&e, NULL, 0.1) > 0);
+	assert(floatcmp(NULL, &e, 0.1) < 0);
+	assert(floatcmp(NULL, NULL, 0.1) == 0);
+}
+
 
 /*** arrcmp ***/
 
@@ -228,6 +279,11 @@ int main(void)
 	test_float_eq_eq_edge_cases();
 	test_float_eq_eq_w_negative_eps();
 	test_float_eq_not_eq();
+
+	test_floatcmp_eq();
+	test_floatcmp_lt();
+	test_floatcmp_gt();
+	test_floatcmp_null();
 
 	test_arrcmp_eq();
 	test_arrcmp_neq();
