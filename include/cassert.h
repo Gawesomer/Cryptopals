@@ -6,7 +6,6 @@
 #include <stdint.h>
 #include <float.h>
 #include <string.h>
-#include <assert.h>
 
 /* These are the internal test functions.
  * They should not be called directly and should instead by used by utilizing
