@@ -43,7 +43,7 @@ void test_xor_binary_singlebyte_null(void)
 {
 	printf("%s\n", __func__);
 
-	TEST_BYTES_EQ(0, xor_binary_singlebyte(NULL, 0, 0x00), NULL);
+	TEST_BYTES_EQ(xor_binary_singlebyte(NULL, 0, 0x00), NULL, 0);
 }
 
 void test_xor_binary_singlebyte_empty(void)
@@ -52,7 +52,7 @@ void test_xor_binary_singlebyte_empty(void)
 
 	uint8_t bits[] = {0};
 
-	TEST_BYTES_EQ(0, xor_binary_singlebyte(bits, 0, 0x00), NULL);
+	TEST_BYTES_EQ(xor_binary_singlebyte(bits, 0, 0x00), NULL, 0);
 }
 
 void test_xor_binary_singlebyte_single_byte(void)
@@ -66,7 +66,7 @@ void test_xor_binary_singlebyte_single_byte(void)
 
 	actual = xor_binary_singlebyte(bits, 1, byte);
 
-	TEST_BYTES_EQ(1, expected, actual);
+	TEST_BYTES_EQ(expected, actual, 1);
 
 	free(actual);
 }
@@ -82,7 +82,7 @@ void test_xor_binary_singlebyte_multiple_bytes(void)
 
 	actual = xor_binary_singlebyte(bits, 4, byte);
 
-	TEST_BYTES_EQ(4, expected, actual);
+	TEST_BYTES_EQ(expected, actual, 4);
 
 	free(actual);
 }

@@ -11,7 +11,7 @@ void test_binarytobase64_null(void)
 {
 	printf("%s\n", __func__);
 
-	TEST_BYTES_EQ(0, binarytobase64(NULL, 0), NULL);
+	TEST_BYTES_EQ(binarytobase64(NULL, 0), NULL, 0);
 }
 
 void test_binarytobase64_wholebyte(void)
@@ -22,7 +22,7 @@ void test_binarytobase64_wholebyte(void)
 	uint8_t expectedbase64[2] = {18, 16};
 	uint8_t *actualbase64 = binarytobase64(binary, 1);
 
-	TEST_BYTES_EQ(2, expectedbase64, actualbase64);
+	TEST_BYTES_EQ(expectedbase64, actualbase64, 2);
 
 	free(actualbase64);
 }
@@ -35,7 +35,7 @@ void test_binarytobase64_halfbyte(void)
 	uint8_t expectedbase64[2] = {2, 32};
 	uint8_t *actualbase64 = binarytobase64(binary, 1);
 
-	TEST_BYTES_EQ(2, expectedbase64, actualbase64);
+	TEST_BYTES_EQ(expectedbase64, actualbase64, 2);
 
 	free(actualbase64);
 }
@@ -48,7 +48,7 @@ void test_binarytobase64_twobytes(void)
 	uint8_t expectedbase64[3] = {18, 18, 28};
 	uint8_t *actualbase64 = binarytobase64(binary, 2);
 
-	TEST_BYTES_EQ(3, expectedbase64, actualbase64);
+	TEST_BYTES_EQ(expectedbase64, actualbase64, 3);
 
 	free(actualbase64);
 }

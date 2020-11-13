@@ -71,8 +71,8 @@ int test_float_eq(const char *f, int l, const char *fun, \
 }
 
 int test_bytes_eq(const char *f, int l, const char *fun, \
-		  const char *len_tk, const char *a_tk, const char *b_tk, \
-		  size_t len, const uint8_t *a, const uint8_t *b)
+		  const char *a_tk, const char *b_tk, const char *len_tk, \
+		  const uint8_t *a, const uint8_t *b, size_t len)
 {
 	int i;
 
@@ -113,8 +113,8 @@ int test_bytes_eq(const char *f, int l, const char *fun, \
 }
 
 int test_int_arr_eq(const char *f, int l, const char *fun, \
-		  const char *len_tk, const char *a_tk, const char *b_tk, \
-		  size_t len, const int *a, const int *b)
+		  const char *a_tk, const char *b_tk, const char *len_tk, \
+		  const int *a, const int *b, size_t len)
 {
 	int i;
 

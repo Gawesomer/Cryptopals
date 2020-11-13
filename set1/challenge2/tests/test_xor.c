@@ -13,9 +13,9 @@ void test_xor_binarrays_null(void)
 
 	uint8_t bits[] = {0xFF};
 
-	TEST_BYTES_EQ(0, xor_binarrays(NULL, NULL, 0), NULL);
-	TEST_BYTES_EQ(0, xor_binarrays(bits, NULL, 1), NULL);
-	TEST_BYTES_EQ(0, xor_binarrays(NULL, bits, 1), NULL);
+	TEST_BYTES_EQ(xor_binarrays(NULL, NULL, 0), NULL, 0);
+	TEST_BYTES_EQ(xor_binarrays(bits, NULL, 1), NULL, 0);
+	TEST_BYTES_EQ(xor_binarrays(NULL, bits, 1), NULL, 0);
 }
 
 void test_xor_binarrays_single_byte(void)
@@ -27,7 +27,7 @@ void test_xor_binarrays_single_byte(void)
 	uint8_t expected[] = {0x55};
 	uint8_t *actual = xor_binarrays(a, b, 1);
 
-	TEST_BYTES_EQ(1, expected, actual);
+	TEST_BYTES_EQ(expected, actual, 1);
 
 	free(actual);
 }
@@ -41,7 +41,7 @@ void test_xor_binarrays_two_bytes(void)
 	uint8_t expected[] = {0x44, 0x4C};
 	uint8_t *actual = xor_binarrays(a, b, 2);
 
-	TEST_BYTES_EQ(2, expected, actual);
+	TEST_BYTES_EQ(expected, actual, 2);
 
 	free(actual);
 }
