@@ -11,3 +11,4 @@ set1/challenge3/tests/test_freq
 set1/challenge3/tests/test_single_xor
 util/tests/test_div
 util/tests/test_cassert
+util/tests/test_cmp

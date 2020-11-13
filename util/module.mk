@@ -1,4 +1,4 @@
-CURRPROGS := util/tests/test_div util/tests/test_cassert
+CURRPROGS := util/tests/test_div util/tests/test_cassert util/tests/test_cmp
 
 PROGRAMS += $(CURRPROGS)
 
@@ -9,3 +9,5 @@ util: $(CURRPROGS)
 util/tests/test_div: util/tests/test_div.o util/cassert.o
 
 util/tests/test_cassert: util/tests/test_cassert.o
+
+util/tests/test_cmp: util/tests/test_cmp.o
