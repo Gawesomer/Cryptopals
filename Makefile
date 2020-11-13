@@ -4,9 +4,7 @@ INCLUDEDIR := ./include
 CC	 := gcc
 CFLAGS	 := -g -ggdb3 -Wall -Wextra -Werror -pedantic
 CPPFLAGS := -I $(INCLUDEDIR) -MMD -MP
-
 ARFLAGS  := rvu
-
 
 SRCS := $(shell find . -name "*.c")
 OBJS := $(SRCS:%.c=%.o)
