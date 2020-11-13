@@ -86,6 +86,36 @@ int bytecmp(const void *pa, const void *pb)
 	return 1;
 }
 
+/* Checks if two floats are equal within a certain range
+ * params:
+ * 	- a: float
+ * 	- b: float
+ * 	- eps: positive epsilon to specify the acceptable range within which
+ * 	       floats may be considered equal
+ * returns:
+ * 	0 if the absolute difference between `a` and `b` is less than or
+ * 	equal to `eps, nonzero otherwise
+ */
+int float_eq(float a, float b, float eps)
+{
+	float lower, upper;
+	eps = fabs(eps);
+
+	if ((FLT_MAX-eps) <= a)
+		upper = FLT_MAX;
+	else
+		upper = a+eps;
+
+	if ((-1)*(FLT_MAX+eps) >= a)
+		lower = (-1)*FLT_MAX;
+	else
+		lower = a-eps;
+
+	if (lower <= b && b <= upper)
+		return 0;
+	return 1;
+}
+
 /* Compare two arrays
  * params:
  * 	- a_arr: array

@@ -266,53 +266,6 @@ void test_TEST_INT_EQ_stacktrace_w_expr(void)
 	free(actualstr);
 }
 
-/*** float_eq ***/
-
-void test_float_eq_eq(void)
-{
-	printf("%s\n", __func__);
-
-	assert(float_eq(1.0, 1.0, 0.0) == 0);
-}
-
-void test_float_eq_eq_w_eps(void)
-{
-	printf("%s\n", __func__);
-
-	assert(float_eq(1.0, 1.1, 0.1) == 0);
-	assert(float_eq(-1.0, -1.1, 0.1) == 0);
-}
-
-void test_float_eq_eq_edge_cases(void)
-{
-	printf("%s\n", __func__);
-
-	assert(float_eq(FLT_MAX, FLT_MAX-0.1, 0.1) == 0);
-	assert(float_eq(FLT_MAX-0.1, FLT_MAX, 0.1) == 0);
-	assert(float_eq(-1*FLT_MAX, (-1*FLT_MAX)+0.1, 0.1) == 0);
-	assert(float_eq((-1*FLT_MAX)+0.1, -1*FLT_MAX, 0.1) == 0);
-	assert(float_eq(FLT_MAX, 0, FLT_MAX) == 0);
-	assert(float_eq(-1*FLT_MAX, 0, -1*FLT_MAX) == 0);
-}
-
-void test_float_eq_eq_w_negative_eps(void)
-{
-	printf("%s\n", __func__);
-
-	assert(float_eq(1.0, 1.1, -0.1) == 0);
-	assert(float_eq(-1.0, -1.1, -0.1) == 0);
-	assert(float_eq(FLT_MAX, FLT_MAX-0.1, -0.1) == 0);
-	assert(float_eq(-1*FLT_MAX, (-1*FLT_MAX)+0.1, -0.1) == 0);
-}
-
-void test_float_eq_not_eq(void)
-{
-	printf("%s\n", __func__);
-
-	assert(float_eq(1.0, 1.1, 0.05) != 0);
-	assert(float_eq(FLT_MAX, -1*FLT_MAX, 10) != 0);
-}
-
 /*** TEST_FLOAT_EQ ***/
 
 void test_TEST_FLOAT_EQ_eq(void)
@@ -446,12 +399,6 @@ int main(void)
 	test_TEST_INT_EQ_not_eq_w_expr();
 	test_TEST_INT_EQ_stacktrace();
 	test_TEST_INT_EQ_stacktrace_w_expr();
-
-	test_float_eq_eq();
-	test_float_eq_eq_w_eps();
-	test_float_eq_eq_edge_cases();
-	test_float_eq_eq_w_negative_eps();
-	test_float_eq_not_eq();
 
 	test_TEST_FLOAT_EQ_eq();
 	test_TEST_FLOAT_EQ_eq_w_expr();

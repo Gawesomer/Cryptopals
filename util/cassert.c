@@ -33,26 +33,6 @@ int test_int_eq(const char *f, int l, const char *fun, \
 	return 1;
 }
 
-int float_eq(float a, float b, float eps)
-{
-	float lower, upper;
-	eps = fabs(eps);
-
-	if ((FLT_MAX-eps) <= a)
-		upper = FLT_MAX;
-	else
-		upper = a+eps;
-
-	if ((-1)*(FLT_MAX+eps) >= a)
-		lower = (-1)*FLT_MAX;
-	else
-		lower = a-eps;
-
-	if (lower <= b && b <= upper)
-		return 0;
-	return 1;
-}
-
 int test_float_eq(const char *f, int l, const char *fun, \
 		  const char *a_tk, const char *b_tk, const char *eps_tk, \
 		  float a, float b, float eps)

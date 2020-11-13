@@ -8,6 +8,8 @@
 #include <math.h>
 #include <string.h>
 
+#include "cmp.h"
+
 /* These are the internal test functions.
  * They should not be called directly and should instead by used by utilizing
  * their respective wrapper macros defined below
