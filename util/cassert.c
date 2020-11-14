@@ -105,10 +105,10 @@ int test_int_arr_eq(const char *f, int l, const char *fun, \
 	printf("FAIL: %s\n", fun);
 	printf("----------------------------------------------------------\n");
 	printf("\tFile \"%s\", line %d:\n", f, l);
-	printf("\t\tTEST_BYTES_EQ(%s, %s, %s)\n", len_tk, a_tk, b_tk);
+	printf("\t\tTEST_INT_ARR_EQ(%s, %s, %s)\n", a_tk, b_tk, len_tk);
 	if (a) {
 		printf("\t\t\t[");
-		for (i = 0; (size_t)i < len-1; ++i)
+		for (i = 0; (size_t)i < len; ++i)
 			printf("%d%s", a[i], ((size_t)i == len-1) ? "" : ", ");
 		printf("]\n");
 	} else {
