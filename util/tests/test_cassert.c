@@ -382,6 +382,121 @@ void test_TEST_FLOAT_EQ_stacktrace_w_expr(void)
 	free(actualstr);
 }
 
+/*** TEST_BYTES_EQ ***/
+
+void test_TEST_BYTES_EQ_eq(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t one_el[] = {0x12};
+	uint8_t mult_els[] = {0x12, 0x34, 0x45};
+
+	assert(TEST_BYTES_EQ(NULL, NULL, 0) == 0);
+	assert(TEST_BYTES_EQ(one_el, one_el, 1) == 0);
+	assert(TEST_BYTES_EQ(mult_els, mult_els, 3) == 0);
+}
+
+void test_TEST_BYTES_EQ_stacktrace(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t a[] = {0x12, 0x34, 0x56};
+	uint8_t b[] = {0x12, 0xD4, 0x56};
+	char *actualstr;
+	char expectedstr[BUFFSIZE];
+	FILE *buffer, *tmp;
+
+	snprintf(expectedstr, BUFFSIZE, \
+		"==========================================================\n"
+		"FAIL: %s\n"
+		"----------------------------------------------------------\n"
+		"\tFile \"%s\", line %d:\n"
+		"\t\tTEST_BYTES_EQ(%s, %s, %s)\n"
+		"\t\t\t[%x, %x, %x]\n"
+		"\t\t!=\t[%x, %x, %x]\n"
+		"----------------------------------------------------------\n", \
+		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		"a", "b", "3", a[0], a[1], a[2], b[0], b[1], b[2]);
+	actualstr = calloc(BUFFSIZE, sizeof(char));
+	buffer = fmemopen(actualstr, BUFFSIZE, "w");
+
+	tmp = stdout;
+	stdout = buffer;
+
+	TEST_BYTES_EQ(a, b, 3);
+
+	stdout = tmp;
+	fclose(buffer);
+
+	assert(strcmp(actualstr, expectedstr) == 0);
+
+	free(actualstr);
+}
+
+void test_TEST_BYTES_EQ_stacktrace_w_null(void)
+{
+	printf("%s\n", __func__);
+
+	uint8_t a[] = {0x12, 0x34, 0x56};
+	char *actualstr;
+	char expectedstr[BUFFSIZE];
+	FILE *buffer, *tmp;
+
+	// NULL as the first argument
+	snprintf(expectedstr, BUFFSIZE, \
+		"==========================================================\n"
+		"FAIL: %s\n"
+		"----------------------------------------------------------\n"
+		"\tFile \"%s\", line %d:\n"
+		"\t\tTEST_BYTES_EQ(%s, %s, %s)\n"
+		"\t\t\tNULL\n"
+		"\t\t!=\t[%x, %x, %x]\n"
+		"----------------------------------------------------------\n", \
+		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		"NULL", "a", "3", a[0], a[1], a[2]);
+	actualstr = calloc(BUFFSIZE, sizeof(char));
+	buffer = fmemopen(actualstr, BUFFSIZE, "w");
+
+	tmp = stdout;
+	stdout = buffer;
+
+	TEST_BYTES_EQ(NULL, a, 3);
+
+	stdout = tmp;
+	fclose(buffer);
+
+	assert(strcmp(actualstr, expectedstr) == 0);
+
+	free(actualstr);
+
+	// NULL as the second argument
+	snprintf(expectedstr, BUFFSIZE, \
+		"==========================================================\n"
+		"FAIL: %s\n"
+		"----------------------------------------------------------\n"
+		"\tFile \"%s\", line %d:\n"
+		"\t\tTEST_BYTES_EQ(%s, %s, %s)\n"
+		"\t\t\t[%x, %x, %x]\n"
+		"\t\t!=\tNULL\n"
+		"----------------------------------------------------------\n", \
+		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		"a", "NULL", "3", a[0], a[1], a[2]);
+	actualstr = calloc(BUFFSIZE, sizeof(char));
+	buffer = fmemopen(actualstr, BUFFSIZE, "w");
+
+	tmp = stdout;
+	stdout = buffer;
+
+	TEST_BYTES_EQ(a, NULL, 3);
+
+	stdout = tmp;
+	fclose(buffer);
+
+	assert(strcmp(actualstr, expectedstr) == 0);
+
+	free(actualstr);
+}
+
 int main(void)
 {
 	printf("--- %s ---\n", __FILE__);
@@ -406,6 +521,10 @@ int main(void)
 	test_TEST_FLOAT_EQ_not_eq_w_expr();
 	test_TEST_FLOAT_EQ_stacktrace();
 	test_TEST_FLOAT_EQ_stacktrace_w_expr();
+
+	test_TEST_BYTES_EQ_eq();
+	test_TEST_BYTES_EQ_stacktrace();
+	test_TEST_BYTES_EQ_stacktrace_w_null();
 
 	return EXIT_SUCCESS;
 }

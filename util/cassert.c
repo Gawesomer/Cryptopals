@@ -57,24 +57,17 @@ int test_bytes_eq(const char *f, int l, const char *fun, \
 {
 	int i;
 
-	if (!a && !b) {
+	if (arrcmp(a, b, len, sizeof(uint8_t), bytecmp) == 0)
 		return 0;
-	} else if (a && b) {
-		for (i = 0; (size_t)i < len && a[i] == b[i]; ++i)
-			;
-
-		if ((size_t)i == len)
-			return 0;
-	}
 
 	printf("==========================================================\n");
 	printf("FAIL: %s\n", fun);
 	printf("----------------------------------------------------------\n");
 	printf("\tFile \"%s\", line %d:\n", f, l);
-	printf("\t\tTEST_BYTES_EQ(%s, %s, %s)\n", len_tk, a_tk, b_tk);
+	printf("\t\tTEST_BYTES_EQ(%s, %s, %s)\n", a_tk, b_tk, len_tk);
 	if (a) {
 		printf("\t\t\t[");
-		for (i = 0; (size_t)i < len-1; ++i)
+		for (i = 0; (size_t)i < len; ++i)
 			printf("%x%s", a[i], ((size_t)i == len-1) ? "" : ", ");
 		printf("]\n");
 	} else {
