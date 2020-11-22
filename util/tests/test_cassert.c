@@ -278,14 +278,14 @@ void test_TEST_FLOAT_EQ_eq(void)
 {
 	printf("%s\n", __func__);
 
-	assert(TEST_FLOAT_EQ(1.0, 1.0) == 0);
+	assert(TEST_FLOAT_EQ(1.0f, 1.0f) == 0);
 }
 
 void test_TEST_FLOAT_EQ_eq_w_expr(void)
 {
 	printf("%s\n", __func__);
 
-	assert(TEST_FLOAT_EQ(0.1+1.0, 1.0+0.1) == 0);
+	assert(TEST_FLOAT_EQ(0.1f+1.0f, 1.0f+0.1f) == 0);
 }
 
 void test_TEST_FLOAT_EQ_not_eq(void)
@@ -298,7 +298,7 @@ void test_TEST_FLOAT_EQ_not_eq(void)
 	tmp = stdout;
 	stdout = devnull;
 
-	assert(TEST_FLOAT_EQ(1.0, 1.2) != 0);
+	assert(TEST_FLOAT_EQ(1.0f, 1.2f) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
@@ -314,7 +314,7 @@ void test_TEST_FLOAT_EQ_not_eq_w_expr(void)
 	tmp = stdout;
 	stdout = devnull;
 
-	assert(TEST_FLOAT_EQ(0.0+1.0, 3.0-1.8) != 0);
+	assert(TEST_FLOAT_EQ(0.0f+1.0f, 3.0f-1.8f) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
@@ -337,14 +337,14 @@ void test_TEST_FLOAT_EQ_stacktrace(void)
 		"\t\t\t%f != %f\n"
 		"----------------------------------------------------------\n", \
 		__FUNCTION__, __FILE__, __LINE__ + 8, \
-		"1.0", "1.2", 1.0, 1.2);
+		"1.0f", "1.2f", 1.0f, 1.2f);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
 	tmp = stdout;
 	stdout = buffer;
 
-	TEST_FLOAT_EQ(1.0, 1.2);
+	TEST_FLOAT_EQ(1.0f, 1.2f);
 
 	stdout = tmp;
 	fclose(buffer);
@@ -371,14 +371,14 @@ void test_TEST_FLOAT_EQ_stacktrace_w_expr(void)
 		"\t\t\t%f != %f\n"
 		"----------------------------------------------------------\n", \
 		__FUNCTION__, __FILE__, __LINE__ + 8, \
-		"0.0+1.0", "3.0-1.8", 1.0, 1.2);
+		"0.0f+1.0f", "3.0f-1.8f", 1.0f, 1.2f);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
 	tmp = stdout;
 	stdout = buffer;
 
-	TEST_FLOAT_EQ(0.0+1.0, 3.0-1.8);
+	TEST_FLOAT_EQ(0.0f+1.0f, 3.0f-1.8f);
 
 	stdout = tmp;
 	fclose(buffer);

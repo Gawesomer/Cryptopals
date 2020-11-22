@@ -236,7 +236,7 @@ void test_floatcmp_eq(void)
 
 	float a, b;
 
-	a = b = 7.1;
+	a = b = 7.1f;
 	assert(floatcmp(&a, &b) == 0);
 }
 
@@ -246,8 +246,8 @@ void test_floatcmp_lt(void)
 
 	float a, b;
 
-	a = 5.0;
-	b = 7.0;
+	a = 5.0f;
+	b = 7.0f;
 
 	assert(floatcmp(&a, &b) < 0);
 }
@@ -258,8 +258,8 @@ void test_floatcmp_gt(void)
 
 	float a, b;
 
-	a = 7.0;
-	b = 5.0;
+	a = 7.0f;
+	b = 5.0f;
 
 	assert(floatcmp(&a, &b) > 0);
 }
@@ -268,7 +268,7 @@ void test_floatcmp_null(void)
 {
 	printf("%s\n", __func__);
 
-	float e = 0;
+	float e = 0.0f;
 
 	assert(floatcmp(&e, NULL) > 0);
 	assert(floatcmp(NULL, &e) < 0);

@@ -157,7 +157,7 @@ int float_eq(float a, float b)
 	float difference = fabs(a - b);
 	if (difference <= FLT_FIXED_EPS)
 		return 0;
-	if ((a < 0) != (b < 0))
+	if ((a < 0.0f) != (b < 0.0f))
 		return 1;
 	if (ulpdist(a, b) <= FLT_ULP_EPS)
 		return 0;
