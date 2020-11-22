@@ -127,14 +127,8 @@ int test_float_arr_eq(const char *f, int l, const char *fun, \
 {
 	int i;
 
-	if (!a && !b) {
+	if (arrcmp(a, b, len, sizeof(float), floatcmp) == 0)
 		return 0;
-	} else if (a && b) {
-		for (i=0; (size_t)i<len && float_eq(a[i],b[i])==0; ++i)
-			;
-		if ((size_t)i == len)
-			return 0;
-	}
 
 	printf("==========================================================\n");
 	printf("FAIL: %s\n", fun);
