@@ -55,8 +55,6 @@ int test_bytes_eq(const char *f, int l, const char *fun, \
 		  const char *a_tk, const char *b_tk, const char *len_tk, \
 		  const uint8_t *a, const uint8_t *b, size_t len)
 {
-	int i;
-
 	if (arrcmp(a, b, len, sizeof(uint8_t), bytecmp) == 0)
 		return 0;
 
@@ -65,22 +63,12 @@ int test_bytes_eq(const char *f, int l, const char *fun, \
 	printf("----------------------------------------------------------\n");
 	printf("\tFile \"%s\", line %d:\n", f, l);
 	printf("\t\tTEST_BYTES_EQ(%s, %s, %s)\n", a_tk, b_tk, len_tk);
-	if (a) {
-		printf("\t\t\t[");
-		for (i = 0; (size_t)i < len; ++i)
-			printf("%x%s", a[i], ((size_t)i == len-1) ? "" : ", ");
-		printf("]\n");
-	} else {
-		printf("\t\t\tNULL\n");
-	}
-	if (b) {
-		printf("\t\t!=\t[");
-		for (i = 0; (size_t)i < len; ++i)
-			printf("%x%s", b[i], ((size_t)i == len-1) ? "" : ", ");
-		printf("]\n");
-	} else {
-		printf("\t\t!=\tNULL\n");
-	}
+	printf("\t\t\t");
+	arr_displ(stdout, a, len, sizeof(uint8_t), byte_displ);
+	printf("\n");
+	printf("\t\t!=\t");
+	arr_displ(stdout, b, len, sizeof(uint8_t), byte_displ);
+	printf("\n");
 	printf("----------------------------------------------------------\n");
 
 	return 1;
@@ -90,8 +78,6 @@ int test_int_arr_eq(const char *f, int l, const char *fun, \
 		  const char *a_tk, const char *b_tk, const char *len_tk, \
 		  const int *a, const int *b, size_t len)
 {
-	int i;
-
 	if (arrcmp(a, b, len, sizeof(int), intcmp) == 0)
 		return 0;
 
@@ -100,22 +86,12 @@ int test_int_arr_eq(const char *f, int l, const char *fun, \
 	printf("----------------------------------------------------------\n");
 	printf("\tFile \"%s\", line %d:\n", f, l);
 	printf("\t\tTEST_INT_ARR_EQ(%s, %s, %s)\n", a_tk, b_tk, len_tk);
-	if (a) {
-		printf("\t\t\t[");
-		for (i = 0; (size_t)i < len; ++i)
-			printf("%d%s", a[i], ((size_t)i == len-1) ? "" : ", ");
-		printf("]\n");
-	} else {
-		printf("\t\t\tNULL\n");
-	}
-	if (b) {
-		printf("\t\t!=\t[");
-		for (i = 0; (size_t)i < len; ++i)
-			printf("%d%s", b[i], ((size_t)i == len-1) ? "" : ", ");
-		printf("]\n");
-	} else {
-		printf("\t\t!=\tNULL\n");
-	}
+	printf("\t\t\t");
+	arr_displ(stdout, a, len, sizeof(int), int_displ);
+	printf("\n");
+	printf("\t\t!=\t");
+	arr_displ(stdout, b, len, sizeof(int), int_displ);
+	printf("\n");
 	printf("----------------------------------------------------------\n");
 
 	return 1;
@@ -125,8 +101,6 @@ int test_float_arr_eq(const char *f, int l, const char *fun, \
 		const char *a_tk, const char *b_tk, const char *len_tk, \
 		const float *a, const float *b, size_t len)
 {
-	int i;
-
 	if (arrcmp(a, b, len, sizeof(float), floatcmp) == 0)
 		return 0;
 
@@ -135,22 +109,12 @@ int test_float_arr_eq(const char *f, int l, const char *fun, \
 	printf("----------------------------------------------------------\n");
 	printf("\tFile \"%s\", line %d:\n", f, l);
 	printf("\t\tTEST_FLOAT_ARR_EQ(%s, %s, %s)\n", a_tk, b_tk, len_tk);
-	if (a) {
-		printf("\t\t\t[");
-		for (i = 0; (size_t)i < len; ++i)
-			printf("%f%s", a[i], ((size_t)i == len-1) ? "" : ", ");
-		printf("]\n");
-	} else {
-		printf("\t\t\tNULL\n");
-	}
-	if (b) {
-		printf("\t\t!=\t[");
-		for (i = 0; (size_t)i < len; ++i)
-			printf("%f%s", b[i], ((size_t)i == len-1) ? "" : ", ");
-		printf("]\n");
-	} else {
-		printf("\t\t!=\tNULL\n");
-	}
+	printf("\t\t\t");
+	arr_displ(stdout, a, len, sizeof(float), float_displ);
+	printf("\n");
+	printf("\t\t!=\t");
+	arr_displ(stdout, b, len, sizeof(float), float_displ);
+	printf("\n");
 	printf("----------------------------------------------------------\n");
 
 	return 1;
