@@ -21,15 +21,11 @@ int test_int_eq(const char *f, int l, const char *fun, \
 int test_float_eq(const char *f, int l, const char *fun, \
 		  const char *a_tk, const char *b_tk, \
 		  float a, float b);
-int test_bytes_eq(const char *f, int l, const char *fun, \
-		  const char *a_tk, const char *b_tk, const char *len_tk, \
-		  const uint8_t *a, const uint8_t *b, size_t len);
-int test_int_arr_eq(const char *f, int l, const char *fun, \
-		    const char *a_tk, const char *b_tk, const char *len_tk, \
-		    const int *a, const int *b, size_t len);
-int test_float_arr_eq(const char *f, int l, const char *fun, \
-		      const char *a_tk, const char *b_tk, const char *len_tk, \
-		      const float *a, const float *b, size_t len);
+int test_arr_eq(const char *macro, const char *f, int l, const char *fun, \
+		const char *a_tk, const char *b_tk, const char *nel_tk, \
+		const void *a, const void *b, size_t nel, size_t width, \
+		int (*compare)(const void *, const void *),
+		void (*display)(FILE *, const void *));
 int test_str_eq(const char *f, int l, const char *fun, \
 		const char *s1_tk, const char *s2_tk, \
 		const char *s1, const char *s2);
@@ -76,8 +72,10 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * 	in the case where one is longer, it will fail to notice it, possibly
  * 	resulting in false positives
  */
-#define TEST_BYTES_EQ(a, b, len)	test_bytes_eq(__FILE__, __LINE__, \
-					__FUNCTION__, #a, #b, #len, a, b, len)
+#define TEST_BYTES_EQ(a, b, len) \
+	test_arr_eq("TEST_BYTES_EQ", __FILE__, __LINE__, __FUNCTION__, \
+			#a, #b, #len, a, b, len, \
+			sizeof(uint8_t), bytecmp, byte_displ)
 
 /* Tests integer arrays to be equal, prints error message if `a` is not equal
  * to `b`
@@ -93,8 +91,10 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * 	in the case where one is longer, it will fail to notice it, possibly
  * 	resulting in false positives
  */
-#define TEST_INT_ARR_EQ(a, b, len)	test_int_arr_eq(__FILE__, __LINE__, \
-					__FUNCTION__, #a, #b, #len, a, b, len)
+#define TEST_INT_ARR_EQ(a, b, len) \
+	test_arr_eq("TEST_INT_ARR_EQ", __FILE__, __LINE__, __FUNCTION__, \
+			#a, #b, #len, a, b, len, \
+			sizeof(int), intcmp, int_displ)
 
 /* Tests float arrays to be equal, prints error message if `a` is not equal
  * to `b`
@@ -110,10 +110,10 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * 	in the case where one is longer, it will fail to notice it, possibly
  * 	resulting in false positives
  */
-#define TEST_FLOAT_ARR_EQ(a, b, len)	test_float_arr_eq(__FILE__, \
-						__LINE__, __FUNCTION__, \
-						#a, #b, #len, \
-						a, b, len)
+#define TEST_FLOAT_ARR_EQ(a, b, len) \
+	test_arr_eq("TEST_FLOAT_ARR_EQ", __FILE__, __LINE__, __FUNCTION__, \
+			#a, #b, #len, a, b, len, \
+			sizeof(float), floatcmp, float_displ)
 
 /* Tests C-strings to be equal, prints error message if `s1` is not equal to \
  * `s2`
