@@ -11,14 +11,14 @@ void test_hextobinary_null(void)
 {
 	printf("%s\n", __func__);
 
-	TEST_BYTES_EQ(hextobinary(NULL), NULL, 0);
+	TEST_BYTE_ARR_EQ(hextobinary(NULL), NULL, 0);
 }
 
 void test_hextobinary_empty(void)
 {
 	printf("%s\n", __func__);
 
-	TEST_BYTES_EQ(hextobinary(""), NULL, 0);
+	TEST_BYTE_ARR_EQ(hextobinary(""), NULL, 0);
 }
 
 void test_hextobinary_wholebyte(void)
@@ -29,7 +29,7 @@ void test_hextobinary_wholebyte(void)
 	uint8_t expectedbinary[1] = {0x49};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTES_EQ(expectedbinary, actualbinary, 1);
+	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
 	free(actualbinary);
 }
@@ -42,7 +42,7 @@ void test_hextobinary_halfbyte(void)
 	uint8_t expectedbinary[1] = {0x0A};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTES_EQ(expectedbinary, actualbinary, 1);
+	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
 	free(actualbinary);
 }
@@ -55,7 +55,7 @@ void test_hextobinary_lowercase(void)
 	uint8_t expectedbinary[1] = {0x0a};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTES_EQ(expectedbinary, actualbinary, 1);
+	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
 	free(actualbinary);
 }
@@ -68,7 +68,7 @@ void test_hextobinary_odd_length(void)
 	uint8_t expectedbinary[] = {0x0F, 0xFF};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTES_EQ(expectedbinary, actualbinary, 2);
+	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 2);
 
 	free(actualbinary);
 }
@@ -77,7 +77,7 @@ void test_hextobinary_invalidhex(void)
 {
 	printf("%s\n", __func__);
 
-	TEST_BYTES_EQ(hextobinary("G"), NULL, 0);
+	TEST_BYTE_ARR_EQ(hextobinary("G"), NULL, 0);
 }
 
 void test_hextobinary_cryptopals_example(void)
@@ -94,7 +94,7 @@ void test_hextobinary_cryptopals_example(void)
 		0x6f, 0x6d};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTES_EQ(expectedbinary, actualbinary, 48);
+	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 48);
 
 	free(actualbinary);
 }

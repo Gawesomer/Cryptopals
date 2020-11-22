@@ -76,8 +76,8 @@ int test_str_eq(const char *macro, const char *f, int l, const char *fun, \
  * 	in the case where one is longer, it will fail to notice it, possibly
  * 	resulting in false positives
  */
-#define TEST_BYTES_EQ(a, b, nel) \
-	test_arr_eq("TEST_BYTES_EQ", __FILE__, __LINE__, __FUNCTION__, \
+#define TEST_BYTE_ARR_EQ(a, b, nel) \
+	test_arr_eq("TEST_BYTE_ARR_EQ", __FILE__, __LINE__, __FUNCTION__, \
 			#a, #b, #nel, a, b, nel, \
 			sizeof(uint8_t), bytecmp, byte_displ)
 

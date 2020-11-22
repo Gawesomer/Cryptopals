@@ -388,21 +388,21 @@ void test_TEST_FLOAT_EQ_stacktrace_w_expr(void)
 	free(actualstr);
 }
 
-/*** TEST_BYTES_EQ ***/
+/*** TEST_BYTE_ARR_EQ ***/
 
-void test_TEST_BYTES_EQ_eq(void)
+void test_TEST_BYTE_ARR_EQ_eq(void)
 {
 	printf("%s\n", __func__);
 
 	uint8_t one_el[] = {0x12};
 	uint8_t mult_els[] = {0x12, 0x34, 0x45};
 
-	assert(TEST_BYTES_EQ(NULL, NULL, 0) == 0);
-	assert(TEST_BYTES_EQ(one_el, one_el, 1) == 0);
-	assert(TEST_BYTES_EQ(mult_els, mult_els, 3) == 0);
+	assert(TEST_BYTE_ARR_EQ(NULL, NULL, 0) == 0);
+	assert(TEST_BYTE_ARR_EQ(one_el, one_el, 1) == 0);
+	assert(TEST_BYTE_ARR_EQ(mult_els, mult_els, 3) == 0);
 }
 
-void test_TEST_BYTES_EQ_stacktrace(void)
+void test_TEST_BYTE_ARR_EQ_stacktrace(void)
 {
 	printf("%s\n", __func__);
 
@@ -417,7 +417,7 @@ void test_TEST_BYTES_EQ_stacktrace(void)
 		"FAIL: %s\n"
 		"----------------------------------------------------------\n"
 		"\tFile \"%s\", line %d:\n"
-		"\t\tTEST_BYTES_EQ(%s, %s, %s)\n"
+		"\t\tTEST_BYTE_ARR_EQ(%s, %s, %s)\n"
 		"\t\t\t[%x, %x, %x]\n"
 		"\t\t!=\t[%x, %x, %x]\n"
 		"----------------------------------------------------------\n", \
@@ -429,7 +429,7 @@ void test_TEST_BYTES_EQ_stacktrace(void)
 	tmp = stdout;
 	stdout = buffer;
 
-	TEST_BYTES_EQ(a, b, 3);
+	TEST_BYTE_ARR_EQ(a, b, 3);
 
 	stdout = tmp;
 	fclose(buffer);
@@ -439,7 +439,7 @@ void test_TEST_BYTES_EQ_stacktrace(void)
 	free(actualstr);
 }
 
-void test_TEST_BYTES_EQ_stacktrace_w_null(void)
+void test_TEST_BYTE_ARR_EQ_stacktrace_w_null(void)
 {
 	printf("%s\n", __func__);
 
@@ -456,7 +456,7 @@ void test_TEST_BYTES_EQ_stacktrace_w_null(void)
 		"FAIL: %s\n"
 		"----------------------------------------------------------\n"
 		"\tFile \"%s\", line %d:\n"
-		"\t\tTEST_BYTES_EQ(%s, %s, %s)\n"
+		"\t\tTEST_BYTE_ARR_EQ(%s, %s, %s)\n"
 		"\t\t\tNULL\n"
 		"\t\t!=\t[%x, %x, %x]\n"
 		"----------------------------------------------------------\n", \
@@ -467,7 +467,7 @@ void test_TEST_BYTES_EQ_stacktrace_w_null(void)
 	tmp = stdout;
 	stdout = buffer;
 
-	TEST_BYTES_EQ(NULL, a, 3);
+	TEST_BYTE_ARR_EQ(NULL, a, 3);
 
 	stdout = tmp;
 	fclose(buffer);
@@ -480,7 +480,7 @@ void test_TEST_BYTES_EQ_stacktrace_w_null(void)
 		"FAIL: %s\n"
 		"----------------------------------------------------------\n"
 		"\tFile \"%s\", line %d:\n"
-		"\t\tTEST_BYTES_EQ(%s, %s, %s)\n"
+		"\t\tTEST_BYTE_ARR_EQ(%s, %s, %s)\n"
 		"\t\t\t[%x, %x, %x]\n"
 		"\t\t!=\tNULL\n"
 		"----------------------------------------------------------\n", \
@@ -491,7 +491,7 @@ void test_TEST_BYTES_EQ_stacktrace_w_null(void)
 	tmp = stdout;
 	stdout = buffer;
 
-	TEST_BYTES_EQ(a, NULL, 3);
+	TEST_BYTE_ARR_EQ(a, NULL, 3);
 
 	stdout = tmp;
 	fclose(buffer);
@@ -863,9 +863,9 @@ int main(void)
 	test_TEST_FLOAT_EQ_stacktrace();
 	test_TEST_FLOAT_EQ_stacktrace_w_expr();
 
-	test_TEST_BYTES_EQ_eq();
-	test_TEST_BYTES_EQ_stacktrace();
-	test_TEST_BYTES_EQ_stacktrace_w_null();
+	test_TEST_BYTE_ARR_EQ_eq();
+	test_TEST_BYTE_ARR_EQ_stacktrace();
+	test_TEST_BYTE_ARR_EQ_stacktrace_w_null();
 
 	test_TEST_INT_ARR_EQ_eq();
 	test_TEST_INT_ARR_EQ_stacktrace();
