@@ -92,14 +92,8 @@ int test_int_arr_eq(const char *f, int l, const char *fun, \
 {
 	int i;
 
-	if (!a && !b) {
+	if (arrcmp(a, b, len, sizeof(int), intcmp) == 0)
 		return 0;
-	} else if (a && b) {
-		for (i = 0; (size_t)i < len && a[i] == b[i]; ++i)
-			;
-		if ((size_t)i == len)
-			return 0;
-	}
 
 	printf("==========================================================\n");
 	printf("FAIL: %s\n", fun);
