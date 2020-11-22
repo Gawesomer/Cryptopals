@@ -15,10 +15,11 @@
  * They should not be called directly and should instead by used by utilizing
  * their respective wrapper macros defined below
  */
-int test_true(const char *f, int l, const char *fun, const char *tk, int exp);
-int test_int_eq(const char *f, int l, const char *fun, \
+int test_true(const char *macro, const char *f, int l, const char *fun, \
+		const char *tk, int exp);
+int test_int_eq(const char *macro, const char *f, int l, const char *fun, \
 		const char *a_tk, const char *b_tk, int a, int b);
-int test_float_eq(const char *f, int l, const char *fun, \
+int test_float_eq(const char *macro, const char *f, int l, const char *fun, \
 		  const char *a_tk, const char *b_tk, \
 		  float a, float b);
 int test_arr_eq(const char *macro, const char *f, int l, const char *fun, \
@@ -26,7 +27,7 @@ int test_arr_eq(const char *macro, const char *f, int l, const char *fun, \
 		const void *a, const void *b, size_t nel, size_t width, \
 		int (*compare)(const void *, const void *),
 		void (*display)(FILE *, const void *));
-int test_str_eq(const char *f, int l, const char *fun, \
+int test_str_eq(const char *macro, const char *f, int l, const char *fun, \
 		const char *s1_tk, const char *s2_tk, \
 		const char *s1, const char *s2);
 
@@ -36,7 +37,8 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * returns:
  * 	0 if `exp` is true, 1 otherwise
  */
-#define TEST_TRUE(exp)	test_true(__FILE__, __LINE__, __FUNCTION__, #exp, exp)
+#define TEST_TRUE(exp) \
+	test_true("TEST_TRUE", __FILE__, __LINE__, __FUNCTION__, #exp, exp)
 
 /* Tests integers to be equal, prints error message if `a` is not equal to `b`
  * params:
@@ -45,8 +47,9 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * returns:
  * 	0 if `a` == `b`, 1 otherwise
  */
-#define TEST_INT_EQ(a, b)	test_int_eq(__FILE__, __LINE__, __FUNCTION__, \
-					#a, #b, a, b)
+#define TEST_INT_EQ(a, b) \
+	test_int_eq("TEST_INT_EQ", __FILE__, __LINE__, __FUNCTION__, \
+		#a, #b, a, b)
 
 /* Tests floats to be equal, prints error message if `a` is not equal to `b`
  * params:
@@ -55,8 +58,9 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * returns:
  * 	0 if `a` == `b`, 1 otherwise
  */
-#define TEST_FLOAT_EQ(a, b)	test_float_eq(__FILE__, __LINE__, \
-					__FUNCTION__, #a, #b, a, b)
+#define TEST_FLOAT_EQ(a, b) \
+	test_float_eq("TEST_FLOAT_EQ", __FILE__, __LINE__, __FUNCTION__, \
+		#a, #b, a, b)
 
 /* Tests byte arrays to be equal, prints error message if `a` is not equal to
  * `b`
@@ -123,7 +127,8 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * returns:
  * 	0 if `s1` == `s2`, 1 otherwise
  */
-#define TEST_STR_EQ(s1, s2)	test_str_eq(__FILE__, __LINE__, \
-				__FUNCTION__, #s1, #s2, s1, s2)
+#define TEST_STR_EQ(s1, s2) \
+	test_str_eq("TEST_STR_EQ", __FILE__, __LINE__, __FUNCTION__, \
+		#s1, #s2, s1, s2)
 
 #endif
