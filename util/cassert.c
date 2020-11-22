@@ -19,7 +19,7 @@ int test_true(const char *f, int l, const char *fun, const char *tk, int exp)
 int test_int_eq(const char *f, int l, const char *fun, \
 		const char *a_tk, const char *b_tk, int a, int b)
 {
-	if (a == b)
+	if (intcmp(&a, &b) == 0)
 		return 0;
 
 	printf("==========================================================\n");
@@ -37,7 +37,7 @@ int test_float_eq(const char *f, int l, const char *fun, \
 		  const char *a_tk, const char *b_tk, \
 		  float a, float b)
 {
-	if (float_eq(a, b) == 0)
+	if (floatcmp(&a, &b) == 0)
 		return 0;
 
 	printf("==========================================================\n");

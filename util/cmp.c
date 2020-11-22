@@ -1,6 +1,6 @@
 #include "cmp.h"
 
-/* Checks that pointers given are not NULL
+/* Check that pointers given are not NULL
  * params:
  * 	- pa: void pointer
  * 	- pb: void pointer
