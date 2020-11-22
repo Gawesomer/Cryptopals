@@ -727,6 +727,117 @@ void test_TEST_FLOAT_ARR_EQ_stacktrace_w_null(void)
 	free(actualstr);
 }
 
+/*** TEST_STR_EQ ***/
+
+void test_TEST_STR_EQ_eq(void)
+{
+	printf("%s\n", __func__);
+
+	char s[] = "hello world";
+
+	assert(TEST_STR_EQ(NULL, NULL) == 0);
+	assert(TEST_STR_EQ(s, s) == 0);
+}
+
+void test_TEST_STR_EQ_stacktrace(void)
+{
+	printf("%s\n", __func__);
+
+	char s1[] = "hello";
+	char s2[] = "byebye";
+	char *actualstr;
+	char expectedstr[BUFFSIZE];
+	FILE *buffer, *tmp;
+
+	snprintf(expectedstr, BUFFSIZE, \
+		"==========================================================\n"
+		"FAIL: %s\n"
+		"----------------------------------------------------------\n"
+		"\tFile \"%s\", line %d:\n"
+		"\t\tTEST_STR_EQ(%s, %s)\n"
+		"\t\t\t\"%s\"\n"
+		"\t\t!=\t\"%s\"\n"
+		"----------------------------------------------------------\n", \
+		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		"s1", "s2", s1, s2);
+	actualstr = calloc(BUFFSIZE, sizeof(char));
+	buffer = fmemopen(actualstr, BUFFSIZE, "w");
+
+	tmp = stdout;
+	stdout = buffer;
+
+	TEST_STR_EQ(s1, s2);
+
+	stdout = tmp;
+	fclose(buffer);
+
+	assert(strcmp(actualstr, expectedstr) == 0);
+
+	free(actualstr);
+}
+
+void test_TEST_STR_EQ_stacktrace_w_null(void)
+{
+	printf("%s\n", __func__);
+
+	char s[] = "hello world";
+	char *actualstr;
+	char expectedstr[BUFFSIZE];
+	FILE *buffer, *tmp;
+
+	actualstr = calloc(BUFFSIZE, sizeof(char));
+
+	// NULL as the first argument
+	snprintf(expectedstr, BUFFSIZE, \
+		"==========================================================\n"
+		"FAIL: %s\n"
+		"----------------------------------------------------------\n"
+		"\tFile \"%s\", line %d:\n"
+		"\t\tTEST_STR_EQ(%s, %s)\n"
+		"\t\t\tNULL\n"
+		"\t\t!=\t\"%s\"\n"
+		"----------------------------------------------------------\n", \
+		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		"NULL", "s", s);
+	buffer = fmemopen(actualstr, BUFFSIZE, "w");
+
+	tmp = stdout;
+	stdout = buffer;
+
+	TEST_STR_EQ(NULL, s);
+
+	stdout = tmp;
+	fclose(buffer);
+
+	assert(strcmp(actualstr, expectedstr) == 0);
+
+	// NULL as the second argument
+	snprintf(expectedstr, BUFFSIZE, \
+		"==========================================================\n"
+		"FAIL: %s\n"
+		"----------------------------------------------------------\n"
+		"\tFile \"%s\", line %d:\n"
+		"\t\tTEST_STR_EQ(%s, %s)\n"
+		"\t\t\t\"%s\"\n"
+		"\t\t!=\tNULL\n"
+		"----------------------------------------------------------\n", \
+		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		"s", "NULL", s);
+	buffer = fmemopen(actualstr, BUFFSIZE, "w");
+
+	tmp = stdout;
+	stdout = buffer;
+
+	TEST_STR_EQ(s, NULL);
+
+	stdout = tmp;
+	fclose(buffer);
+
+	assert(strcmp(actualstr, expectedstr) == 0);
+
+	free(actualstr);
+}
+
 int main(void)
 {
 	printf("--- %s ---\n", __FILE__);
@@ -763,6 +874,10 @@ int main(void)
 	test_TEST_FLOAT_ARR_EQ_eq();
 	test_TEST_FLOAT_ARR_EQ_stacktrace();
 	test_TEST_FLOAT_ARR_EQ_stacktrace_w_null();
+
+	test_TEST_STR_EQ_eq();
+	test_TEST_STR_EQ_stacktrace();
+	test_TEST_STR_EQ_stacktrace_w_null();
 
 	return EXIT_SUCCESS;
 }

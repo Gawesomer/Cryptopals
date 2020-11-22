@@ -169,7 +169,7 @@ int test_str_eq(const char *f, int l, const char *fun, \
 	printf("FAIL: %s\n", fun);
 	printf("----------------------------------------------------------\n");
 	printf("\tFile \"%s\", line %d:\n", f, l);
-	printf("\t\tTEST_STRS_EQ(%s, %s)\n", s1_tk, s2_tk);
+	printf("\t\tTEST_STR_EQ(%s, %s)\n", s1_tk, s2_tk);
 	if (s1)
 		printf("\t\t\t\"%s\"\n", s1);
 	else
