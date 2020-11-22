@@ -63,18 +63,18 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * params:
  * 	- a: uint8_t byte array
  * 	- b: uint8_t byte array
- * 	- len: size_t length of both `a` and `b`
+ * 	- nel: size_t length of both `a` and `b`
  * returns:
  * 	0 if `a` == `b`, 1 otherwise
  * notes:
- * 	assumes that both `a` and `b` are of size `len`;
+ * 	assumes that both `a` and `b` are of size `nel`;
  * 	in the case where one is shorter, it will cause a read out of bounds,
  * 	in the case where one is longer, it will fail to notice it, possibly
  * 	resulting in false positives
  */
-#define TEST_BYTES_EQ(a, b, len) \
+#define TEST_BYTES_EQ(a, b, nel) \
 	test_arr_eq("TEST_BYTES_EQ", __FILE__, __LINE__, __FUNCTION__, \
-			#a, #b, #len, a, b, len, \
+			#a, #b, #nel, a, b, nel, \
 			sizeof(uint8_t), bytecmp, byte_displ)
 
 /* Tests integer arrays to be equal, prints error message if `a` is not equal
@@ -82,18 +82,18 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * params:
  * 	- a: integer array
  * 	- b: integer array
- * 	- len: size_t length of both `a` and `b`
+ * 	- nel: size_t length of both `a` and `b`
  * returns:
  * 	0 if `a` == `b`, 1 otherwise
  * notes:
- * 	assumes that both `a` and `b` are of size `len`;
+ * 	assumes that both `a` and `b` are of size `nel`;
  * 	in the case where one is shorter, it will cause a read out of bounds,
  * 	in the case where one is longer, it will fail to notice it, possibly
  * 	resulting in false positives
  */
-#define TEST_INT_ARR_EQ(a, b, len) \
+#define TEST_INT_ARR_EQ(a, b, nel) \
 	test_arr_eq("TEST_INT_ARR_EQ", __FILE__, __LINE__, __FUNCTION__, \
-			#a, #b, #len, a, b, len, \
+			#a, #b, #nel, a, b, nel, \
 			sizeof(int), intcmp, int_displ)
 
 /* Tests float arrays to be equal, prints error message if `a` is not equal
@@ -101,18 +101,18 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * params:
  * 	- a: float array
  * 	- b: float array
- * 	- len: size_t length of both `a` and `b`
+ * 	- nel: size_t length of both `a` and `b`
  * returns:
  * 	0 if `a` == `b`, 1 otherwise
  * notes:
- * 	assumes that both `a` and `b` are of size `len`;
+ * 	assumes that both `a` and `b` are of size `nel`;
  * 	in the case where one is shorter, it will cause a read out of bounds,
  * 	in the case where one is longer, it will fail to notice it, possibly
  * 	resulting in false positives
  */
-#define TEST_FLOAT_ARR_EQ(a, b, len) \
+#define TEST_FLOAT_ARR_EQ(a, b, nel) \
 	test_arr_eq("TEST_FLOAT_ARR_EQ", __FILE__, __LINE__, __FUNCTION__, \
-			#a, #b, #len, a, b, len, \
+			#a, #b, #nel, a, b, nel, \
 			sizeof(float), floatcmp, float_displ)
 
 /* Tests C-strings to be equal, prints error message if `s1` is not equal to \
