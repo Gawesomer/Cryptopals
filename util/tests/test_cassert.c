@@ -8,6 +8,12 @@
 
 #define BUFFSIZE	1024
 
+// Redefined here for test case consistency
+#undef FLT_FIXED_EPS
+#undef FLT_ULP_EPS
+#define	FLT_FIXED_EPS	0.1f
+#define FLT_ULP_EPS	3
+
 /*** TEST_TRUE ***/
 
 void test_TEST_TRUE_true(void)
@@ -272,14 +278,14 @@ void test_TEST_FLOAT_EQ_eq(void)
 {
 	printf("%s\n", __func__);
 
-	assert(TEST_FLOAT_EQ(1.0, 1.1, 0.1) == 0);
+	assert(TEST_FLOAT_EQ(1.0, 1.0) == 0);
 }
 
 void test_TEST_FLOAT_EQ_eq_w_expr(void)
 {
 	printf("%s\n", __func__);
 
-	assert(TEST_FLOAT_EQ(0.0+1.0, 1.0+0.1, 0.1) == 0);
+	assert(TEST_FLOAT_EQ(0.1+1.0, 1.0+0.1) == 0);
 }
 
 void test_TEST_FLOAT_EQ_not_eq(void)
@@ -292,7 +298,7 @@ void test_TEST_FLOAT_EQ_not_eq(void)
 	tmp = stdout;
 	stdout = devnull;
 
-	assert(TEST_FLOAT_EQ(1.0, 1.1, 0.05) != 0);
+	assert(TEST_FLOAT_EQ(1.0, 1.2) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
@@ -308,7 +314,7 @@ void test_TEST_FLOAT_EQ_not_eq_w_expr(void)
 	tmp = stdout;
 	stdout = devnull;
 
-	assert(TEST_FLOAT_EQ(0.0+1.0, 3.0-1.9, 0.05-0.0) != 0);
+	assert(TEST_FLOAT_EQ(0.0+1.0, 3.0-1.8) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
@@ -327,18 +333,18 @@ void test_TEST_FLOAT_EQ_stacktrace(void)
 		"FAIL: %s\n"
 		"----------------------------------------------------------\n"
 		"\tFile \"%s\", line %d:\n"
-		"\t\tTEST_FLOAT_EQ(%s, %s, %s)\n"
+		"\t\tTEST_FLOAT_EQ(%s, %s)\n"
 		"\t\t\t%f != %f\n"
 		"----------------------------------------------------------\n", \
 		__FUNCTION__, __FILE__, __LINE__ + 8, \
-		"1.0", "1.1", "0.05", 1.0, 1.1);
+		"1.0", "1.2", 1.0, 1.2);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
 	tmp = stdout;
 	stdout = buffer;
 
-	TEST_FLOAT_EQ(1.0, 1.1, 0.05);
+	TEST_FLOAT_EQ(1.0, 1.2);
 
 	stdout = tmp;
 	fclose(buffer);
@@ -361,18 +367,18 @@ void test_TEST_FLOAT_EQ_stacktrace_w_expr(void)
 		"FAIL: %s\n"
 		"----------------------------------------------------------\n"
 		"\tFile \"%s\", line %d:\n"
-		"\t\tTEST_FLOAT_EQ(%s, %s, %s)\n"
+		"\t\tTEST_FLOAT_EQ(%s, %s)\n"
 		"\t\t\t%f != %f\n"
 		"----------------------------------------------------------\n", \
 		__FUNCTION__, __FILE__, __LINE__ + 8, \
-		"0.0+1.0", "3.0-1.9", "0.05-0.0", 1.0, 1.1);
+		"0.0+1.0", "3.0-1.8", 1.0, 1.2);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
 	tmp = stdout;
 	stdout = buffer;
 
-	TEST_FLOAT_EQ(0.0+1.0, 3.0-1.9, 0.05-0.0);
+	TEST_FLOAT_EQ(0.0+1.0, 3.0-1.8);
 
 	stdout = tmp;
 	fclose(buffer);

@@ -18,8 +18,8 @@ int test_true(const char *f, int l, const char *fun, const char *tk, int exp);
 int test_int_eq(const char *f, int l, const char *fun, \
 		const char *a_tk, const char *b_tk, int a, int b);
 int test_float_eq(const char *f, int l, const char *fun, \
-		  const char *a_tk, const char *b_tk, const char *exp_tk, \
-		  float a, float b, float eps);
+		  const char *a_tk, const char *b_tk, \
+		  float a, float b);
 int test_bytes_eq(const char *f, int l, const char *fun, \
 		  const char *a_tk, const char *b_tk, const char *len_tk, \
 		  const uint8_t *a, const uint8_t *b, size_t len);
@@ -27,9 +27,8 @@ int test_int_arr_eq(const char *f, int l, const char *fun, \
 		    const char *a_tk, const char *b_tk, const char *len_tk, \
 		    const int *a, const int *b, size_t len);
 int test_float_arr_eq(const char *f, int l, const char *fun, \
-		      const char *a_tk, const char *b_tk, \
-		      const char *eps_tk, const char *len_tk, \
-		      const float *a, const float *b, float eps, size_t len);
+		      const char *a_tk, const char *b_tk, const char *len_tk, \
+		      const float *a, const float *b, size_t len);
 int test_str_eq(const char *f, int l, const char *fun, \
 		const char *s1_tk, const char *s2_tk, \
 		const char *s1, const char *s2);
@@ -56,13 +55,11 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * params:
  * 	- a: float
  * 	- b: float
- * 	- eps: positive epsilon to specify the acceptable range within which
- * 	       floats may be considered equal
  * returns:
  * 	0 if `a` == `b`, 1 otherwise
  */
-#define TEST_FLOAT_EQ(a, b, eps)	test_float_eq(__FILE__, __LINE__, \
-					__FUNCTION__, #a, #b, #eps, a, b, eps)
+#define TEST_FLOAT_EQ(a, b)	test_float_eq(__FILE__, __LINE__, \
+					__FUNCTION__, #a, #b, a, b)
 
 /* Tests byte arrays to be equal, prints error message if `a` is not equal to
  * `b`
@@ -103,8 +100,6 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * params:
  * 	- a: float array
  * 	- b: float array
- * 	- eps: positive epsilon to specify the acceptable range within which
- * 	       floats may be considered equal
  * 	- len: size_t length of both `a` and `b`
  * returns:
  * 	0 if `a` == `b`, 1 otherwise
@@ -114,10 +109,10 @@ int test_str_eq(const char *f, int l, const char *fun, \
  * 	in the case where one is longer, it will fail to notice it, possibly
  * 	resulting in false positives
  */
-#define TEST_FLOAT_ARR_EQ(a, b, eps, len)	test_float_arr_eq(__FILE__, \
+#define TEST_FLOAT_ARR_EQ(a, b, len)	test_float_arr_eq(__FILE__, \
 						__LINE__, __FUNCTION__, \
-						#a, #b, #eps, #len, \
-						a, b, eps, len)
+						#a, #b, #len, \
+						a, b, len)
 
 /* Tests C-strings to be equal, prints error message if `s1` is not equal to \
  * `s2`

@@ -86,32 +86,80 @@ int bytecmp(const void *pa, const void *pb)
 	return 1;
 }
 
-/* Checks if two floats are equal within a certain range
+/* Type pun a float to an integer
+ * params:
+ * 	- f: float
+ * returns:
+ * 	int32_t filled with binary data from `f`
+ */
+int32_t ftoi_punning(float f)
+{
+	int32_t e;
+	memcpy(&e, &f, sizeof(float));
+	return e;
+}
+
+/* Type pun an integer to a float
+ * params:
+ * 	- e: int32_t
+ * returns:
+ * 	float filled with binary data from `e`
+ */
+float itof_punning(int32_t e)
+{
+	float f;
+	memcpy(&f, &e, sizeof(int32_t));
+	return f;
+}
+
+/* Compute the distance in number of floating point values
+ * (Units of Least Precision) between two floats
  * params:
  * 	- a: float
  * 	- b: float
- * 	- eps: positive epsilon to specify the acceptable range within which
- * 	       floats may be considered equal
+ * returns:
+ * 	distance between `a` and `b` in ULPs
+ */
+int32_t ulpdist(float a, float b)
+{
+	int32_t ia, ib;
+	int32_t dist;
+
+	if (a == b)
+		return 0;
+	if ((a < 0.0f) != (b < 0.0f))
+		return INT_MAX;
+
+	ia = ftoi_punning(a);
+	ib = ftoi_punning(b);
+
+	dist = ia - ib;
+	if (dist < 0)
+		dist *= -1;
+	return dist;
+}
+
+/* Check if two floats are equal within FLT_FIXED_EPS or FLT_ULP_EPS
+ * params:
+ * 	- a: float
+ * 	- b: float
  * returns:
  * 	0 if the absolute difference between `a` and `b` is less than or
- * 	equal to `eps, nonzero otherwise
+ * 	equal to FLT_FIXED_EPS, or if the distance in ULPs between `a` and `b`
+ * 	is less than FLT_ULP_EPS, nonzero otherwise
+ * credits:
+ * 	implementation for `float_eq` as well as helper functions was taken
+ * 	from Matt Kline's paper "Comparing Floating-Point Numbers Is Tricky":
+ * 	https://bitbashing.io/comparing-floats.html
  */
-int float_eq(float a, float b, float eps)
+int float_eq(float a, float b)
 {
-	float lower, upper;
-	eps = fabs(eps);
-
-	if ((FLT_MAX-eps) <= a)
-		upper = FLT_MAX;
-	else
-		upper = a+eps;
-
-	if ((-1)*(FLT_MAX+eps) >= a)
-		lower = (-1)*FLT_MAX;
-	else
-		lower = a-eps;
-
-	if (lower <= b && b <= upper)
+	float difference = fabs(a - b);
+	if (difference <= FLT_FIXED_EPS)
+		return 0;
+	if ((a < 0) != (b < 0))
+		return 1;
+	if (ulpdist(a, b) <= FLT_ULP_EPS)
 		return 0;
 	return 1;
 }
@@ -120,8 +168,6 @@ int float_eq(float a, float b, float eps)
  * params:
  * 	- pa: float pointer
  * 	- pb: float pointer
- * 	- eps: positive epsilon to specify the acceptable range within which
- * 	       floats may be considered equal
  * returns:
  * 	integer greater than, equal to, or less than 0, accordingly as the
  * 	float pointed to by `pa` is greater than, equal to, or less than the
@@ -129,7 +175,7 @@ int float_eq(float a, float b, float eps)
  * notes:
  * 	a NULL-pointer will be considered as the smallest element
  */
-int floatcmp(const void *pa, const void *pb, float eps)
+int floatcmp(const void *pa, const void *pb)
 {
 	int c;
 	const float *a;
@@ -140,7 +186,7 @@ int floatcmp(const void *pa, const void *pb, float eps)
 
 	a = (float *)pa;
 	b = (float *)pb;
-	if (float_eq(*a, *b, eps) == 0)
+	if (float_eq(*a, *b) == 0)
 		return 0;
 	if (*a < *b)
 		return -1;

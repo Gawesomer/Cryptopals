@@ -34,17 +34,17 @@ int test_int_eq(const char *f, int l, const char *fun, \
 }
 
 int test_float_eq(const char *f, int l, const char *fun, \
-		  const char *a_tk, const char *b_tk, const char *eps_tk, \
-		  float a, float b, float eps)
+		  const char *a_tk, const char *b_tk, \
+		  float a, float b)
 {
-	if (float_eq(a, b, eps) == 0)
+	if (float_eq(a, b) == 0)
 		return 0;
 
 	printf("==========================================================\n");
 	printf("FAIL: %s\n", fun);
 	printf("----------------------------------------------------------\n");
 	printf("\tFile \"%s\", line %d:\n", f, l);
-	printf ("\t\tTEST_FLOAT_EQ(%s, %s, %s)\n", a_tk, b_tk, eps_tk);
+	printf ("\t\tTEST_FLOAT_EQ(%s, %s)\n", a_tk, b_tk);
 	printf("\t\t\t%f != %f\n", a, b);
 	printf("----------------------------------------------------------\n");
 
@@ -128,16 +128,15 @@ int test_int_arr_eq(const char *f, int l, const char *fun, \
 }
 
 int test_float_arr_eq(const char *f, int l, const char *fun, \
-		const char *a_tk, const char *b_tk, \
-		const char *eps_tk, const char *len_tk, \
-		const float *a, const float *b, float eps, size_t len)
+		const char *a_tk, const char *b_tk, const char *len_tk, \
+		const float *a, const float *b, size_t len)
 {
 	int i;
 
 	if (!a && !b) {
 		return 0;
 	} else if (a && b) {
-		for (i=0; (size_t)i<len && float_eq(a[i],b[i],eps)==0; ++i)
+		for (i=0; (size_t)i<len && float_eq(a[i],b[i])==0; ++i)
 			;
 		if ((size_t)i == len)
 			return 0;
@@ -147,11 +146,10 @@ int test_float_arr_eq(const char *f, int l, const char *fun, \
 	printf("FAIL: %s\n", fun);
 	printf("----------------------------------------------------------\n");
 	printf("\tFile \"%s\", line %d:\n", f, l);
-	printf("\t\tTEST_FLOAT_ARR_EQ(%s, %s, %s, %s)\n", a_tk, b_tk, \
-			eps_tk, len_tk);
+	printf("\t\tTEST_FLOAT_ARR_EQ(%s, %s, %s)\n", a_tk, b_tk, len_tk);
 	if (a) {
 		printf("\t\t\t[");
-		for (i = 0; (size_t)i < len-1; ++i)
+		for (i = 0; (size_t)i < len; ++i)
 			printf("%f%s", a[i], ((size_t)i == len-1) ? "" : ", ");
 		printf("]\n");
 	} else {

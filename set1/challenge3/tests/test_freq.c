@@ -7,7 +7,6 @@
 #include "../freq.c"
 
 
-#define	FLOAT_EPS	0.01f
 /* English letter frequency duplicate of `ENGLISH_LETTER_FREQ` from `freq.h`
  * so that tests do not fail if `ENGLISH_LETTER_FREQ` is changed
  */
@@ -136,7 +135,7 @@ void test_occmap_to_freqmap_null(void)
 {
 	printf("%s\n", __func__);
 
-	TEST_FLOAT_ARR_EQ(occmap_to_freqmap(NULL), NULL, FLOAT_EPS, 0);
+	TEST_FLOAT_ARR_EQ(occmap_to_freqmap(NULL), NULL, 0);
 }
 
 void test_occmap_to_freqmap_empty(void)
@@ -149,7 +148,7 @@ void test_occmap_to_freqmap_empty(void)
 
 	actual_freq = occmap_to_freqmap(occmap);
 
-	TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, FLOAT_EPS, 26);
+	TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, 26);
 
 	free(actual_freq);
 }
@@ -166,7 +165,7 @@ void test_occmap_to_freqmap_single_letter(void)
 
 	actual_freq = occmap_to_freqmap(occmap);
 
-	TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, FLOAT_EPS, 26);
+	TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, 26);
 
 	free(actual_freq);
 }
@@ -178,7 +177,7 @@ void test_occmap_to_freqmap_negative_occ(void)
 	int occmap[26] = {0};
 	occmap[4] = -1;
 
-	TEST_FLOAT_ARR_EQ(occmap_to_freqmap(occmap), NULL, FLOAT_EPS, 0);
+	TEST_FLOAT_ARR_EQ(occmap_to_freqmap(occmap), NULL, 0);
 }
 
 void test_occmap_to_freqmap_multiple_bytes(void)
@@ -199,7 +198,7 @@ void test_occmap_to_freqmap_multiple_bytes(void)
 
 	actual_freq = occmap_to_freqmap(occmap);
 
-	TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, FLOAT_EPS, 26);
+	TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, 26);
 
 	free(actual_freq);
 }
@@ -210,7 +209,7 @@ void test_freqmap_from_binary_null(void)
 {
 	printf("%s\n", __func__);
 
-	TEST_FLOAT_ARR_EQ(freqmap_from_binary(NULL, 0), NULL, FLOAT_EPS, 0);
+	TEST_FLOAT_ARR_EQ(freqmap_from_binary(NULL, 0), NULL, 0);
 }
 
 void test_freqmap_from_binary_empty(void)
@@ -223,7 +222,7 @@ void test_freqmap_from_binary_empty(void)
 
 	actual_map = freqmap_from_binary(bits, 0);
 
-	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
 
 	free(actual_map);
 }
@@ -239,7 +238,7 @@ void test_freqmap_from_binary_single_byte(void)
 
 	actual_map = freqmap_from_binary(bits, 1);
 
-	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
 
 	free(actual_map);
 }
@@ -255,7 +254,7 @@ void test_freqmap_from_binary_lowercase(void)
 
 	actual_map = freqmap_from_binary(bits, 1);
 
-	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
 
 	free(actual_map);
 }
@@ -270,7 +269,7 @@ void test_freqmap_from_binary_nonletter(void)
 
 	actual_map = freqmap_from_binary(bits, 1);
 
-	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
 
 	free(actual_map);
 }
@@ -289,7 +288,7 @@ void test_freqmap_from_binary_multiple_bytes(void)
 
 	actual_map = freqmap_from_binary(bits, 9);
 
-	TEST_FLOAT_ARR_EQ(expected_map, actual_map, FLOAT_EPS, 26);
+	TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
 
 	free(actual_map);
 }
@@ -302,9 +301,9 @@ void test_freq_score_null(void)
 
 	float freq[26] = {0.00f};
 	
-	TEST_FLOAT_EQ(freq_score(freq, NULL), FLT_MAX, FLOAT_EPS);
-	TEST_FLOAT_EQ(freq_score(NULL, freq), FLT_MAX, FLOAT_EPS);
-	TEST_FLOAT_EQ(freq_score(NULL, NULL), FLT_MAX, FLOAT_EPS);
+	TEST_FLOAT_EQ(freq_score(freq, NULL), FLT_MAX);
+	TEST_FLOAT_EQ(freq_score(NULL, freq), FLT_MAX);
+	TEST_FLOAT_EQ(freq_score(NULL, NULL), FLT_MAX);
 }
 
 void test_freq_score_empty(void)
@@ -317,7 +316,7 @@ void test_freq_score_empty(void)
 
 	actual_score = freq_score(freq, TEST_LETTER_FREQ);
 
-	TEST_FLOAT_EQ(expected_score, actual_score, FLOAT_EPS);
+	TEST_FLOAT_EQ(expected_score, actual_score);
 }
 
 void test_freq_score_single_letter(void)
@@ -331,7 +330,7 @@ void test_freq_score_single_letter(void)
 
 	actual_score = freq_score(freq, TEST_LETTER_FREQ);
 
-	TEST_FLOAT_EQ(expected_score, actual_score, FLOAT_EPS);
+	TEST_FLOAT_EQ(expected_score, actual_score);
 }
 
 void test_freq_score_multiple_letters(void)
@@ -348,7 +347,7 @@ void test_freq_score_multiple_letters(void)
 
 	actual_score = freq_score(freq, TEST_LETTER_FREQ);
 
-	TEST_FLOAT_EQ(expected_score, actual_score, FLOAT_EPS);
+	TEST_FLOAT_EQ(expected_score, actual_score);
 }
 
 int main(void)
