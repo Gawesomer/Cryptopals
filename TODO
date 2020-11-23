@@ -1,3 +1,5 @@
-Add tests to util
-Implement hextoascii
 Implement freq_score_from_binary
+Implement test framework
+	- Add structure to tests
+	- Add script to run tests
+Refactor includes
