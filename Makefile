@@ -12,15 +12,18 @@ DEPS := $(OBJS:%.o=%.d)
 
 # each module will add to these
 PROGRAMS :=
+TESTS	 :=
 PHONYS   :=
 
 include $(shell find . -name "module.mk")
 
 -include $(DEPS)
 
-all: $(PROGRAMS)
+all: $(PROGRAMS) $(TESTS)
+
+tests: $(TESTS)
 
 clean:
-	$(RM) $(PROGRAMS) $(OBJS) $(DEPS)
+	$(RM) $(PROGRAMS) $(TESTS) $(OBJS) $(DEPS)
 
-.PHONY: all clean $(PHONYS)
+.PHONY: all tests clean $(PHONYS)

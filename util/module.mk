@@ -1,11 +1,15 @@
-CURRPROGS := util/test.a util/tests/test_div util/tests/test_cassert \
-	util/tests/test_cmp util/tests/test_displ
+CURRPROGS := util/test.a
+CURRTESTS := util/tests/test_div util/tests/test_cassert util/tests/test_cmp \
+	util/tests/test_displ
 
 PROGRAMS += $(CURRPROGS)
+TESTS	 += $(CURRTESTS)
 
-PHONYS += util
+PHONYS += util util/tests
 
-util: $(CURRPROGS)
+util: $(CURRPROGS) $(CURRTESTS)
+
+util/tests: $(CURRTESTS)
 
 util/test.a: util/test.a(util/cassert.o util/cmp.o util/displ.o)
 
