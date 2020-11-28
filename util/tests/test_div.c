@@ -75,5 +75,8 @@ int main(void)
 	test_round_up_div_negative_denominator();
 	test_round_up_div_both_negative();
 
+	printf("----------------------------------------------------------\n");
+	printf("\nOK\n");
+
 	return EXIT_SUCCESS;
 }

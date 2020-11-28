@@ -367,5 +367,8 @@ int main(void)
 	test_arr_displ_null_stream_defaults_to_stdout();
 	test_arr_displ_to_alternate_stream();
 
+	printf("----------------------------------------------------------\n");
+	printf("\nOK\n");
+
 	return EXIT_SUCCESS;
 }

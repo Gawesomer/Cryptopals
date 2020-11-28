@@ -879,5 +879,8 @@ int main(void)
 	test_TEST_STR_EQ_stacktrace();
 	test_TEST_STR_EQ_stacktrace_w_null();
 
+	printf("----------------------------------------------------------\n");
+	printf("\nOK\n");
+
 	return EXIT_SUCCESS;
 }

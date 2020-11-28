@@ -346,5 +346,8 @@ int main(void)
 	test_arrcmp_neq();
 	test_arrcmp_null();
 
+	printf("----------------------------------------------------------\n");
+	printf("\nOK\n");
+
 	return EXIT_SUCCESS;
 }

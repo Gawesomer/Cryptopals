@@ -259,6 +259,7 @@ void test_RUN_TESTS_failing_tests_displays_failures(void)
 
 int main(void)
 {
+	printf("--- %s ---\n", __FILE__);
 	test_clean_tests_no_tests();
 	test_clean_tests_w_tests_allocated_tests_get_freed();
 
@@ -271,6 +272,9 @@ int main(void)
 	test_RUN_TESTS_single_failing_tests_causes_failure();
 	test_RUN_TESTS_passing_tests_displays_success();
 	test_RUN_TESTS_failing_tests_displays_failures();
+
+	printf("----------------------------------------------------------\n");
+	printf("\nOK\n");
 
 	return EXIT_SUCCESS;
 }
