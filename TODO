@@ -3,3 +3,5 @@ Implement test framework
 	- Add structure to tests
 	- Add script to run tests
 Refactor includes
+Investigate redefining macros in test_cassert.c
+Fix assertions to free allocated memory before asserting
