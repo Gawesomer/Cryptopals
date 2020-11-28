@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "test_framework.h"
 #include "cassert.h"
 #include "../single_xor.c"
 
@@ -39,26 +40,21 @@ const float TEST_LETTER_FREQ[26] = {
 
 /*** xor_binary_singlebyte ***/
 
-void test_xor_binary_singlebyte_null(void)
+int test_xor_binary_singlebyte_null(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_BYTE_ARR_EQ(xor_binary_singlebyte(NULL, 0, 0x00), NULL, 0);
+	return TEST_BYTE_ARR_EQ(xor_binary_singlebyte(NULL, 0, 0x00), NULL, 0);
 }
 
-void test_xor_binary_singlebyte_empty(void)
+int test_xor_binary_singlebyte_empty(void)
 {
-	printf("%s\n", __func__);
-
 	uint8_t bits[] = {0};
 
-	TEST_BYTE_ARR_EQ(xor_binary_singlebyte(bits, 0, 0x00), NULL, 0);
+	return TEST_BYTE_ARR_EQ(xor_binary_singlebyte(bits, 0, 0x00), NULL, 0);
 }
 
-void test_xor_binary_singlebyte_single_byte(void)
+int test_xor_binary_singlebyte_single_byte(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	uint8_t bits[] = {0xFF};
 	uint8_t byte = 0xAA;
 	uint8_t *actual;
@@ -66,15 +62,16 @@ void test_xor_binary_singlebyte_single_byte(void)
 
 	actual = xor_binary_singlebyte(bits, 1, byte);
 
-	TEST_BYTE_ARR_EQ(expected, actual, 1);
+	status = TEST_BYTE_ARR_EQ(expected, actual, 1);
 
 	free(actual);
+
+	return status;
 }
 
-void test_xor_binary_singlebyte_multiple_bytes(void)
+int test_xor_binary_singlebyte_multiple_bytes(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	uint8_t bits[] = {0x12, 0x34, 0xFF, 0xAA};
 	uint8_t byte = 0xAA;
 	uint8_t *actual;
@@ -82,36 +79,37 @@ void test_xor_binary_singlebyte_multiple_bytes(void)
 
 	actual = xor_binary_singlebyte(bits, 4, byte);
 
-	TEST_BYTE_ARR_EQ(expected, actual, 4);
+	status = TEST_BYTE_ARR_EQ(expected, actual, 4);
 
 	free(actual);
+
+	return status;
 }
 
 /*** decrypt_singlebytexor_on_hex ***/
 
-void test_decrypt_singlebytexor_on_hex_null(void)
+int test_decrypt_singlebytexor_on_hex_null(void)
 {
-	printf("%s\n", __func__);
-
+	int status = 0;
 	char hex[] = "00";
 
-	TEST_STR_EQ(decrypt_singlebytexor_on_hex(NULL, TEST_LETTER_FREQ), \
+	status += TEST_STR_EQ(decrypt_singlebytexor_on_hex(NULL, TEST_LETTER_FREQ), \
 			NULL);
-	TEST_STR_EQ(decrypt_singlebytexor_on_hex(hex, NULL), NULL);
-	TEST_STR_EQ(decrypt_singlebytexor_on_hex(NULL, NULL), NULL);
+	status += TEST_STR_EQ(decrypt_singlebytexor_on_hex(hex, NULL), NULL);
+	status += TEST_STR_EQ(decrypt_singlebytexor_on_hex(NULL, NULL), NULL);
+
+	return status;
 }
 
-void test_decrypt_singlebytexor_on_hex_empty(void)
+int test_decrypt_singlebytexor_on_hex_empty(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_STR_EQ(decrypt_singlebytexor_on_hex("", TEST_LETTER_FREQ), NULL);
+	return TEST_STR_EQ(decrypt_singlebytexor_on_hex("", TEST_LETTER_FREQ), \
+			NULL);
 }
 
-void test_decrypt_singlebytexor_on_hex_all_letters(void)
+int test_decrypt_singlebytexor_on_hex_all_letters(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	// "THISISARANDOMENGLISHSENTENCE" ^ 'A'
 	char hex[] = "1509081208120013000F050E0C040F060D08120912040F15040F0204";
 	char *actual;
@@ -120,21 +118,23 @@ void test_decrypt_singlebytexor_on_hex_all_letters(void)
 
 	actual = decrypt_singlebytexor_on_hex(hex, TEST_LETTER_FREQ);
 
-	TEST_STR_EQ(expected, actual);
+	status = TEST_STR_EQ(expected, actual);
 
 	free(actual);
+
+	return status;
 }
 
 int main(void)
 {
-	test_xor_binary_singlebyte_null();
-	test_xor_binary_singlebyte_empty();
-	test_xor_binary_singlebyte_single_byte();
-	test_xor_binary_singlebyte_multiple_bytes();
+	REGISTER_TEST(test_xor_binary_singlebyte_null);
+	REGISTER_TEST(test_xor_binary_singlebyte_empty);
+	REGISTER_TEST(test_xor_binary_singlebyte_single_byte);
+	REGISTER_TEST(test_xor_binary_singlebyte_multiple_bytes);
 
-	test_decrypt_singlebytexor_on_hex_null();
-	test_decrypt_singlebytexor_on_hex_empty();
-	test_decrypt_singlebytexor_on_hex_all_letters();
+	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_null);
+	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_empty);
+	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_all_letters);
 
-	return EXIT_SUCCESS;
+	return RUN_TESTS();
 }

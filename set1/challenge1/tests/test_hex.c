@@ -2,88 +2,86 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "test_framework.h"
 #include "cassert.h"
 #include "../hex.c"
 
 /*** hextobinary ***/
 
-void test_hextobinary_null(void)
+int test_hextobinary_null(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_BYTE_ARR_EQ(hextobinary(NULL), NULL, 0);
+	return TEST_BYTE_ARR_EQ(hextobinary(NULL), NULL, 0);
 }
 
-void test_hextobinary_empty(void)
+int test_hextobinary_empty(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_BYTE_ARR_EQ(hextobinary(""), NULL, 0);
+	return TEST_BYTE_ARR_EQ(hextobinary(""), NULL, 0);
 }
 
-void test_hextobinary_wholebyte(void)
+int test_hextobinary_wholebyte(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "49";
 	uint8_t expectedbinary[1] = {0x49};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
 	free(actualbinary);
+
+	return status;
 }
 
-void test_hextobinary_halfbyte(void)
+int test_hextobinary_halfbyte(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "A";
 	uint8_t expectedbinary[1] = {0x0A};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
 	free(actualbinary);
+
+	return status;
 }
 
-void test_hextobinary_lowercase(void)
+int test_hextobinary_lowercase(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "a";
 	uint8_t expectedbinary[1] = {0x0a};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
 	free(actualbinary);
+
+	return status;
 }
 
-void test_hextobinary_odd_length(void)
+int test_hextobinary_odd_length(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "FFF";
 	uint8_t expectedbinary[] = {0x0F, 0xFF};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 2);
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 2);
 
 	free(actualbinary);
+
+	return status;
 }
 
-void test_hextobinary_invalidhex(void)
+int test_hextobinary_invalidhex(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_BYTE_ARR_EQ(hextobinary("G"), NULL, 0);
+	return TEST_BYTE_ARR_EQ(hextobinary("G"), NULL, 0);
 }
 
-void test_hextobinary_cryptopals_example(void)
+int test_hextobinary_cryptopals_example(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "49276d206b696c6c696e6720796f757220627261696e206c696" \
 			"b65206120706f69736f6e6f7573206d757368726f6f6d";
 	uint8_t expectedbinary[48] = {0x49, 0x27, 0x6d, 0x20, 0x6b, 0x69, \
@@ -94,50 +92,51 @@ void test_hextobinary_cryptopals_example(void)
 		0x6f, 0x6d};
 	uint8_t *actualbinary = hextobinary(hexstr);
 
-	TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 48);
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 48);
 
 	free(actualbinary);
+
+	return status;
 }
 
 /*** binarytohex ***/
 
-void test_binarytohex_null(void)
+int test_binarytohex_null(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_STR_EQ(binarytohex(NULL, 0), NULL);
+	return TEST_STR_EQ(binarytohex(NULL, 0), NULL);
 }
 
-void test_binarytohex_wholebyte(void)
+int test_binarytohex_wholebyte(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	uint8_t binary[1] = {0x49};
 	char expectedhex[] = "49";
 	char *actualhex = binarytohex(binary, 1);
 
-	TEST_STR_EQ(expectedhex, actualhex);
+	status = TEST_STR_EQ(expectedhex, actualhex);
 
 	free(actualhex);
+
+	return status;
 }
 
-void test_binarytohex_letter(void)
+int test_binarytohex_letter(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	uint8_t binary[1] = {0xCF};
 	char expectedhex[] = "CF";
 	char *actualhex = binarytohex(binary, 1);
 
-	TEST_STR_EQ(expectedhex, actualhex);
+	status = TEST_STR_EQ(expectedhex, actualhex);
 
 	free(actualhex);
+
+	return status;
 }
 
-void test_binarytohex_cryptopals_example(void)
+int test_binarytohex_cryptopals_example(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	uint8_t binary[48] = {0x49, 0x27, 0x6d, 0x20, 0x6b, 0x69, 0x6c, 0x6c, \
 		0x69, 0x6e, 0x67, 0x20, 0x79, 0x6f, 0x75, 0x72, 0x20, 0x62, \
 		0x72, 0x61, 0x69, 0x6e, 0x20, 0x6c, 0x69, 0x6b, 0x65, 0x20, \
@@ -147,184 +146,183 @@ void test_binarytohex_cryptopals_example(void)
 			"6C696B65206120706F69736F6E6F7573206D757368726F6F6D";
 	char *actualhex = binarytohex(binary, 48);
 
-	TEST_STR_EQ(expectedhex, actualhex);
+	status = TEST_STR_EQ(expectedhex, actualhex);
 
 	free(actualhex);
+
+	return status;
 }
 
 /*** hextoascii ***/
 
-void test_hextoascii_null(void)
+int test_hextoascii_null(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_STR_EQ(hextoascii(NULL), NULL);
+	return TEST_STR_EQ(hextoascii(NULL), NULL);
 }
 
-void test_hextoascii_empty(void)
+int test_hextoascii_empty(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_STR_EQ(hextoascii(""), NULL);
+	return TEST_STR_EQ(hextoascii(""), NULL);
 }
 
-void test_hextoascii_halfbyte(void)
+int test_hextoascii_halfbyte(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "9";
 	char expected[] = "\t";
 	char *actual;
 
 	actual = hextoascii(hexstr);
 
-	TEST_STR_EQ(expected, actual);
+	status = TEST_STR_EQ(expected, actual);
 
 	free(actual);
+
+	return status;
 }
 
-void test_hextoascii_wholebyte(void)
+int test_hextoascii_wholebyte(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "4B";
 	char expected[] = "K";
 	char *actual;
 
 	actual = hextoascii(hexstr);
 
-	TEST_STR_EQ(expected, actual);
+	status = TEST_STR_EQ(expected, actual);
 
 	free(actual);
+
+	return status;
 }
 
-void test_hextoascii_lowercase(void)
+int test_hextoascii_lowercase(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "4b";
 	char expected[] = "K";
 	char *actual;
 
 	actual = hextoascii(hexstr);
 
-	TEST_STR_EQ(expected, actual);
+	status = TEST_STR_EQ(expected, actual);
 
 	free(actual);
+
+	return status;
 }
 
-void test_hextoascii_odd_length(void)
+int test_hextoascii_odd_length(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "94b";
 	char expected[] = "\tK";
 	char *actual;
 
 	actual = hextoascii(hexstr);
 
-	TEST_STR_EQ(expected, actual);
+	status = TEST_STR_EQ(expected, actual);
 
 	free(actual);
+
+	return status;
 }
 
-void test_hextoascii_invalidhex(void)
+int test_hextoascii_invalidhex(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_STR_EQ(hextoascii("G"), NULL);
+	return TEST_STR_EQ(hextoascii("G"), NULL);
 }
 
-void test_hextoascii_multiple_bytes(void)
+int test_hextoascii_multiple_bytes(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char hexstr[] = "48656C6C6F20776F726C6421";
 	char expected[] = "Hello world!";
 	char *actual;
 
 	actual = hextoascii(hexstr);
 
-	TEST_STR_EQ(expected, actual);
+	status = TEST_STR_EQ(expected, actual);
 
 	free(actual);
+
+	return status;
 }
 
 /*** asciitohex ***/
 
-void test_asciitohex_null(void)
+int test_asciitohex_null(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_STR_EQ(asciitohex(NULL), NULL);
+	return TEST_STR_EQ(asciitohex(NULL), NULL);
 }
 
-void test_asciitohex_empty(void)
+int test_asciitohex_empty(void)
 {
-	printf("%s\n", __func__);
-
-	TEST_STR_EQ(asciitohex(""), NULL);
+	return TEST_STR_EQ(asciitohex(""), NULL);
 }
 
-void test_asciitohex_single_letter(void)
+int test_asciitohex_single_letter(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char ascii[] = "A";
 	char expected[] = "41";
 	char *actual;
 
 	actual = asciitohex(ascii);
 
-	TEST_STR_EQ(expected, actual);
+	status = TEST_STR_EQ(expected, actual);
 
 	free(actual);
+
+	return status;
 }
 
-void test_asciitohex_multiple_letters(void)
+int test_asciitohex_multiple_letters(void)
 {
-	printf("%s\n", __func__);
-
+	int status;
 	char ascii[] = "Hello world!";
 	char expected[] = "48656C6C6F20776F726C6421";
 	char *actual;
 
 	actual = asciitohex(ascii);
 
-	TEST_STR_EQ(expected, actual);
+	status = TEST_STR_EQ(expected, actual);
 
 	free(actual);
+
+	return status;
 }
 
 int main(void)
 {
-	test_hextobinary_null();
-	test_hextobinary_empty();
-	test_hextobinary_wholebyte();
-	test_hextobinary_halfbyte();
-	test_hextobinary_lowercase();
-	test_hextobinary_odd_length();
-	test_hextobinary_invalidhex();
-	test_hextobinary_cryptopals_example();
+	REGISTER_TEST(test_hextobinary_null);
+	REGISTER_TEST(test_hextobinary_empty);
+	REGISTER_TEST(test_hextobinary_wholebyte);
+	REGISTER_TEST(test_hextobinary_halfbyte);
+	REGISTER_TEST(test_hextobinary_lowercase);
+	REGISTER_TEST(test_hextobinary_odd_length);
+	REGISTER_TEST(test_hextobinary_invalidhex);
+	REGISTER_TEST(test_hextobinary_cryptopals_example);
 
-	test_binarytohex_null();
-	test_binarytohex_wholebyte();
-	test_binarytohex_letter();
-	test_binarytohex_cryptopals_example();
+	REGISTER_TEST(test_binarytohex_null);
+	REGISTER_TEST(test_binarytohex_wholebyte);
+	REGISTER_TEST(test_binarytohex_letter);
+	REGISTER_TEST(test_binarytohex_cryptopals_example);
 
-	test_hextoascii_null();
-	test_hextoascii_empty();
-	test_hextoascii_halfbyte();
-	test_hextoascii_wholebyte();
-	test_hextoascii_lowercase();
-	test_hextoascii_odd_length();
-	test_hextoascii_invalidhex();
-	test_hextoascii_multiple_bytes();
+	REGISTER_TEST(test_hextoascii_null);
+	REGISTER_TEST(test_hextoascii_empty);
+	REGISTER_TEST(test_hextoascii_halfbyte);
+	REGISTER_TEST(test_hextoascii_wholebyte);
+	REGISTER_TEST(test_hextoascii_lowercase);
+	REGISTER_TEST(test_hextoascii_odd_length);
+	REGISTER_TEST(test_hextoascii_invalidhex);
+	REGISTER_TEST(test_hextoascii_multiple_bytes);
 
-	test_asciitohex_null();
-	test_asciitohex_empty();
-	test_asciitohex_single_letter();
-	test_asciitohex_multiple_letters();
+	REGISTER_TEST(test_asciitohex_null);
+	REGISTER_TEST(test_asciitohex_empty);
+	REGISTER_TEST(test_asciitohex_single_letter);
+	REGISTER_TEST(test_asciitohex_multiple_letters);
 
-	return EXIT_SUCCESS;
+	return RUN_TESTS();
 }

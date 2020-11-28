@@ -11,7 +11,9 @@ util: $(CURRPROGS) $(CURRTESTS)
 
 util/tests: $(CURRTESTS)
 
-util/test.a: util/test.a(util/cassert.o util/cmp.o util/displ.o)
+util/test.a: util/test.a( \
+	util/test_framework.o util/cassert.o util/cmp.o util/displ.o \
+	)
 
 util/tests/test_div: util/tests/test_div.o util/test.a
 
