@@ -5,6 +5,7 @@ CC	 := gcc
 CFLAGS	 := -g -ggdb3 -Wall -Wextra -Werror -pedantic
 CPPFLAGS := -I $(INCLUDEDIR) -MMD -MP
 ARFLAGS  := rvu
+RM	 := rm -rf
 
 SRCS := $(shell find . -name "*.c")
 OBJS := $(SRCS:%.c=%.o)
@@ -24,6 +25,6 @@ all: $(PROGRAMS) $(TESTS)
 tests: $(TESTS)
 
 clean:
-	$(RM) $(PROGRAMS) $(TESTS) $(OBJS) $(DEPS)
+	$(RM) $(PROGRAMS) $(TESTS) $(OBJS) $(DEPS) *.dSYM
 
 .PHONY: all tests clean $(PHONYS)
