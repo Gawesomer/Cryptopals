@@ -37,6 +37,7 @@ void test_TEST_TRUE_false(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	FILE *devnull, *tmp;
 
 	// Execute with STDOUT redirected to /dev/null
@@ -44,34 +45,38 @@ void test_TEST_TRUE_false(void)
 	tmp = stdout;
 	stdout = devnull;
 
-	// NOTE: We will still see `assert`'s stacktrace despite the STDOUT
-	// redirection as `assert` prints to STDERR
-	assert(TEST_TRUE(0) != 0);
+	assertion = (TEST_TRUE(0) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
+
+	assert(assertion);
 }
 
 void test_TEST_TRUE_false_w_expr(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	FILE *devnull, *tmp;
 
 	devnull = fopen("/dev/null", "w");
 	tmp = stdout;
 	stdout = devnull;
 
-	assert(TEST_TRUE(3*4 == 13) != 0);
+	assertion = (TEST_TRUE(3*4 == 13) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
+
+	assert(assertion);
 }
 
 void test_TEST_TRUE_stacktrace(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
 	FILE *buffer, *tmp;
@@ -103,15 +108,18 @@ void test_TEST_TRUE_stacktrace(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_TEST_TRUE_stacktrace_w_expr(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
 	FILE *buffer, *tmp;
@@ -136,9 +144,11 @@ void test_TEST_TRUE_stacktrace_w_expr(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 
@@ -171,45 +181,56 @@ void test_TEST_INT_EQ_not_eq(void)
 {
 	printf("%s\n", __func__);
 
+	int i;
+	int assertions[3];
 	FILE *devnull, *tmp;
 
 	devnull = fopen("/dev/null", "w");
 	tmp = stdout;
 	stdout = devnull;
 
-	assert(TEST_INT_EQ(0, 1) != 0);
-	assert(TEST_INT_EQ(-1, 1) != 0);
-	assert(TEST_INT_EQ(INT_MAX, INT_MIN) != 0);
+	assertions[0] = (TEST_INT_EQ(0, 1) != 0);
+	assertions[1] = (TEST_INT_EQ(-1, 1) != 0);
+	assertions[2] = (TEST_INT_EQ(INT_MAX, INT_MIN) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
+
+	for (i = 0; i < 3; i++)
+		assert(assertions[i]);
 }
 
 void test_TEST_INT_EQ_not_eq_w_expr(void)
 {
 	printf("%s\n", __func__);
 
+	int i;
+	int assertions[6];
 	FILE *devnull, *tmp;
 
 	devnull = fopen("/dev/null", "w");
 	tmp = stdout;
 	stdout = devnull;
 
-	assert(TEST_INT_EQ(-8+10, 1) != 0);
-	assert(TEST_INT_EQ(1, -8+10) != 0);
-	assert(TEST_INT_EQ(-8+10, 8-10) != 0);
-	assert(TEST_INT_EQ(TEST_INT_EQ(7, 7), 1) != 0);
-	assert(TEST_INT_EQ(1, TEST_INT_EQ(7, 7)) != 0);
-	assert(TEST_INT_EQ(TEST_INT_EQ(1, 2), TEST_INT_EQ(7, 7)) != 0);
+	assertions[0] = (TEST_INT_EQ(-8+10, 1) != 0);
+	assertions[1] = (TEST_INT_EQ(1, -8+10) != 0);
+	assertions[2] = (TEST_INT_EQ(-8+10, 8-10) != 0);
+	assertions[3] = (TEST_INT_EQ(TEST_INT_EQ(7, 7), 1) != 0);
+	assertions[4] = (TEST_INT_EQ(1, TEST_INT_EQ(7, 7)) != 0);
+	assertions[5] = (TEST_INT_EQ(TEST_INT_EQ(1, 2), TEST_INT_EQ(7, 7)) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
+
+	for (i = 0; i < 6; i++)
+		assert(assertions[i]);
 }
 
 void test_TEST_INT_EQ_stacktrace(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
 	FILE *buffer, *tmp;
@@ -234,15 +255,18 @@ void test_TEST_INT_EQ_stacktrace(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_TEST_INT_EQ_stacktrace_w_expr(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
 	FILE *buffer, *tmp;
@@ -267,9 +291,11 @@ void test_TEST_INT_EQ_stacktrace_w_expr(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 /*** TEST_FLOAT_EQ ***/
@@ -292,38 +318,45 @@ void test_TEST_FLOAT_EQ_not_eq(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	FILE *devnull, *tmp;
 
 	devnull = fopen("/dev/null", "w");
 	tmp = stdout;
 	stdout = devnull;
 
-	assert(TEST_FLOAT_EQ(1.0f, 1.2f) != 0);
+	assertion = (TEST_FLOAT_EQ(1.0f, 1.2f) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
+
+	assert(assertion);
 }
 
 void test_TEST_FLOAT_EQ_not_eq_w_expr(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	FILE *devnull, *tmp;
 
 	devnull = fopen("/dev/null", "w");
 	tmp = stdout;
 	stdout = devnull;
 
-	assert(TEST_FLOAT_EQ(0.0f+1.0f, 3.0f-1.8f) != 0);
+	assertion = (TEST_FLOAT_EQ(0.0f+1.0f, 3.0f-1.8f) != 0);
 
 	stdout = tmp;
 	fclose(devnull);
+
+	assert(assertion);
 }
 
 void test_TEST_FLOAT_EQ_stacktrace(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
 	FILE *buffer, *tmp;
@@ -349,15 +382,18 @@ void test_TEST_FLOAT_EQ_stacktrace(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_TEST_FLOAT_EQ_stacktrace_w_expr(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
 	FILE *buffer, *tmp;
@@ -383,9 +419,11 @@ void test_TEST_FLOAT_EQ_stacktrace_w_expr(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 /*** TEST_BYTE_ARR_EQ ***/
@@ -406,6 +444,7 @@ void test_TEST_BYTE_ARR_EQ_stacktrace(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	uint8_t a[] = {0x12, 0x34, 0x56};
 	uint8_t b[] = {0x12, 0xD4, 0x56};
 	char *actualstr;
@@ -434,15 +473,19 @@ void test_TEST_BYTE_ARR_EQ_stacktrace(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_TEST_BYTE_ARR_EQ_stacktrace_w_null(void)
 {
 	printf("%s\n", __func__);
 
+	int i;
+	int assertions[2];
 	uint8_t a[] = {0x12, 0x34, 0x56};
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -472,7 +515,7 @@ void test_TEST_BYTE_ARR_EQ_stacktrace_w_null(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertions[0] = (strcmp(actualstr, expectedstr) == 0);
 
 	// NULL as the second argument
 	snprintf(expectedstr, BUFFSIZE, \
@@ -496,9 +539,12 @@ void test_TEST_BYTE_ARR_EQ_stacktrace_w_null(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertions[1] = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	for (i = 0; i < 2; i++)
+		assert(assertions[i]);
 }
 
 /*** TEST_INT_ARR_EQ ***/
@@ -519,6 +565,7 @@ void test_TEST_INT_ARR_EQ_stacktrace(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	int a[] = {12, 34, 56};
 	int b[] = {12, 255, 56};
 	char *actualstr;
@@ -547,15 +594,19 @@ void test_TEST_INT_ARR_EQ_stacktrace(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_TEST_INT_ARR_EQ_stacktrace_w_null(void)
 {
 	printf("%s\n", __func__);
 
+	int i;
+	int assertions[2];
 	int a[] = {12, 34, 56};
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -585,7 +636,7 @@ void test_TEST_INT_ARR_EQ_stacktrace_w_null(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertions[0] = (strcmp(actualstr, expectedstr) == 0);
 
 	// NULL as the second argument
 	snprintf(expectedstr, BUFFSIZE, \
@@ -609,9 +660,12 @@ void test_TEST_INT_ARR_EQ_stacktrace_w_null(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertions[1] = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	for (i = 0; i < 2; i++)
+		assert(assertions[i]);
 }
 
 /*** TEST_FLOAT_ARR_EQ ***/
@@ -632,6 +686,7 @@ void test_TEST_FLOAT_ARR_EQ_stacktrace(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	float a[] = {12.1f, 34.2f, 56.3f};
 	float b[] = {12.1f, 255.2f, 56.3f};
 	char *actualstr;
@@ -660,15 +715,19 @@ void test_TEST_FLOAT_ARR_EQ_stacktrace(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_TEST_FLOAT_ARR_EQ_stacktrace_w_null(void)
 {
 	printf("%s\n", __func__);
 
+	int i;
+	int assertions[2];
 	float a[] = {12.0f, 34.1f, 56.2f};
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -698,7 +757,7 @@ void test_TEST_FLOAT_ARR_EQ_stacktrace_w_null(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertions[0] = (strcmp(actualstr, expectedstr) == 0);
 
 	// NULL as the second argument
 	snprintf(expectedstr, BUFFSIZE, \
@@ -722,9 +781,12 @@ void test_TEST_FLOAT_ARR_EQ_stacktrace_w_null(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertions[1] = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	for (i = 0; i < 2; i++)
+		assert(assertions[i]);
 }
 
 /*** TEST_STR_EQ ***/
@@ -743,6 +805,7 @@ void test_TEST_STR_EQ_stacktrace(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char s1[] = "hello";
 	char s2[] = "byebye";
 	char *actualstr;
@@ -771,15 +834,19 @@ void test_TEST_STR_EQ_stacktrace(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_TEST_STR_EQ_stacktrace_w_null(void)
 {
 	printf("%s\n", __func__);
 
+	int i;
+	int assertions[2];
 	char s[] = "hello world";
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -809,7 +876,7 @@ void test_TEST_STR_EQ_stacktrace_w_null(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertions[0] = (strcmp(actualstr, expectedstr) == 0);
 
 	// NULL as the second argument
 	snprintf(expectedstr, BUFFSIZE, \
@@ -833,9 +900,12 @@ void test_TEST_STR_EQ_stacktrace_w_null(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertions[1] = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	for (i = 0; i < 2; i++)
+		assert(assertions[i]);
 }
 
 int main(void)
