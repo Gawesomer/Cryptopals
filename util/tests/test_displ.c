@@ -13,6 +13,7 @@ void test_int_displ_to_alternate_stream(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	int e = 128;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -26,15 +27,18 @@ void test_int_displ_to_alternate_stream(void)
 
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_int_displ_null(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[] = "NULL";
 	FILE *buffer;
@@ -46,15 +50,18 @@ void test_int_displ_null(void)
 
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_int_displ_null_stream_defaults_to_stdout(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	int e = 128;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -72,9 +79,11 @@ void test_int_displ_null_stream_defaults_to_stdout(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 /*** byte_displ ***/
@@ -83,6 +92,7 @@ void test_byte_displ_to_alternate_stream(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	uint8_t e = 0x7D;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -96,15 +106,18 @@ void test_byte_displ_to_alternate_stream(void)
 
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_byte_displ_null(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[] = "NULL";
 	FILE *buffer;
@@ -116,15 +129,18 @@ void test_byte_displ_null(void)
 
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_byte_displ_null_stream_defaults_to_stdout(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	uint8_t e = 0x7D;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -142,9 +158,11 @@ void test_byte_displ_null_stream_defaults_to_stdout(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 /*** float_displ ***/
@@ -153,6 +171,7 @@ void test_float_displ_to_alternate_stream(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	float e = 128.05f;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -166,15 +185,18 @@ void test_float_displ_to_alternate_stream(void)
 
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_float_displ_null(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[] = "NULL";
 	FILE *buffer;
@@ -186,15 +208,18 @@ void test_float_displ_null(void)
 
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_float_displ_null_stream_defaults_to_stdout(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	float e = 128.05f;
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -212,9 +237,11 @@ void test_float_displ_null_stream_defaults_to_stdout(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 /*** arr_displ ***/
@@ -223,6 +250,7 @@ void test_arr_displ_null(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	char *actualstr;
 	char expectedstr[] = "NULL";
 	FILE *buffer, *tmp;
@@ -238,15 +266,18 @@ void test_arr_displ_null(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_arr_displ_empty(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	int arr[] = {0};
 	char *actualstr;
 	char expectedstr[] = "[]";
@@ -263,15 +294,18 @@ void test_arr_displ_empty(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_arr_displ_multiple_els(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	int arr[] = {1, 2, 3};
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -290,15 +324,18 @@ void test_arr_displ_multiple_els(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_arr_displ_null_stream_defaults_to_stdout(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	int arr[] = {1, 2, 3};
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -317,15 +354,18 @@ void test_arr_displ_null_stream_defaults_to_stdout(void)
 	stdout = tmp;
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 void test_arr_displ_to_alternate_stream(void)
 {
 	printf("%s\n", __func__);
 
+	int assertion;
 	int arr[] = {1, 2, 3};
 	char *actualstr;
 	char expectedstr[BUFFSIZE];
@@ -340,9 +380,11 @@ void test_arr_displ_to_alternate_stream(void)
 
 	fclose(buffer);
 
-	assert(strcmp(actualstr, expectedstr) == 0);
+	assertion = (strcmp(actualstr, expectedstr) == 0);
 
 	free(actualstr);
+
+	assert(assertion);
 }
 
 int main(void)

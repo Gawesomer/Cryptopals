@@ -1,4 +1,3 @@
 Implement freq_score_from_binary
 Refactor includes
 Investigate redefining macros in test_cassert.c
-Fix assertions to free allocated memory before asserting
