@@ -1,3 +1,9 @@
+#include <float.h>
+#include <limits.h>
+#include <math.h>
+#include <string.h>
+#include <stdint.h>
+
 #include "cmp.h"
 
 /* Check that pointers given are not NULL

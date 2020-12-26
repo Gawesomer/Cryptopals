@@ -1,12 +1,7 @@
 #ifndef _CASSERT_H_
 #define _CASSERT_H_
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
-#include <float.h>
-#include <math.h>
-#include <string.h>
 
 #include "cmp.h"
 #include "displ.h"

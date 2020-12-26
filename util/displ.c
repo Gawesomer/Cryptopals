@@ -1,3 +1,6 @@
+#include <stdint.h>
+#include <stdio.h>
+
 #include "displ.h"
 
 /* Print integer to specified stream

@@ -1,10 +1,7 @@
 #ifndef _FREQ_H_
 #define _FREQ_H_
 
-#include <stdlib.h>
 #include <stdint.h>
-#include <float.h>
-#include <math.h>
 
 extern const float ENGLISH_LETTER_FREQ[26];
 

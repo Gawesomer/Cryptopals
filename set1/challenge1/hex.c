@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <string.h>
+
 #include "hex.h"
 
 /* Returns size in bytes of binary translation from hex for given `hexlen` */

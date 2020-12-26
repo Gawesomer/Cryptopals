@@ -1,9 +1,7 @@
 #ifndef _XOR_H_
 #define _XOR_H_
 
-#include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 
 #include "hex.h"
 

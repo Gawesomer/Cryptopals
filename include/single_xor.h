@@ -1,11 +1,6 @@
 #ifndef _SINGLE_XOR_H_
 #define _SINGLE_XOR_H_
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-#include <float.h>
-
 #include "hex.h"
 #include "freq.h"
 

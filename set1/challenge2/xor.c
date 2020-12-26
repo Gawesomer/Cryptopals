@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <string.h>
+
 #include "xor.h"
 
 /* XOR two equal length binary arrays

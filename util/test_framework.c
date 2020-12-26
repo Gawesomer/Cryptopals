@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "test_framework.h"
 
 #define TEST_BATCH_SIZE	1024

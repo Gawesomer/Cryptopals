@@ -1,13 +1,6 @@
 #ifndef _CMP_H_
 #define _CMP_H_
 
-#include <stdint.h>
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
-#include <string.h>
-#include <limits.h>
-
 /* Epsilons used for determining single precision float equality
  * `float_cmp` first uses FLT_FIXED_EPS to determine equality, if that fails,
  * the relative measure of distance in Units of Least Precision is used instead

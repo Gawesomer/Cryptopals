@@ -1,3 +1,7 @@
+#include <float.h>
+#include <math.h>
+#include <stdlib.h>
+
 #include "freq.h"
 
 /* English letter frequency based on a sample of 40,000 words obtained from:

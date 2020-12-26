@@ -1,3 +1,8 @@
+#include <float.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "single_xor.h"
 
 /* XOR binary array with single byte

@@ -1,3 +1,7 @@
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "base64.h"
 
 /* Returns size in bytes of base64 translation from binary for given

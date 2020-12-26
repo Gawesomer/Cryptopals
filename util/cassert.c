@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <string.h>
+
 #include "cassert.h"
 
 int test_true(const char *macro, const char *f, int l, const char *fun, \

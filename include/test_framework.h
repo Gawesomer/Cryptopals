@@ -1,9 +1,6 @@
 #ifndef _TEST_FRAMEWORK_H_
 #define _TEST_FRAMEWORK_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-
 /* These are the internal test functions.
  * They should not be called directly and should instead by used by utilizing
  * their respective wrapper macros defined below
