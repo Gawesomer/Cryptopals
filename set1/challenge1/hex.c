@@ -78,7 +78,7 @@ uint8_t *hextobinary(const char *hexstr)
  * otherwise '\0' */
 char hex_inttochar(uint8_t i)
 {
-	if (0 <= i && i <= 9)
+	if (0 < i && i <= 9)
 		return i+'0';
 	if (10 <= i && i <= 15)
 		return i+'A'-10;

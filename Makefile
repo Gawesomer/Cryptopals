@@ -2,7 +2,7 @@ UTILDIR    := ./util
 INCLUDEDIR := ./include
 
 CC	 := gcc
-CFLAGS	 := -g -ggdb3 -Wall -Wextra -Werror -pedantic
+CFLAGS	 := -std=gnu11 -g -ggdb3 -Wall -Wextra -Werror -pedantic
 CPPFLAGS := -I $(INCLUDEDIR) -MMD -MP
 ARFLAGS  := rvu
 RM	 := rm -rf

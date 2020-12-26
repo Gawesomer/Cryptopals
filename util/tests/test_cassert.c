@@ -95,7 +95,7 @@ void test_TEST_TRUE_stacktrace(void)
 		"\t\tTEST_TRUE(%s)\n"
 		"\t\t\t`%s` not true\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 8, "0", "0");
+		__func__, __FILE__, __LINE__ + 8, "0", "0");
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -132,7 +132,7 @@ void test_TEST_TRUE_stacktrace_w_expr(void)
 		"\t\tTEST_TRUE(%s)\n"
 		"\t\t\t`%s` not true\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, "0 == 1", "0 == 1");
+		__func__, __FILE__, __LINE__ + 7, "0 == 1", "0 == 1");
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -243,7 +243,7 @@ void test_TEST_INT_EQ_stacktrace(void)
 		"\t\tTEST_INT_EQ(%s, %s)\n"
 		"\t\t\t%d != %d\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, "0", "1", 0, 1);
+		__func__, __FILE__, __LINE__ + 7, "0", "1", 0, 1);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -279,7 +279,7 @@ void test_TEST_INT_EQ_stacktrace_w_expr(void)
 		"\t\tTEST_INT_EQ(%s, %s)\n"
 		"\t\t\t%d != %d\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, "-8+10", "8-10", 2, -2);
+		__func__, __FILE__, __LINE__ + 7, "-8+10", "8-10", 2, -2);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -369,7 +369,7 @@ void test_TEST_FLOAT_EQ_stacktrace(void)
 		"\t\tTEST_FLOAT_EQ(%s, %s)\n"
 		"\t\t\t%f != %f\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		__func__, __FILE__, __LINE__ + 8, \
 		"1.0f", "1.2f", 1.0f, 1.2f);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
@@ -406,7 +406,7 @@ void test_TEST_FLOAT_EQ_stacktrace_w_expr(void)
 		"\t\tTEST_FLOAT_EQ(%s, %s)\n"
 		"\t\t\t%f != %f\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		__func__, __FILE__, __LINE__ + 8, \
 		"0.0f+1.0f", "3.0f-1.8f", 1.0f, 1.2f);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
@@ -460,7 +460,7 @@ void test_TEST_BYTE_ARR_EQ_stacktrace(void)
 		"\t\t\t[%x, %x, %x]\n"
 		"\t\t!=\t[%x, %x, %x]\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		__func__, __FILE__, __LINE__ + 8, \
 		"a", "b", "3", a[0], a[1], a[2], b[0], b[1], b[2]);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
@@ -503,7 +503,7 @@ void test_TEST_BYTE_ARR_EQ_stacktrace_w_null(void)
 		"\t\t\tNULL\n"
 		"\t\t!=\t[%x, %x, %x]\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		__func__, __FILE__, __LINE__ + 7, \
 		"NULL", "a", "3", a[0], a[1], a[2]);
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -527,7 +527,7 @@ void test_TEST_BYTE_ARR_EQ_stacktrace_w_null(void)
 		"\t\t\t[%x, %x, %x]\n"
 		"\t\t!=\tNULL\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		__func__, __FILE__, __LINE__ + 7, \
 		"a", "NULL", "3", a[0], a[1], a[2]);
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -581,7 +581,7 @@ void test_TEST_INT_ARR_EQ_stacktrace(void)
 		"\t\t\t[%d, %d, %d]\n"
 		"\t\t!=\t[%d, %d, %d]\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		__func__, __FILE__, __LINE__ + 8, \
 		"a", "b", "3", a[0], a[1], a[2], b[0], b[1], b[2]);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
@@ -624,7 +624,7 @@ void test_TEST_INT_ARR_EQ_stacktrace_w_null(void)
 		"\t\t\tNULL\n"
 		"\t\t!=\t[%d, %d, %d]\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		__func__, __FILE__, __LINE__ + 7, \
 		"NULL", "a", "3", a[0], a[1], a[2]);
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -648,7 +648,7 @@ void test_TEST_INT_ARR_EQ_stacktrace_w_null(void)
 		"\t\t\t[%d, %d, %d]\n"
 		"\t\t!=\tNULL\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		__func__, __FILE__, __LINE__ + 7, \
 		"a", "NULL", "3", a[0], a[1], a[2]);
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -702,7 +702,7 @@ void test_TEST_FLOAT_ARR_EQ_stacktrace(void)
 		"\t\t\t[%f, %f, %f]\n"
 		"\t\t!=\t[%f, %f, %f]\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		__func__, __FILE__, __LINE__ + 8, \
 		"a", "b", "3", a[0], a[1], a[2], b[0], b[1], b[2]);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
@@ -745,7 +745,7 @@ void test_TEST_FLOAT_ARR_EQ_stacktrace_w_null(void)
 		"\t\t\tNULL\n"
 		"\t\t!=\t[%f, %f, %f]\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		__func__, __FILE__, __LINE__ + 7, \
 		"NULL", "a", "3", a[0], a[1], a[2]);
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -769,7 +769,7 @@ void test_TEST_FLOAT_ARR_EQ_stacktrace_w_null(void)
 		"\t\t\t[%f, %f, %f]\n"
 		"\t\t!=\tNULL\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		__func__, __FILE__, __LINE__ + 7, \
 		"a", "NULL", "3", a[0], a[1], a[2]);
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -821,7 +821,7 @@ void test_TEST_STR_EQ_stacktrace(void)
 		"\t\t\t\"%s\"\n"
 		"\t\t!=\t\"%s\"\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 8, \
+		__func__, __FILE__, __LINE__ + 8, \
 		"s1", "s2", s1, s2);
 	actualstr = calloc(BUFFSIZE, sizeof(char));
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
@@ -864,7 +864,7 @@ void test_TEST_STR_EQ_stacktrace_w_null(void)
 		"\t\t\tNULL\n"
 		"\t\t!=\t\"%s\"\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		__func__, __FILE__, __LINE__ + 7, \
 		"NULL", "s", s);
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 
@@ -888,7 +888,7 @@ void test_TEST_STR_EQ_stacktrace_w_null(void)
 		"\t\t\t\"%s\"\n"
 		"\t\t!=\tNULL\n"
 		"----------------------------------------------------------\n", \
-		__FUNCTION__, __FILE__, __LINE__ + 7, \
+		__func__, __FILE__, __LINE__ + 7, \
 		"s", "NULL", s);
 	buffer = fmemopen(actualstr, BUFFSIZE, "w");
 

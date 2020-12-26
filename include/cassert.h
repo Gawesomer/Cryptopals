@@ -33,7 +33,7 @@ int test_str_eq(const char *macro, const char *f, int l, const char *fun, \
  * 	0 if `exp` is true, 1 otherwise
  */
 #define TEST_TRUE(exp) \
-	test_true("TEST_TRUE", __FILE__, __LINE__, __FUNCTION__, #exp, exp)
+	test_true("TEST_TRUE", __FILE__, __LINE__, __func__, #exp, exp)
 
 /* Tests integers to be equal, prints error message if `a` is not equal to `b`
  * params:
@@ -43,7 +43,7 @@ int test_str_eq(const char *macro, const char *f, int l, const char *fun, \
  * 	0 if `a` == `b`, 1 otherwise
  */
 #define TEST_INT_EQ(a, b) \
-	test_int_eq("TEST_INT_EQ", __FILE__, __LINE__, __FUNCTION__, \
+	test_int_eq("TEST_INT_EQ", __FILE__, __LINE__, __func__, \
 		#a, #b, a, b)
 
 /* Tests floats to be equal, prints error message if `a` is not equal to `b`
@@ -54,7 +54,7 @@ int test_str_eq(const char *macro, const char *f, int l, const char *fun, \
  * 	0 if `a` == `b`, 1 otherwise
  */
 #define TEST_FLOAT_EQ(a, b) \
-	test_float_eq("TEST_FLOAT_EQ", __FILE__, __LINE__, __FUNCTION__, \
+	test_float_eq("TEST_FLOAT_EQ", __FILE__, __LINE__, __func__, \
 		#a, #b, a, b)
 
 /* Tests byte arrays to be equal, prints error message if `a` is not equal to
@@ -72,7 +72,7 @@ int test_str_eq(const char *macro, const char *f, int l, const char *fun, \
  * 	resulting in false positives
  */
 #define TEST_BYTE_ARR_EQ(a, b, nel) \
-	test_arr_eq("TEST_BYTE_ARR_EQ", __FILE__, __LINE__, __FUNCTION__, \
+	test_arr_eq("TEST_BYTE_ARR_EQ", __FILE__, __LINE__, __func__, \
 			#a, #b, #nel, a, b, nel, \
 			sizeof(uint8_t), bytecmp, byte_displ)
 
@@ -91,7 +91,7 @@ int test_str_eq(const char *macro, const char *f, int l, const char *fun, \
  * 	resulting in false positives
  */
 #define TEST_INT_ARR_EQ(a, b, nel) \
-	test_arr_eq("TEST_INT_ARR_EQ", __FILE__, __LINE__, __FUNCTION__, \
+	test_arr_eq("TEST_INT_ARR_EQ", __FILE__, __LINE__, __func__, \
 			#a, #b, #nel, a, b, nel, \
 			sizeof(int), intcmp, int_displ)
 
@@ -110,7 +110,7 @@ int test_str_eq(const char *macro, const char *f, int l, const char *fun, \
  * 	resulting in false positives
  */
 #define TEST_FLOAT_ARR_EQ(a, b, nel) \
-	test_arr_eq("TEST_FLOAT_ARR_EQ", __FILE__, __LINE__, __FUNCTION__, \
+	test_arr_eq("TEST_FLOAT_ARR_EQ", __FILE__, __LINE__, __func__, \
 			#a, #b, #nel, a, b, nel, \
 			sizeof(float), floatcmp, float_displ)
 
@@ -123,7 +123,7 @@ int test_str_eq(const char *macro, const char *f, int l, const char *fun, \
  * 	0 if `s1` == `s2`, 1 otherwise
  */
 #define TEST_STR_EQ(s1, s2) \
-	test_str_eq("TEST_STR_EQ", __FILE__, __LINE__, __FUNCTION__, \
+	test_str_eq("TEST_STR_EQ", __FILE__, __LINE__, __func__, \
 		#s1, #s2, s1, s2)
 
 #endif
