@@ -10,6 +10,7 @@ RM	 := rm -rf
 SRCS := $(shell find . -name "*.c")
 OBJS := $(SRCS:%.c=%.o)
 DEPS := $(OBJS:%.o=%.d)
+DSYM := $(shell find . -name "*.dSYM")
 
 # each module will add to these
 PROGRAMS :=
@@ -25,6 +26,6 @@ all: $(PROGRAMS) $(TESTS)
 tests: $(TESTS)
 
 clean:
-	$(RM) $(PROGRAMS) $(TESTS) $(OBJS) $(DEPS) *.dSYM
+	$(RM) $(PROGRAMS) $(TESTS) $(OBJS) $(DEPS) $(DSYM)
 
 .PHONY: all tests clean $(PHONYS)
