@@ -59,7 +59,7 @@ uint8_t *binarytobase64(const uint8_t *bits, size_t numbytes)
 /* Returns char representation of `i` if within range [0, 63], otherwise '\0' */
 char base64_inttochar(uint8_t i)
 {
-	if (0 < i && i <= 25)
+	if (i <= 25)
 		return i+'A';
 	if (26 <= i && i <= 51)
 		return i+'a'-26;

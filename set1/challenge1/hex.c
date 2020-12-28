@@ -78,7 +78,7 @@ uint8_t *hextobinary(const char *hexstr)
  * otherwise '\0' */
 char hex_inttochar(uint8_t i)
 {
-	if (0 < i && i <= 9)
+	if (i <= 9)
 		return i+'0';
 	if (10 <= i && i <= 15)
 		return i+'A'-10;
@@ -92,7 +92,7 @@ char hex_inttochar(uint8_t i)
  * returns:
  * 	C-string with characters in range [0, 1, ..., 9, A, ..., F]
  * 	representing hex translation of `bits`, or NULL if `bits` is NULL
- * 	returned C-string has been dynamically allocated and shoould be freed
+ * 	returned C-string has been dynamically allocated and should be freed
  * 	by user
  */
 char *binarytohex(const uint8_t *bits, size_t numbytes)
