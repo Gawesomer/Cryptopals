@@ -3,8 +3,7 @@
 #include <stdint.h>
 #include <float.h>
 
-#include "test_framework.h"
-#include "cassert.h"
+#include "cTest.h"
 #include "../freq.c"
 
 

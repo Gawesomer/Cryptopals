@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "test_framework.h"
-#include "cassert.h"
+#include "cTest.h"
 #include "../single_xor.c"
 
 /* English letter frequency duplicate of `ENGLISH_LETTER_FREQ` from `freq.h`

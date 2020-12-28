@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "test_framework.h"
-#include "cassert.h"
+#include "cTest.h"
 #include "../xor.c"
 
 /*** xor_binarrays ***/

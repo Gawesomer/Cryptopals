@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "cassert.h"
+#include "cTest.h"
 #include "../div.c"
 
 /*** round_up_div ***/
