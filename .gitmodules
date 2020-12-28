@@ -1,3 +1,6 @@
 [submodule "cTest"]
 	path = cTest
 	url = git@github.com:Gawesomer/cTest.git
+[submodule "simpleMake"]
+	path = simpleMake
+	url = git@github.com:Gawesomer/simpleMake.git
