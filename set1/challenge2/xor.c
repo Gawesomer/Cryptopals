@@ -51,11 +51,19 @@ char *xor_hexstrs(const char *a, const char *b)
 	size_t a_bin_size, b_bin_size, min_size;
 	uint8_t *res_bin;
 
+	if (!a || !b)
+		return NULL;
+
 	a_bin = hextobinary(a);
 	b_bin = hextobinary(b);
 
-	if (!a || !b || !a_bin || !b_bin)
+	if (!a_bin || !b_bin) {
+		if (!a_bin && b_bin)
+			free(b_bin);
+		else if (!b_bin && a_bin)
+			free(a_bin);
 		return NULL;
+	}
 
 	a_len = strlen(a);
 	b_len = strlen(b);
