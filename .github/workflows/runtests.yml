@@ -1,0 +1,19 @@
+name: C/C++ CI
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: git update submodules
+      run: git submodule update --init --recursive
+    # - name: install valgrind
+    #   run: sudo apt update && sudo apt install valgrind
+    - name: make
+      run: make all
+    - name: make runtests
+      run: make runtests
