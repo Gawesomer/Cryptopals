@@ -54,7 +54,6 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 	unsigned int byte;
 	size_t hexlen, binsize;
 	uint8_t *xor_res;
-	float *freqmap;
 	float min_freqscore, curr;
 	uint8_t min_key;
 
@@ -71,10 +70,8 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 	min_freqscore = FLT_MAX;
 	for (byte = 1; byte < 256; ++byte) {
 		xor_res = xor_binary_singlebyte(bin, binsize, byte);
-		freqmap = freqmap_from_binary(xor_res, binsize);
+		curr = freq_score_from_binary(xor_res, binsize, lang_freq);
 		free(xor_res);
-		curr = freq_score(freqmap, lang_freq);
-		free(freqmap);
 		if (curr < min_freqscore) {
 			min_freqscore = curr;
 			min_key = byte;
