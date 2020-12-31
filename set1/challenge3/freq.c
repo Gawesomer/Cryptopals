@@ -158,3 +158,34 @@ float freq_score(const float actual_freq[26], const float lang_freq[26])
 
 	return score;
 }
+
+/* Compute frequency score of `bits` relative to `lang_freq`
+ * params:
+ * 	- bits: binary array
+ * 	- lang_freq: language frequency map of size 26 to which `bits`
+ * 		     should be compared to in computing it's score
+ * returns:
+ * 	float frequency score computed by summing the difference in frequency
+ * 	of the letters in the latin alphabet between `bits` and
+ * 	`lang_freq`
+ * 	or FLT_MAX if either `bits` or `lang_freq` is NULL
+ * notes:
+ * 	a lower frequency score indicates a closer resemblence to the given
+ * 	language frequency
+ */
+float freq_score_from_binary(const uint8_t *bits, size_t size, const float lang_freq[26])
+{
+	float score;
+	float *actual_freq;
+
+	if (!bits || !lang_freq)
+		return FLT_MAX;
+
+	actual_freq = freqmap_from_binary(bits, size);
+
+	score = freq_score(actual_freq, lang_freq);
+
+	free(actual_freq);
+
+	return score;
+}

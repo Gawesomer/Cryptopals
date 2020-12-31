@@ -350,6 +350,57 @@ int test_freq_score_multiple_letters(void)
 	return TEST_FLOAT_EQ(expected_score, actual_score);
 }
 
+/*** freq_score_from_binary ***/
+
+int test_freq_score_from_binary_null_returns_fltmax(void)
+{
+	return TEST_FLOAT_EQ(freq_score_from_binary(NULL, 0, TEST_LETTER_FREQ), FLT_MAX);
+}
+
+int test_freq_score_from_binary_empty_returns_zero(void)
+{
+	uint8_t bits[] = {0};
+	float actual_score;
+	float expected_score = 99.99f;
+
+	actual_score = freq_score_from_binary(bits, 0, TEST_LETTER_FREQ);
+
+	return TEST_FLOAT_EQ(expected_score, actual_score);
+}
+
+int test_freq_score_from_binary_single_letter(void)
+{
+	uint8_t bits[] = {0x45};
+	float actual_score;
+	float expected_score = 175.95f;
+
+	actual_score = freq_score_from_binary(bits, 1, TEST_LETTER_FREQ);
+
+	return TEST_FLOAT_EQ(expected_score, actual_score);
+}
+
+int test_freq_score_from_binary_multiple_uppercase_letters(void)
+{
+	uint8_t bits[] = {0x42, 0x45, 0x45, 0x48, 0x59, 0x59};
+	float actual_score;
+	float expected_score = 156.91f;
+
+	actual_score = freq_score_from_binary(bits, 6, TEST_LETTER_FREQ);
+
+	return TEST_FLOAT_EQ(expected_score, actual_score);
+}
+
+int test_freq_score_from_binary_multiple_bothcases_letters(void)
+{
+	uint8_t bits[] = {0x42, 0x45, 0x65, 0x48, 0x59, 0x79};
+	float actual_score;
+	float expected_score = 156.91f;
+
+	actual_score = freq_score_from_binary(bits, 6, TEST_LETTER_FREQ);
+
+	return TEST_FLOAT_EQ(expected_score, actual_score);
+}
+
 int main(void)
 {
 	REGISTER_TEST(test_occmap_from_binary_null);
@@ -376,6 +427,12 @@ int main(void)
 	REGISTER_TEST(test_freq_score_empty);
 	REGISTER_TEST(test_freq_score_single_letter);
 	REGISTER_TEST(test_freq_score_multiple_letters);
+
+	REGISTER_TEST(test_freq_score_from_binary_null_returns_fltmax);
+	REGISTER_TEST(test_freq_score_from_binary_empty_returns_zero);
+	REGISTER_TEST(test_freq_score_from_binary_single_letter);
+	REGISTER_TEST(test_freq_score_from_binary_multiple_uppercase_letters);
+	REGISTER_TEST(test_freq_score_from_binary_multiple_bothcases_letters);
 
 	return RUN_TESTS();
 }
