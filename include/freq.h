@@ -11,4 +11,6 @@ float freq_score(const float actual_freq[26], const float lang_freq[26]);
 
 float freq_score_from_binary(const uint8_t *bits, size_t size, const float lang_freq[26]);
 
+float freq_score_from_hex(const char *hex, const float lang_freq[26]);
+
 #endif

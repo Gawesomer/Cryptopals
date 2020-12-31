@@ -401,6 +401,46 @@ int test_freq_score_from_binary_multiple_bothcases_letters(void)
 	return TEST_FLOAT_EQ(expected_score, actual_score);
 }
 
+/*** freq_score_from_hex ***/
+
+int test_freq_score_from_hex_null_returns_fltmax(void)
+{
+	return TEST_FLOAT_EQ(freq_score_from_hex(NULL, TEST_LETTER_FREQ), FLT_MAX);
+}
+
+int test_freq_score_from_hex_single_letter(void)
+{
+	char hex[] = "45";
+	float actual_score;
+	float expected_score = 175.95f;
+
+	actual_score = freq_score_from_hex(hex, TEST_LETTER_FREQ);
+
+	return TEST_FLOAT_EQ(expected_score, actual_score);
+}
+
+int test_freq_score_from_hex_multiple_uppercase_letters(void)
+{
+	char hex[] = "424545485959";
+	float actual_score;
+	float expected_score = 156.91f;
+
+	actual_score = freq_score_from_hex(hex, TEST_LETTER_FREQ);
+
+	return TEST_FLOAT_EQ(expected_score, actual_score);
+}
+
+int test_freq_score_from_hex_multiple_bothcases_letters(void)
+{
+	char hex[] = "424565485979";
+	float actual_score;
+	float expected_score = 156.91f;
+
+	actual_score = freq_score_from_hex(hex, TEST_LETTER_FREQ);
+
+	return TEST_FLOAT_EQ(expected_score, actual_score);
+}
+
 int main(void)
 {
 	REGISTER_TEST(test_occmap_from_binary_null);
@@ -433,6 +473,11 @@ int main(void)
 	REGISTER_TEST(test_freq_score_from_binary_single_letter);
 	REGISTER_TEST(test_freq_score_from_binary_multiple_uppercase_letters);
 	REGISTER_TEST(test_freq_score_from_binary_multiple_bothcases_letters);
+
+	REGISTER_TEST(test_freq_score_from_hex_null_returns_fltmax);
+	REGISTER_TEST(test_freq_score_from_hex_single_letter);
+	REGISTER_TEST(test_freq_score_from_hex_multiple_uppercase_letters);
+	REGISTER_TEST(test_freq_score_from_hex_multiple_bothcases_letters);
 
 	return RUN_TESTS();
 }

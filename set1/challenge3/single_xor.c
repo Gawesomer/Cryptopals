@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "hex.h"
+#include "freq.h"
 #include "single_xor.h"
 
 /* XOR binary array with single byte
