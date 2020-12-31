@@ -19,4 +19,6 @@ int main(void)
 	printf("%s\n", ascii);
 
 	free(ascii);
+
+	return EXIT_SUCCESS;
 }

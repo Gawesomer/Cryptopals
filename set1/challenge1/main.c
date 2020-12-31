@@ -13,4 +13,6 @@ int main(void)
 	printf("base64str: '%s'\n", base64str);
 
 	free(base64str);
+
+	return EXIT_SUCCESS;
 }

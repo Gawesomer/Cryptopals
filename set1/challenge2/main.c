@@ -12,4 +12,6 @@ int main(void)
 	printf("XOR(\"%s\", \"%s\") = \"%s\"\n", a, b, res);
 
 	free(res);
+
+	return EXIT_SUCCESS;
 }
