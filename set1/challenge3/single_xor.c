@@ -35,6 +35,19 @@ uint8_t *xor_binary_singlebyte(const uint8_t *bits, size_t size, uint8_t byte)
 	return res;
 }
 
+/* Replace '\0's with ' 's */
+void replace_null_w_space(uint8_t *bits, size_t size)
+{
+	int i;
+
+	if (!bits)
+		return;
+
+	for (i = 0; (size_t)i < size; i++)
+		if (bits[i] == 0)
+			bits[i] = 20;
+}
+
 /* Decrypt hex string that has undergone a single-byte-xor based on language
  * frequency map
  * params:
@@ -82,6 +95,8 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 
 	xor_res = xor_binary_singlebyte(bin, binsize, min_key);
 	free(bin);
+
+	replace_null_w_space(xor_res, binsize);
 
 	plain = binarytohex(xor_res, binsize);
 	free(xor_res);
