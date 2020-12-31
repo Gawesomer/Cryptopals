@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "hex.h"
+#include "freq.h"
 #include "single_xor.h"
 
 /* XOR binary array with single byte
@@ -33,6 +35,19 @@ uint8_t *xor_binary_singlebyte(const uint8_t *bits, size_t size, uint8_t byte)
 	return res;
 }
 
+/* Replace '\0's with ' 's */
+void replace_null_w_space(uint8_t *bits, size_t size)
+{
+	int i;
+
+	if (!bits)
+		return;
+
+	for (i = 0; (size_t)i < size; i++)
+		if (bits[i] == 0)
+			bits[i] = 20;
+}
+
 /* Decrypt hex string that has undergone a single-byte-xor based on language
  * frequency map
  * params:
@@ -54,7 +69,6 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 	unsigned int byte;
 	size_t hexlen, binsize;
 	uint8_t *xor_res;
-	float *freqmap;
 	float min_freqscore, curr;
 	uint8_t min_key;
 
@@ -71,10 +85,8 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 	min_freqscore = FLT_MAX;
 	for (byte = 1; byte < 256; ++byte) {
 		xor_res = xor_binary_singlebyte(bin, binsize, byte);
-		freqmap = freqmap_from_binary(xor_res, binsize);
+		curr = freq_score_from_binary(xor_res, binsize, lang_freq);
 		free(xor_res);
-		curr = freq_score(freqmap, lang_freq);
-		free(freqmap);
 		if (curr < min_freqscore) {
 			min_freqscore = curr;
 			min_key = byte;
@@ -83,6 +95,8 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 
 	xor_res = xor_binary_singlebyte(bin, binsize, min_key);
 	free(bin);
+
+	replace_null_w_space(xor_res, binsize);
 
 	plain = binarytohex(xor_res, binsize);
 	free(xor_res);

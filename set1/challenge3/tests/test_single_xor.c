@@ -124,6 +124,24 @@ int test_decrypt_singlebytexor_on_hex_all_letters(void)
 	return status;
 }
 
+int test_decrypt_singlebytexor_on_hex_some_null_chars(void)
+{
+	int status;
+	// "nOWTHATTHEPARTYISJUMPING*" ^ 'F'
+	char hex[] = "7b5a4215415d544115415d5015455447414c155c46155f4058455c5b523f";
+	char *actual;
+	// "nOWTHATTHEPARTYISJUMPING*"
+	char expected[] = "6E4F57145448415414544845145041525459144953144A554D50494E472A";
+
+	actual = decrypt_singlebytexor_on_hex(hex, TEST_LETTER_FREQ);
+
+	status = TEST_STR_EQ(expected, actual);
+
+	free(actual);
+
+	return status;
+}
+
 int main(void)
 {
 	REGISTER_TEST(test_xor_binary_singlebyte_null);
@@ -134,6 +152,7 @@ int main(void)
 	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_null);
 	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_empty);
 	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_all_letters);
+	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_some_null_chars);
 
 	return RUN_TESTS();
 }

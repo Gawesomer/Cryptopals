@@ -1,8 +1,10 @@
 #include <float.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "freq.h"
+#include "hex.h"
 
 /* English letter frequency based on a sample of 40,000 words obtained from:
  * http://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
@@ -155,6 +157,72 @@ float freq_score(const float actual_freq[26], const float lang_freq[26])
 
 	for (i = 0; i < 26; ++i)
 		score += fabs(lang_freq[i] - actual_freq[i]);
+
+	return score;
+}
+
+/* Compute frequency score of `bits` relative to `lang_freq`
+ * params:
+ * 	- bits: binary array
+ * 	- lang_freq: language frequency map of size 26 to which `bits`
+ * 		     should be compared to in computing it's score
+ * returns:
+ * 	float frequency score computed by summing the difference in frequency
+ * 	of the letters in the latin alphabet between `bits` and
+ * 	`lang_freq`
+ * 	or FLT_MAX if either `bits` or `lang_freq` is NULL
+ * notes:
+ * 	a lower frequency score indicates a closer resemblence to the given
+ * 	language frequency
+ */
+float freq_score_from_binary(const uint8_t *bits, size_t size, const float lang_freq[26])
+{
+	float score;
+	float *actual_freq;
+
+	if (!bits || !lang_freq)
+		return FLT_MAX;
+
+	actual_freq = freqmap_from_binary(bits, size);
+
+	score = freq_score(actual_freq, lang_freq);
+
+	free(actual_freq);
+
+	return score;
+}
+
+/* Compute frequency score of `hex` relative to `lang_freq`
+ * params:
+ * 	- hex: C-string with characters in range [0, 1, ..., 9, A, ..., F]
+ * 	       representing a hex string
+ * 	- lang_freq: language frequency map of size 26 to which `bits`
+ * 		     should be compared to in computing it's score
+ * returns:
+ * 	float frequency score computed by summing the difference in frequency
+ * 	of the letters in the latin alphabet between `hex` and
+ * 	`lang_freq`
+ * 	or FLT_MAX if either `hex` or `lang_freq` is NULL
+ * notes:
+ * 	a lower frequency score indicates a closer resemblence to the given
+ * 	language frequency
+ */
+float freq_score_from_hex(const char *hex, const float lang_freq[26])
+{
+	float score;
+	uint8_t *bin;
+	size_t hexlen, binsize;
+
+	bin = hextobinary(hex);
+	if (!bin)
+		return FLT_MAX;
+
+	hexlen = strlen(hex);
+	binsize = binaryfromhex_size(hexlen);
+
+	score = freq_score_from_binary(bin, binsize, lang_freq);
+
+	free(bin);
 
 	return score;
 }
