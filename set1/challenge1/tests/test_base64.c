@@ -54,6 +54,55 @@ int test_binarytobase64_twobytes(void)
 	return status;
 }
 
+/*** base64tobinary ***/
+
+int test_base64tobinary_null(void)
+{
+	return TEST_BYTE_ARR_EQ(base64tobinary(NULL, 0), NULL, 0);
+}
+
+int test_base64tobinary_wholebyte(void)
+{
+	int status;
+	uint8_t base64[2] = {18, 16};
+	uint8_t expectedbinary[1] = {0x49};
+	uint8_t *actualbinary = base64tobinary(base64, 2);
+
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
+
+	free(actualbinary);
+
+	return status;
+}
+
+int test_base64tobinary_halfbyte(void)
+{
+	int status;
+	uint8_t base64[2] = {2, 32};
+	uint8_t expectedbinary[1] = {0xA};
+	uint8_t *actualbinary = base64tobinary(base64, 2);
+
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
+
+	free(actualbinary);
+
+	return status;
+}
+
+int test_base64tobinary_twobytes(void)
+{
+	int status;
+	uint8_t base64[3] = {18, 18, 28};
+	uint8_t expectedbinary[2] = {0x49, 0x27};
+	uint8_t *actualbinary = base64tobinary(base64, 3);
+
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 2);
+
+	free(actualbinary);
+
+	return status;
+}
+
 /*** base64_tostring ***/
 
 int test_base64_tostring_null(void)
@@ -191,6 +240,11 @@ int main(void)
 	REGISTER_TEST(test_binarytobase64_wholebyte);
 	REGISTER_TEST(test_binarytobase64_halfbyte);
 	REGISTER_TEST(test_binarytobase64_twobytes);
+
+	REGISTER_TEST(test_base64tobinary_null);
+	REGISTER_TEST(test_base64tobinary_wholebyte);
+	REGISTER_TEST(test_base64tobinary_halfbyte);
+	REGISTER_TEST(test_base64tobinary_twobytes);
 
 	REGISTER_TEST(test_base64_tostring_null);
 	REGISTER_TEST(test_base64_tostring_twobytes);

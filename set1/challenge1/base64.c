@@ -3,6 +3,8 @@
 #include <string.h>
 
 #include "base64.h"
+#include "div.h"
+#include "hex.h"
 
 /* Returns size in bytes of base64 translation from binary for given
  * `numbytes`
@@ -54,6 +56,48 @@ uint8_t *binarytobase64(const uint8_t *bits, size_t numbytes)
 	}
 
 	return base64;
+}
+
+/* Returns size in bytes of binary translation from base64 for given
+ * `numbytes`
+ */
+size_t binaryfrombase64_size(size_t numbytes)
+{
+	return round_up_div(numbytes*3, 4);
+}
+
+uint8_t *base64tobinary(const uint8_t *bits, size_t numbytes)
+{
+	uint8_t *binary;
+	size_t binarysize;
+	uint8_t base64mask, binarymask;
+	int ibase64, ibinary;
+
+	if (!bits || numbytes == 0)
+		return NULL;
+
+	binarysize = binaryfrombase64_size(numbytes);
+	binary = calloc(binarysize, sizeof(uint8_t));
+
+	base64mask = 1<<5;
+	binarymask = 1<<7;
+	ibase64 = ibinary = 0;
+	while ((size_t)ibase64 < numbytes) {
+		if (bits[ibase64]&base64mask)
+			binary[ibinary] |= binarymask;
+		binarymask >>= 1;
+		if (!binarymask) {
+			binarymask = 1<<7;
+			++ibinary;
+		}
+		base64mask >>= 1;
+		if (!base64mask) {
+			base64mask = 1<<5;
+			++ibase64;
+		}
+	}
+
+	return binary;
 }
 
 /* Returns char representation of `i` if within range [0, 63], otherwise '\0' */
