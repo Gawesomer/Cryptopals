@@ -1,5 +1,3 @@
-#include <float.h>
-
 #define MIN_KEYSIZE	2
 #define MAX_KEYSIZE	40
 
@@ -10,21 +8,21 @@ uint8_t *get_block(const uint8_t *arr, size_t arr_size, size_t blk_size, int n)
 	uint8_t *res;
 	int i, j;
 
-	if (!arr || n < 0)
+	if (!arr || n < 0 || blk_size == 0)
 		return NULL;
 
 	i = blk_size*n;
-	if ((size_t)i >= arr_size)
+	if ((size_t)i >= arr_size || blk_size > arr_size)
 		return NULL;
 
 	res = calloc(blk_size, sizeof(uint8_t));
 
 	j = 0;
-	while (i%blk_size <= blk_size-1) {
+	do {
 		res[j] = arr[i];
 		i++;
 		j++;
-	}
+	} while (i%blk_size != 0 && (size_t)i < arr_size);
 
 	return res;
 }
