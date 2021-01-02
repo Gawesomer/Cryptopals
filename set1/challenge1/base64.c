@@ -135,8 +135,8 @@ char *hextobase64(const char *hexstr)
 		return NULL;
 	hexlen = strlen(hexstr);
 
-	binarysize = binaryfromhex_size(hexlen);
-	binary = hextobinary(hexstr);
+	binarysize = hex_bytesize(hexlen);
+	binary = hex_decode(hexstr);
 
 	base64size = base64frombinary_size(binarysize);
 	base64 = binarytobase64(binary, binarysize);

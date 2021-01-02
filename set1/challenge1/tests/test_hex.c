@@ -5,24 +5,24 @@
 #include "cTest.h"
 #include "../hex.c"
 
-/*** hextobinary ***/
+/*** hex_decode ***/
 
-int test_hextobinary_null(void)
+int test_hex_decode_null(void)
 {
-	return TEST_BYTE_ARR_EQ(hextobinary(NULL), NULL, 0);
+	return TEST_BYTE_ARR_EQ(hex_decode(NULL), NULL, 0);
 }
 
-int test_hextobinary_empty(void)
+int test_hex_decode_empty(void)
 {
-	return TEST_BYTE_ARR_EQ(hextobinary(""), NULL, 0);
+	return TEST_BYTE_ARR_EQ(hex_decode(""), NULL, 0);
 }
 
-int test_hextobinary_wholebyte(void)
+int test_hex_decode_wholebyte(void)
 {
 	int status;
 	char hexstr[] = "49";
 	uint8_t expectedbinary[1] = {0x49};
-	uint8_t *actualbinary = hextobinary(hexstr);
+	uint8_t *actualbinary = hex_decode(hexstr);
 
 	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
@@ -31,12 +31,12 @@ int test_hextobinary_wholebyte(void)
 	return status;
 }
 
-int test_hextobinary_halfbyte(void)
+int test_hex_decode_halfbyte(void)
 {
 	int status;
 	char hexstr[] = "A";
 	uint8_t expectedbinary[1] = {0x0A};
-	uint8_t *actualbinary = hextobinary(hexstr);
+	uint8_t *actualbinary = hex_decode(hexstr);
 
 	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
@@ -45,12 +45,12 @@ int test_hextobinary_halfbyte(void)
 	return status;
 }
 
-int test_hextobinary_lowercase(void)
+int test_hex_decode_lowercase(void)
 {
 	int status;
 	char hexstr[] = "a";
 	uint8_t expectedbinary[1] = {0x0a};
-	uint8_t *actualbinary = hextobinary(hexstr);
+	uint8_t *actualbinary = hex_decode(hexstr);
 
 	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
@@ -59,12 +59,12 @@ int test_hextobinary_lowercase(void)
 	return status;
 }
 
-int test_hextobinary_odd_length(void)
+int test_hex_decode_odd_length(void)
 {
 	int status;
 	char hexstr[] = "FFF";
 	uint8_t expectedbinary[] = {0x0F, 0xFF};
-	uint8_t *actualbinary = hextobinary(hexstr);
+	uint8_t *actualbinary = hex_decode(hexstr);
 
 	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 2);
 
@@ -73,12 +73,12 @@ int test_hextobinary_odd_length(void)
 	return status;
 }
 
-int test_hextobinary_invalidhex(void)
+int test_hex_decode_invalidhex(void)
 {
-	return TEST_BYTE_ARR_EQ(hextobinary("G"), NULL, 0);
+	return TEST_BYTE_ARR_EQ(hex_decode("G"), NULL, 0);
 }
 
-int test_hextobinary_cryptopals_example(void)
+int test_hex_decode_cryptopals_example(void)
 {
 	int status;
 	char hexstr[] = "49276d206b696c6c696e6720796f757220627261696e206c696" \
@@ -89,7 +89,7 @@ int test_hextobinary_cryptopals_example(void)
 		0x65, 0x20, 0x61, 0x20, 0x70, 0x6f, 0x69, 0x73, 0x6f, 0x6e, \
 		0x6f, 0x75, 0x73, 0x20, 0x6d, 0x75, 0x73, 0x68, 0x72, 0x6f, \
 		0x6f, 0x6d};
-	uint8_t *actualbinary = hextobinary(hexstr);
+	uint8_t *actualbinary = hex_decode(hexstr);
 
 	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 48);
 
@@ -98,19 +98,19 @@ int test_hextobinary_cryptopals_example(void)
 	return status;
 }
 
-/*** binarytohex ***/
+/*** hex_encode ***/
 
-int test_binarytohex_null(void)
+int test_hex_encode_null(void)
 {
-	return TEST_STR_EQ(binarytohex(NULL, 0), NULL);
+	return TEST_STR_EQ(hex_encode(NULL, 0), NULL);
 }
 
-int test_binarytohex_wholebyte(void)
+int test_hex_encode_wholebyte(void)
 {
 	int status;
 	uint8_t binary[1] = {0x49};
 	char expectedhex[] = "49";
-	char *actualhex = binarytohex(binary, 1);
+	char *actualhex = hex_encode(binary, 1);
 
 	status = TEST_STR_EQ(expectedhex, actualhex);
 
@@ -119,12 +119,12 @@ int test_binarytohex_wholebyte(void)
 	return status;
 }
 
-int test_binarytohex_letter(void)
+int test_hex_encode_letter(void)
 {
 	int status;
 	uint8_t binary[1] = {0xCF};
 	char expectedhex[] = "CF";
-	char *actualhex = binarytohex(binary, 1);
+	char *actualhex = hex_encode(binary, 1);
 
 	status = TEST_STR_EQ(expectedhex, actualhex);
 
@@ -133,7 +133,7 @@ int test_binarytohex_letter(void)
 	return status;
 }
 
-int test_binarytohex_cryptopals_example(void)
+int test_hex_encode_cryptopals_example(void)
 {
 	int status;
 	uint8_t binary[48] = {0x49, 0x27, 0x6d, 0x20, 0x6b, 0x69, 0x6c, 0x6c, \
@@ -143,7 +143,7 @@ int test_binarytohex_cryptopals_example(void)
 		0x73, 0x20, 0x6d, 0x75, 0x73, 0x68, 0x72, 0x6f, 0x6f, 0x6d};
 	char expectedhex[] = "49276D206B696C6C696E6720796F757220627261696E20" \
 			"6C696B65206120706F69736F6E6F7573206D757368726F6F6D";
-	char *actualhex = binarytohex(binary, 48);
+	char *actualhex = hex_encode(binary, 48);
 
 	status = TEST_STR_EQ(expectedhex, actualhex);
 
@@ -295,19 +295,19 @@ int test_asciitohex_multiple_letters(void)
 
 int main(void)
 {
-	REGISTER_TEST(test_hextobinary_null);
-	REGISTER_TEST(test_hextobinary_empty);
-	REGISTER_TEST(test_hextobinary_wholebyte);
-	REGISTER_TEST(test_hextobinary_halfbyte);
-	REGISTER_TEST(test_hextobinary_lowercase);
-	REGISTER_TEST(test_hextobinary_odd_length);
-	REGISTER_TEST(test_hextobinary_invalidhex);
-	REGISTER_TEST(test_hextobinary_cryptopals_example);
+	REGISTER_TEST(test_hex_decode_null);
+	REGISTER_TEST(test_hex_decode_empty);
+	REGISTER_TEST(test_hex_decode_wholebyte);
+	REGISTER_TEST(test_hex_decode_halfbyte);
+	REGISTER_TEST(test_hex_decode_lowercase);
+	REGISTER_TEST(test_hex_decode_odd_length);
+	REGISTER_TEST(test_hex_decode_invalidhex);
+	REGISTER_TEST(test_hex_decode_cryptopals_example);
 
-	REGISTER_TEST(test_binarytohex_null);
-	REGISTER_TEST(test_binarytohex_wholebyte);
-	REGISTER_TEST(test_binarytohex_letter);
-	REGISTER_TEST(test_binarytohex_cryptopals_example);
+	REGISTER_TEST(test_hex_encode_null);
+	REGISTER_TEST(test_hex_encode_wholebyte);
+	REGISTER_TEST(test_hex_encode_letter);
+	REGISTER_TEST(test_hex_encode_cryptopals_example);
 
 	REGISTER_TEST(test_hextoascii_null);
 	REGISTER_TEST(test_hextoascii_empty);
