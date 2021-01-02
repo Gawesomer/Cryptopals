@@ -23,13 +23,13 @@ uint8_t hexchar_decode(char c)
 	return 255;
 }
 
-/* Convert hex string to binary representation
+/* Convert hex string to binary data
  * params:
  * 	- hexstr: C-string with characters in range [0, 1, ..., 9, A, ..., F]
  * 		  representing a hex string 
  * returns:
  * 	uint8_t array of size `hex_bytesize` representing binary
- * 	translation of `hexstr`, or NULL if `hexstr` is NULL or contains
+ * 	representation of `hexstr`, or NULL if `hexstr` is NULL or contains
  * 	invalid hex codes.
  * 	note, array will be padded right (i.e. will begin with four zero bits)
  * 	if the length of `hexstr` is odd
@@ -76,7 +76,7 @@ uint8_t *hex_decode(const char *hexstr)
 	return bits;
 }
 
-/* Returns char representation of hex value if within range [0x0, 0xF],
+/* Return char representation of hex value if within range [0x0, 0xF],
  * otherwise '\0' */
 char hexchar_encode(uint8_t i)
 {
@@ -87,13 +87,14 @@ char hexchar_encode(uint8_t i)
 	return '\0';
 }
 
-/* Convert binary to hex string
+/* Convert binary data to hex string
  * params:
  * 	- bits: bits to translate to hex
  * 	- numbytes: size of `bits` array
  * returns:
  * 	C-string with characters in range [0, 1, ..., 9, A, ..., F]
- * 	representing hex translation of `bits`, or NULL if `bits` is NULL
+ * 	corresponding to hex representation of `bits`,
+ * 	or NULL if `bits` is NULL
  * 	returned C-string has been dynamically allocated and should be freed
  * 	by user
  */
