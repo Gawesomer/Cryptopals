@@ -18,4 +18,4 @@ set1/challenge6/tests/test_ham: set1/challenge6/tests/test_ham.o \
 	cTest/lib/test.a
 
 set1/challenge6/tests/test_break_repeatxor: set1/challenge6/tests/test_break_repeatxor.o \
-	cTest/lib/test.a
+	set1/challenge6/ham.o cTest/lib/test.a

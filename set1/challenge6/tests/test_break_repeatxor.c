@@ -64,6 +64,17 @@ int test_get_block_last_block_of_smaller_size(void)
 	return status;
 }
 
+/*** find_keysize ***/
+
+int test_find_keysize_cryptopals(void)
+{
+	const char encrypted[] = "0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272"
+		"a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f";
+	printf("%d\n", find_keysize((uint8_t *)encrypted, 148));
+
+	return 0;
+}
+
 int main(void)
 {
 	REGISTER_TEST(test_get_block_null_arr_returns_null);
@@ -72,6 +83,8 @@ int main(void)
 	REGISTER_TEST(test_get_block_n_oob_returns_null);
 	REGISTER_TEST(test_get_block_get_first_block);
 	REGISTER_TEST(test_get_block_last_block_of_smaller_size);
+
+	REGISTER_TEST(test_find_keysize_cryptopals);
 
 	return RUN_TESTS();
 }

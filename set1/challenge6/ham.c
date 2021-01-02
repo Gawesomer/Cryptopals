@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 /* Compute hamming distance between two bytes
  * params:
  * 	b1: byte
