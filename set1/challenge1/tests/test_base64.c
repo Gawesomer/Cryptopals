@@ -82,6 +82,55 @@ int test_base64_encode_digit(void)
 	return status;
 }
 
+/*** base64_decode ***/
+
+int test_base64_decode_null(void)
+{
+	return TEST_BYTE_ARR_EQ(base64_decode(NULL), NULL, 0);
+}
+
+int test_base64_decode_wholebyte(void)
+{
+	int status;
+	const char base64[] = "SQ";
+	uint8_t expectedbinary[1] = {0x49};
+	uint8_t *actualbinary = base64_decode(base64);
+
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
+
+	free(actualbinary);
+
+	return status;
+}
+
+int test_base64_decode_halfbyte(void)
+{
+	int status;
+	const char base64[] = "Cg";
+	uint8_t expectedbinary[1] = {0xA};
+	uint8_t *actualbinary = base64_decode(base64);
+
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
+
+	free(actualbinary);
+
+	return status;
+}
+
+int test_base64_decode_twobytes(void)
+{
+	int status;
+	const char base64[] = "SSc";
+	uint8_t expectedbinary[2] = {0x49, 0x27};
+	uint8_t *actualbinary = base64_decode(base64);
+
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 2);
+
+	free(actualbinary);
+
+	return status;
+}
+
 /*** hextobase64 ***/
 
 int test_hextobase64_null(void)
@@ -165,6 +214,11 @@ int main(void)
 	REGISTER_TEST(test_base64_encode_twobytes);
 	REGISTER_TEST(test_base64_encode_lowercase);
 	REGISTER_TEST(test_base64_encode_digit);
+
+	REGISTER_TEST(test_base64_decode_null);
+	REGISTER_TEST(test_base64_decode_wholebyte);
+	REGISTER_TEST(test_base64_decode_halfbyte);
+	REGISTER_TEST(test_base64_decode_twobytes);
 
 	REGISTER_TEST(test_hextobase64_null);
 	REGISTER_TEST(test_hextobase64_empty);
