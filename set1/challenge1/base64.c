@@ -105,9 +105,29 @@ char *base64_encode(const uint8_t *bits, size_t numbytes)
 /* Return size in bytes of binary translation from base64 for given
  * `numbytes`
  */
-size_t binary_bytesize(size_t numbytes)
+size_t binary_bytesize(const char *base64)
 {
-	return round_up_div(numbytes*3, 4);
+	size_t len;
+	size_t res;
+
+	if (!base64)
+		return 0;
+
+	len = strlen(base64);
+	if (len <= 1)
+		return 0;
+
+	if ((len%4) != 0)
+		return (len*3)/4;	// round down
+
+	res = (len*3)/4;
+	if (base64[len-1] == '=') {
+		res--;
+		if (base64[len-2] == '=')
+			res--;
+	}
+
+	return res;
 }
 
 /* Return base64 value of `c` if within range
@@ -125,6 +145,8 @@ uint8_t base64char_decode(char c)
 		return 62;
 	if (c == '/')
 		return 63;
+	if (c == '=')
+		return 0;
 	return 255;
 }
 
@@ -153,7 +175,8 @@ uint8_t *base64_decode(const char *base64)
 		return NULL;
 
 	len = strlen(base64);
-	if (len == 0)
+	binarysize = binary_bytesize(base64);
+	if (binarysize == 0)
 		return NULL;
 
 	base64_raw = calloc(len, sizeof(uint8_t));
@@ -167,13 +190,12 @@ uint8_t *base64_decode(const char *base64)
 		base64_raw[i] = base64char;
 	}
 
-	binarysize = binary_bytesize(len);
 	bits = calloc(binarysize, sizeof(uint8_t));
 
 	base64mask = 1<<5;
 	binarymask = 1<<7;
 	ibase64 = ibits = 0;
-	while ((size_t)ibase64 < len) {
+	while ((size_t)ibits < binarysize) {
 		if (base64_raw[ibase64]&base64mask)
 			bits[ibits] |= binarymask;
 		binarymask >>= 1;

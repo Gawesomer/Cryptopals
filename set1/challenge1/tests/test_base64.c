@@ -35,6 +35,13 @@ int test_base64_encode_null(void)
 	return TEST_STR_EQ(base64_encode(NULL, 0), NULL);
 }
 
+int test_base64_encode_empty(void)
+{
+	uint8_t binary[] = {0};
+
+	return TEST_STR_EQ(base64_encode(binary, 0), NULL);
+}
+
 int test_base64_encode_wholebyte(void)
 {
 	int status;
@@ -119,6 +126,62 @@ int test_base64_encode_no_padding(void)
 	return status;
 }
 
+/*** binary_bytesize ***/
+
+int test_binary_bytesize_null(void)
+{
+	return TEST_INT_EQ(binary_bytesize(NULL), 0);
+}
+
+int test_binary_bytesize_empty(void)
+{
+	const char s[] = "";
+
+	return TEST_INT_EQ(binary_bytesize(s), 0);
+}
+
+int test_binary_bytesize_single_char(void)
+{
+	const char s[] = "c";
+
+	return TEST_INT_EQ(binary_bytesize(s), 0);
+}
+
+int test_binary_bytesize_two_chars(void)
+{
+	const char s[] = "bc";
+
+	return TEST_INT_EQ(binary_bytesize(s), 1);
+}
+
+int test_binary_bytesize_three_chars(void)
+{
+	const char s[] = "abc";
+
+	return TEST_INT_EQ(binary_bytesize(s), 2);
+}
+
+int test_binary_bytesize_four_chars(void)
+{
+	const char s[] = "abcd";
+
+	return TEST_INT_EQ(binary_bytesize(s), 3);
+}
+
+int test_binary_bytesize_one_pad(void)
+{
+	const char s[] = "abc=";
+
+	return TEST_INT_EQ(binary_bytesize(s), 2);
+}
+
+int test_binary_bytesize_two_pads(void)
+{
+	const char s[] = "ab==";
+
+	return TEST_INT_EQ(binary_bytesize(s), 1);
+}
+
 /*** base64_decode ***/
 
 int test_base64_decode_null(void)
@@ -126,7 +189,14 @@ int test_base64_decode_null(void)
 	return TEST_BYTE_ARR_EQ(base64_decode(NULL), NULL, 0);
 }
 
-int test_base64_decode_wholebyte(void)
+int test_base64_decode_empty(void)
+{
+	const char base64[] = "";
+
+	return TEST_BYTE_ARR_EQ(base64_decode(base64), NULL, 0);
+}
+
+int test_base64_decode_two_chars_no_pad(void)
 {
 	int status;
 	const char base64[] = "SQ";
@@ -140,21 +210,7 @@ int test_base64_decode_wholebyte(void)
 	return status;
 }
 
-int test_base64_decode_halfbyte(void)
-{
-	int status;
-	const char base64[] = "Cg";
-	uint8_t expectedbinary[1] = {0xA};
-	uint8_t *actualbinary = base64_decode(base64);
-
-	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
-
-	free(actualbinary);
-
-	return status;
-}
-
-int test_base64_decode_twobytes(void)
+int test_base64_decode_three_chars_no_pad(void)
 {
 	int status;
 	const char base64[] = "SSc";
@@ -162,6 +218,48 @@ int test_base64_decode_twobytes(void)
 	uint8_t *actualbinary = base64_decode(base64);
 
 	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 2);
+
+	free(actualbinary);
+
+	return status;
+}
+
+int test_base64_decode_four_chars_no_pad(void)
+{
+	int status;
+	const char base64[] = "TWFu";
+	uint8_t expectedbinary[3] = {0x4D, 0x61, 0x6E};
+	uint8_t *actualbinary = base64_decode(base64);
+
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 3);
+
+	free(actualbinary);
+
+	return status;
+}
+
+int test_base64_decode_one_pad(void)
+{
+	int status;
+	const char base64[] = "TWE=";
+	uint8_t expectedbinary[2] = {0x4D, 0x61};
+	uint8_t *actualbinary = base64_decode(base64);
+
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 2);
+
+	free(actualbinary);
+
+	return status;
+}
+
+int test_base64_decode_two_pads(void)
+{
+	int status;
+	const char base64[] = "TQ==";
+	uint8_t expectedbinary[1] = {0x4D};
+	uint8_t *actualbinary = base64_decode(base64);
+
+	status = TEST_BYTE_ARR_EQ(expectedbinary, actualbinary, 1);
 
 	free(actualbinary);
 
@@ -251,6 +349,7 @@ int main(void)
 	REGISTER_TEST(test_base64_bytesize_two_pads);
 
 	REGISTER_TEST(test_base64_encode_null);
+	REGISTER_TEST(test_base64_encode_empty);
 	REGISTER_TEST(test_base64_encode_wholebyte);
 	REGISTER_TEST(test_base64_encode_halfbyte);
 	REGISTER_TEST(test_base64_encode_twobytes);
@@ -258,10 +357,22 @@ int main(void)
 	REGISTER_TEST(test_base64_encode_digit);
 	REGISTER_TEST(test_base64_encode_no_padding);
 
+	REGISTER_TEST(test_binary_bytesize_null);
+	REGISTER_TEST(test_binary_bytesize_empty);
+	REGISTER_TEST(test_binary_bytesize_single_char);
+	REGISTER_TEST(test_binary_bytesize_two_chars);
+	REGISTER_TEST(test_binary_bytesize_three_chars);
+	REGISTER_TEST(test_binary_bytesize_four_chars);
+	REGISTER_TEST(test_binary_bytesize_one_pad);
+	REGISTER_TEST(test_binary_bytesize_two_pads);
+
 	REGISTER_TEST(test_base64_decode_null);
-	REGISTER_TEST(test_base64_decode_wholebyte);
-	REGISTER_TEST(test_base64_decode_halfbyte);
-	REGISTER_TEST(test_base64_decode_twobytes);
+	REGISTER_TEST(test_base64_decode_empty);
+	REGISTER_TEST(test_base64_decode_two_chars_no_pad);
+	REGISTER_TEST(test_base64_decode_three_chars_no_pad);
+	REGISTER_TEST(test_base64_decode_four_chars_no_pad);
+	REGISTER_TEST(test_base64_decode_one_pad);
+	REGISTER_TEST(test_base64_decode_two_pads);
 
 	REGISTER_TEST(test_hextobase64_null);
 	REGISTER_TEST(test_hextobase64_empty);
