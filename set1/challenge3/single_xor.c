@@ -67,7 +67,7 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 	char *plain;
 	uint8_t *bin;
 	unsigned int byte;
-	size_t hexlen, binsize;
+	size_t binsize;
 	uint8_t *xor_res;
 	float min_freqscore, curr;
 	uint8_t min_key;
@@ -75,12 +75,11 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 	if (!hex || !lang_freq || hex[0] == '\0')
 		return NULL;
 
-	bin = hextobinary(hex);
+	bin = hex_decode(hex);
 	if (!bin)
 		return NULL;
 
-	hexlen = strlen(hex);
-	binsize = binaryfromhex_size(hexlen);
+	binsize = b2fromhex_size(hex);
 
 	min_freqscore = FLT_MAX;
 	for (byte = 1; byte < 256; ++byte) {
@@ -98,7 +97,7 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 
 	replace_null_w_space(xor_res, binsize);
 
-	plain = binarytohex(xor_res, binsize);
+	plain = hex_encode(xor_res, binsize);
 	free(xor_res);
 
 	return plain;

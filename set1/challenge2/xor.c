@@ -54,8 +54,8 @@ char *xor_hexstrs(const char *a, const char *b)
 	if (!a || !b)
 		return NULL;
 
-	a_bin = hextobinary(a);
-	b_bin = hextobinary(b);
+	a_bin = hex_decode(a);
+	b_bin = hex_decode(b);
 
 	if (!a_bin || !b_bin) {
 		if (!a_bin && b_bin)
@@ -69,15 +69,15 @@ char *xor_hexstrs(const char *a, const char *b)
 	b_len = strlen(b);
 	min_len = (a_len <= b_len) ? a_len : b_len;
 
-	a_bin_size = binaryfromhex_size(a_len);
-	b_bin_size = binaryfromhex_size(b_len);
+	a_bin_size = b2fromhex_size(a);
+	b_bin_size = b2fromhex_size(b);
 	min_size = (a_bin_size <= b_bin_size) ? a_bin_size : b_bin_size;
 
 	res_bin = xor_binarrays(a_bin, b_bin, min_size);
 	free(a_bin);
 	free(b_bin);
 
-	res = binarytohex(res_bin, min_size);
+	res = hex_encode(res_bin, min_size);
 	free(res_bin);
 
 	if (min_len%2 != 0) {

@@ -3,13 +3,14 @@
 
 #include <stdint.h>
 
-#include "div.h"
 
-size_t binaryfromhex_size(size_t hexlen);
+size_t b2fromhex_size(const char *hexstr);
 
-uint8_t *hextobinary(const char *hexstr);
+uint8_t *hex_decode(const char *hexstr);
 
-char *binarytohex(const uint8_t *bits, size_t numbytes);
+size_t hexfromb2_size(size_t numbytes);
+
+char *hex_encode(const uint8_t *bits, size_t numbytes);
 
 char *hextoascii(const char *hexstr);
 
