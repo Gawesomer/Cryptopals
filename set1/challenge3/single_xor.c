@@ -67,7 +67,7 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 	char *plain;
 	uint8_t *bin;
 	unsigned int byte;
-	size_t hexlen, binsize;
+	size_t binsize;
 	uint8_t *xor_res;
 	float min_freqscore, curr;
 	uint8_t min_key;
@@ -79,7 +79,6 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 	if (!bin)
 		return NULL;
 
-	hexlen = strlen(hex);
 	binsize = b2fromhex_size(hex);
 
 	min_freqscore = FLT_MAX;
