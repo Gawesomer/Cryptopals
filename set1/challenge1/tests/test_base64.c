@@ -6,26 +6,26 @@
 #include "../base64.c"
 
 
-/*** base64_bytesize ***/
+/*** b64fromb2_size ***/
 
-int test_base64_bytesize_zero(void)
+int test_b64fromb2_size_zero(void)
 {
-	return TEST_INT_EQ(base64_bytesize(0), 0);
+	return TEST_INT_EQ(b64fromb2_size(0), 0);
 }
 
-int test_base64_bytesize_no_padding(void)
+int test_b64fromb2_size_no_padding(void)
 {
-	return TEST_INT_EQ(base64_bytesize(3), 4);
+	return TEST_INT_EQ(b64fromb2_size(3), 4);
 }
 
-int test_base64_bytesize_one_pad(void)
+int test_b64fromb2_size_one_pad(void)
 {
-	return TEST_INT_EQ(base64_bytesize(2), 4);
+	return TEST_INT_EQ(b64fromb2_size(2), 4);
 }
 
-int test_base64_bytesize_two_pads(void)
+int test_b64fromb2_size_two_pads(void)
 {
-	return TEST_INT_EQ(base64_bytesize(1), 4);
+	return TEST_INT_EQ(b64fromb2_size(1), 4);
 }
 
 /*** base64_encode ***/
@@ -126,60 +126,60 @@ int test_base64_encode_no_padding(void)
 	return status;
 }
 
-/*** binary_bytesize ***/
+/*** b2fromb64_size ***/
 
-int test_binary_bytesize_null(void)
+int test_b2fromb64_size_null(void)
 {
-	return TEST_INT_EQ(binary_bytesize(NULL), 0);
+	return TEST_INT_EQ(b2fromb64_size(NULL), 0);
 }
 
-int test_binary_bytesize_empty(void)
+int test_b2fromb64_size_empty(void)
 {
 	const char s[] = "";
 
-	return TEST_INT_EQ(binary_bytesize(s), 0);
+	return TEST_INT_EQ(b2fromb64_size(s), 0);
 }
 
-int test_binary_bytesize_single_char(void)
+int test_b2fromb64_size_single_char(void)
 {
 	const char s[] = "c";
 
-	return TEST_INT_EQ(binary_bytesize(s), 0);
+	return TEST_INT_EQ(b2fromb64_size(s), 0);
 }
 
-int test_binary_bytesize_two_chars(void)
+int test_b2fromb64_size_two_chars(void)
 {
 	const char s[] = "bc";
 
-	return TEST_INT_EQ(binary_bytesize(s), 1);
+	return TEST_INT_EQ(b2fromb64_size(s), 1);
 }
 
-int test_binary_bytesize_three_chars(void)
+int test_b2fromb64_size_three_chars(void)
 {
 	const char s[] = "abc";
 
-	return TEST_INT_EQ(binary_bytesize(s), 2);
+	return TEST_INT_EQ(b2fromb64_size(s), 2);
 }
 
-int test_binary_bytesize_four_chars(void)
+int test_b2fromb64_size_four_chars(void)
 {
 	const char s[] = "abcd";
 
-	return TEST_INT_EQ(binary_bytesize(s), 3);
+	return TEST_INT_EQ(b2fromb64_size(s), 3);
 }
 
-int test_binary_bytesize_one_pad(void)
+int test_b2fromb64_size_one_pad(void)
 {
 	const char s[] = "abc=";
 
-	return TEST_INT_EQ(binary_bytesize(s), 2);
+	return TEST_INT_EQ(b2fromb64_size(s), 2);
 }
 
-int test_binary_bytesize_two_pads(void)
+int test_b2fromb64_size_two_pads(void)
 {
 	const char s[] = "ab==";
 
-	return TEST_INT_EQ(binary_bytesize(s), 1);
+	return TEST_INT_EQ(b2fromb64_size(s), 1);
 }
 
 /*** base64_decode ***/
@@ -343,10 +343,10 @@ int test_hextobase64_cryptopals_example(void)
 
 int main(void)
 {
-	REGISTER_TEST(test_base64_bytesize_zero);
-	REGISTER_TEST(test_base64_bytesize_no_padding);
-	REGISTER_TEST(test_base64_bytesize_one_pad);
-	REGISTER_TEST(test_base64_bytesize_two_pads);
+	REGISTER_TEST(test_b64fromb2_size_zero);
+	REGISTER_TEST(test_b64fromb2_size_no_padding);
+	REGISTER_TEST(test_b64fromb2_size_one_pad);
+	REGISTER_TEST(test_b64fromb2_size_two_pads);
 
 	REGISTER_TEST(test_base64_encode_null);
 	REGISTER_TEST(test_base64_encode_empty);
@@ -357,14 +357,14 @@ int main(void)
 	REGISTER_TEST(test_base64_encode_digit);
 	REGISTER_TEST(test_base64_encode_no_padding);
 
-	REGISTER_TEST(test_binary_bytesize_null);
-	REGISTER_TEST(test_binary_bytesize_empty);
-	REGISTER_TEST(test_binary_bytesize_single_char);
-	REGISTER_TEST(test_binary_bytesize_two_chars);
-	REGISTER_TEST(test_binary_bytesize_three_chars);
-	REGISTER_TEST(test_binary_bytesize_four_chars);
-	REGISTER_TEST(test_binary_bytesize_one_pad);
-	REGISTER_TEST(test_binary_bytesize_two_pads);
+	REGISTER_TEST(test_b2fromb64_size_null);
+	REGISTER_TEST(test_b2fromb64_size_empty);
+	REGISTER_TEST(test_b2fromb64_size_single_char);
+	REGISTER_TEST(test_b2fromb64_size_two_chars);
+	REGISTER_TEST(test_b2fromb64_size_three_chars);
+	REGISTER_TEST(test_b2fromb64_size_four_chars);
+	REGISTER_TEST(test_b2fromb64_size_one_pad);
+	REGISTER_TEST(test_b2fromb64_size_two_pads);
 
 	REGISTER_TEST(test_base64_decode_null);
 	REGISTER_TEST(test_base64_decode_empty);

@@ -218,7 +218,7 @@ float freq_score_from_hex(const char *hex, const float lang_freq[26])
 		return FLT_MAX;
 
 	hexlen = strlen(hex);
-	binsize = hex_bytesize(hexlen);
+	binsize = b2fromhex_size(hex);
 
 	score = freq_score_from_binary(bin, binsize, lang_freq);
 

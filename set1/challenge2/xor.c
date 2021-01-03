@@ -69,8 +69,8 @@ char *xor_hexstrs(const char *a, const char *b)
 	b_len = strlen(b);
 	min_len = (a_len <= b_len) ? a_len : b_len;
 
-	a_bin_size = hex_bytesize(a_len);
-	b_bin_size = hex_bytesize(b_len);
+	a_bin_size = b2fromhex_size(a);
+	b_bin_size = b2fromhex_size(b);
 	min_size = (a_bin_size <= b_bin_size) ? a_bin_size : b_bin_size;
 
 	res_bin = xor_binarrays(a_bin, b_bin, min_size);

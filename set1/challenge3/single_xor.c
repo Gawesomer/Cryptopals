@@ -80,7 +80,7 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 		return NULL;
 
 	hexlen = strlen(hex);
-	binsize = hex_bytesize(hexlen);
+	binsize = b2fromhex_size(hex);
 
 	min_freqscore = FLT_MAX;
 	for (byte = 1; byte < 256; ++byte) {

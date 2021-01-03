@@ -6,9 +6,15 @@
 
 
 /* Return size in bytes of binary translation from hex for given `hexlen` */
-size_t hex_bytesize(size_t hexlen)
+size_t b2fromhex_size(const char *hexstr)
 {
-	return round_up_div(hexlen, 2);
+	size_t len;
+
+	if (!hexstr)
+		return 0;
+	len = strlen(hexstr);
+
+	return round_up_div(len, 2);
 }
 
 /* Return hex value of `c` if within range [0x0, 0xF], otherwise 255 */
@@ -28,7 +34,7 @@ uint8_t hexchar_decode(char c)
  * 	- hexstr: C-string with characters in range [0, 1, ..., 9, A, ..., F]
  * 		  representing a hex string 
  * returns:
- * 	uint8_t array of size `hex_bytesize` representing binary
+ * 	uint8_t array of size `b2fromhex_size` representing binary
  * 	representation of `hexstr`, or NULL if `hexstr` is NULL or contains
  * 	invalid hex codes.
  * 	note, array will be padded right (i.e. will begin with four zero bits)
@@ -50,7 +56,7 @@ uint8_t *hex_decode(const char *hexstr)
 
 	len = strlen(hexstr);
 	oddlen = (len%2 != 0);
-	numbytes = hex_bytesize(len);
+	numbytes = b2fromhex_size(hexstr);
 
 	if (numbytes == 0)
 		return NULL;
@@ -74,6 +80,12 @@ uint8_t *hex_decode(const char *hexstr)
 	}
 
 	return bits;
+}
+
+/* Return size in bytes of hex translation from binary for given `numbytes` */
+size_t hexfromb2_size(size_t numbytes)
+{
+	return 2*numbytes;
 }
 
 /* Return char representation of hex value if within range [0x0, 0xF],
@@ -107,10 +119,11 @@ char *hex_encode(const uint8_t *bits, size_t numbytes)
 	if (!bits)
 		return NULL;
 
-	hexstr = calloc((2*numbytes)+1, sizeof(char));
+	numbytes = hexfromb2_size(numbytes);
+	hexstr = calloc(numbytes+1, sizeof(char));
 
         i = j = 0;
-        while ((size_t)i < 2*numbytes) {
+        while ((size_t)i < numbytes) {
                 hexchar = hexchar_encode(bits[j]>>4);
                 if (hexchar == '\0') {
                         free(hexstr);
@@ -156,7 +169,7 @@ char *hextoascii(const char *hexstr)
 	if (!binary || hexstr[0] == '\0')
 		return NULL;
 
-	ascii_len = hex_bytesize(strlen(hexstr));
+	ascii_len = b2fromhex_size(hexstr);
 	ascii = calloc(ascii_len+1, sizeof(char));
 
 	for (i = 0; (size_t)i < ascii_len; ++i)
