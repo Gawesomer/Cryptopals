@@ -5,6 +5,29 @@
 #include "cTest.h"
 #include "../base64.c"
 
+
+/*** base64_bytesize ***/
+
+int test_base64_bytesize_zero(void)
+{
+	return TEST_INT_EQ(base64_bytesize(0), 0);
+}
+
+int test_base64_bytesize_no_padding(void)
+{
+	return TEST_INT_EQ(base64_bytesize(3), 4);
+}
+
+int test_base64_bytesize_one_pad(void)
+{
+	return TEST_INT_EQ(base64_bytesize(2), 4);
+}
+
+int test_base64_bytesize_two_pads(void)
+{
+	return TEST_INT_EQ(base64_bytesize(1), 4);
+}
+
 /*** base64_encode ***/
 
 int test_base64_encode_null(void)
@@ -16,7 +39,7 @@ int test_base64_encode_wholebyte(void)
 {
 	int status;
 	uint8_t binary[1] = {0x49};
-	const char expectedbase64[] = "SQ";
+	const char expectedbase64[] = "SQ==";
 	char *actualbase64 = base64_encode(binary, 1);
 
 	status = TEST_STR_EQ(expectedbase64, actualbase64);
@@ -30,7 +53,7 @@ int test_base64_encode_halfbyte(void)
 {
 	int status;
 	uint8_t binary[1] = {0xA};
-	const char expectedbase64[] = "Cg";
+	const char expectedbase64[] = "Cg==";
 	char *actualbase64 = base64_encode(binary, 1);
 
 	status = TEST_STR_EQ(expectedbase64, actualbase64);
@@ -44,7 +67,7 @@ int test_base64_encode_twobytes(void)
 {
 	int status;
 	uint8_t binary[2] = {0x49, 0x27};
-	const char expectedbase64[] = "SSc";
+	const char expectedbase64[] = "SSc=";
 	char *actualbase64 = base64_encode(binary, 2);
 
 	status = TEST_STR_EQ(expectedbase64, actualbase64);
@@ -58,7 +81,7 @@ int test_base64_encode_lowercase(void)
 {
 	int status;
 	uint8_t binary[1] = {0x88};
-	const char expectedbase64[] = "iA";
+	const char expectedbase64[] = "iA==";
 	char *actualbase64 = base64_encode(binary, 1);
 
 	status = TEST_STR_EQ(expectedbase64, actualbase64);
@@ -72,8 +95,22 @@ int test_base64_encode_digit(void)
 {
 	int status;
 	uint8_t binary[1] = {0xE8};
-	const char expectedbase64[] = "6A";
-	char *actualbase64= base64_encode(binary, 1);
+	const char expectedbase64[] = "6A==";
+	char *actualbase64 = base64_encode(binary, 1);
+
+	status = TEST_STR_EQ(expectedbase64, actualbase64);
+
+	free(actualbase64);
+
+	return status;
+}
+
+int test_base64_encode_no_padding(void)
+{
+	int status;
+	uint8_t binary[3] = {0x4D, 0x61, 0x6E};
+	const char expectedbase64[] = "TWFu";
+	char *actualbase64 = base64_encode(binary, 3);
 
 	status = TEST_STR_EQ(expectedbase64, actualbase64);
 
@@ -208,12 +245,18 @@ int test_hextobase64_cryptopals_example(void)
 
 int main(void)
 {
+	REGISTER_TEST(test_base64_bytesize_zero);
+	REGISTER_TEST(test_base64_bytesize_no_padding);
+	REGISTER_TEST(test_base64_bytesize_one_pad);
+	REGISTER_TEST(test_base64_bytesize_two_pads);
+
 	REGISTER_TEST(test_base64_encode_null);
 	REGISTER_TEST(test_base64_encode_wholebyte);
 	REGISTER_TEST(test_base64_encode_halfbyte);
 	REGISTER_TEST(test_base64_encode_twobytes);
 	REGISTER_TEST(test_base64_encode_lowercase);
 	REGISTER_TEST(test_base64_encode_digit);
+	REGISTER_TEST(test_base64_encode_no_padding);
 
 	REGISTER_TEST(test_base64_decode_null);
 	REGISTER_TEST(test_base64_decode_wholebyte);

@@ -11,7 +11,13 @@
  */
 size_t base64_bytesize(size_t numbytes)
 {
-	return round_up_div(numbytes*4, 3);
+	size_t res;
+
+	res = round_up_div(numbytes*4, 3);
+	while (res%4 != 0)
+		res++;
+
+	return res;
 }
 
 /* Return char representation of `i` if within range [0, 63], otherwise '\0' */
@@ -56,6 +62,7 @@ char *base64_encode(const uint8_t *bits, size_t numbytes)
 	base64size = base64_bytesize(numbytes);
 	base64 = calloc(base64size+1, sizeof(char));
 
+	/* split into right-padded sextets */
 	base64mask = 1<<5;
 	bitsmask = 1<<7;
 	ibase64 = ibits = 0;
@@ -74,7 +81,11 @@ char *base64_encode(const uint8_t *bits, size_t numbytes)
 		}
 	}
 
-	for (i = 0; (size_t)i < base64size; ++i) {
+	/* translate to ASCII characters */
+	if (base64mask < (1<<5))
+		ibase64++;
+
+	for (i = 0; i < ibase64; ++i) {
 		base64char = base64char_encode(base64[i]);
 		if (base64char == '\0') {
 			free(base64);
@@ -82,6 +93,10 @@ char *base64_encode(const uint8_t *bits, size_t numbytes)
 		}
 		base64[i] = base64char;
 	}
+
+	/* add padding */
+	for (; (size_t)i < base64size; i++)
+		base64[i] = '=';
 	base64[i] = '\0';
 
 	return base64;
