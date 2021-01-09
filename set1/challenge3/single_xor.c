@@ -6,6 +6,7 @@
 #include "hex.h"
 #include "freq.h"
 #include "single_xor.h"
+#include "xor.h"
 
 /* XOR binary array with single byte
  * params:
@@ -13,26 +14,23 @@
  * 	- size: size of `bits`
  * 	- byte: single byte
  * returns:
- * 	uint8_t binary array of size `size` containing the result of XORing
- * 	every byte of `bits` with `byte`
- * 	or NULL if `bits` is NULL or `size` is zero
- * 	returned array has been dynamically allocated and should be freed by
- * 	user
+ * 	nothing
+ * side-effect:
+ * 	`bits` has been updated to contain the result of `bits` XORed with `byte`
  */
-uint8_t *xor_binary_singlebyte(const uint8_t *bits, size_t size, uint8_t byte)
+void xor_binary_singlebyte(uint8_t *bits, size_t size, uint8_t byte)
 {
-	uint8_t *res;
-	int i;
+	uint8_t *operand;
 
 	if (!bits || size == 0)
-		return NULL;
+		return;
 
-	res = calloc(size, sizeof(uint8_t));
+	operand = calloc(size, sizeof(uint8_t));
+	memset(operand, byte, size);
 
-	for (i = 0; (size_t)i < size; ++i)
-		res[i] = bits[i] ^ byte;
+	xor_binary(bits, operand, size);
 
-	return res;
+	free(operand);
 }
 
 /* Replace '\0's with ' 's */
@@ -68,7 +66,6 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 	uint8_t *bin;
 	unsigned int byte;
 	size_t binsize;
-	uint8_t *xor_res;
 	float min_freqscore, curr;
 	uint8_t min_key;
 
@@ -83,22 +80,21 @@ char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
 
 	min_freqscore = FLT_MAX;
 	for (byte = 1; byte < 256; ++byte) {
-		xor_res = xor_binary_singlebyte(bin, binsize, byte);
-		curr = freq_score_from_binary(xor_res, binsize, lang_freq);
-		free(xor_res);
+		xor_binary_singlebyte(bin, binsize, byte);
+		curr = freq_score_from_binary(bin, binsize, lang_freq);
+		xor_binary_singlebyte(bin, binsize, byte);
 		if (curr < min_freqscore) {
 			min_freqscore = curr;
 			min_key = byte;
 		}
 	}
 
-	xor_res = xor_binary_singlebyte(bin, binsize, min_key);
+	xor_binary_singlebyte(bin, binsize, min_key);
+
+	replace_null_w_space(bin, binsize);
+
+	plain = hex_encode(bin, binsize);
 	free(bin);
-
-	replace_null_w_space(xor_res, binsize);
-
-	plain = hex_encode(xor_res, binsize);
-	free(xor_res);
 
 	return plain;
 }
