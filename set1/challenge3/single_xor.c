@@ -1,11 +1,12 @@
-#include <float.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "hex.h"
 #include "freq.h"
 #include "single_xor.h"
+#include "xor.h"
+
 
 /* XOR binary array with single byte
  * params:
@@ -13,92 +14,57 @@
  * 	- size: size of `bits`
  * 	- byte: single byte
  * returns:
- * 	uint8_t binary array of size `size` containing the result of XORing
- * 	every byte of `bits` with `byte`
- * 	or NULL if `bits` is NULL or `size` is zero
- * 	returned array has been dynamically allocated and should be freed by
- * 	user
+ * 	nothing
+ * side-effect:
+ * 	`bits` has been updated to contain the result of `bits` XORed with `byte`
  */
-uint8_t *xor_binary_singlebyte(const uint8_t *bits, size_t size, uint8_t byte)
+void xor_binary_singlebyte(uint8_t *bits, size_t size, uint8_t byte)
 {
-	uint8_t *res;
-	int i;
+	uint8_t *operand;
 
 	if (!bits || size == 0)
-		return NULL;
-
-	res = calloc(size, sizeof(uint8_t));
-
-	for (i = 0; (size_t)i < size; ++i)
-		res[i] = bits[i] ^ byte;
-
-	return res;
-}
-
-/* Replace '\0's with ' 's */
-void replace_null_w_space(uint8_t *bits, size_t size)
-{
-	int i;
-
-	if (!bits)
 		return;
 
-	for (i = 0; (size_t)i < size; i++)
-		if (bits[i] == 0)
-			bits[i] = 20;
+	operand = calloc(size, sizeof(uint8_t));
+	memset(operand, byte, size);
+
+	xor_binary(bits, operand, size);
+
+	free(operand);
 }
 
-/* Decrypt hex string that has undergone a single-byte-xor based on language
+/* Decrypt binary data that has undergone a single-byte-xor based on language
  * frequency map
  * params:
- * 	- hex: C-string with characters in range [0, 1, ..., 9, A, ..., F]
- * 	       representing a hex string
- * 	- lang_freq: language frequency map of size 26 that should be compared
- * 		     to when determining the likeliness of the original string
+ * 	- bits: binary array
+ * 	- size: size of `bits`
+ * 	- lang_freq: language frequency map of size 27 that should be compared
+ * 		     to when determining the likeliness of the original message
  * returns:
- * 	hex string of the same length as `hex` representing the most likely
- * 	decryption based on character frequency
- * 	or NULL if `hex` is NULL or is an invalid hex string
- * 	returned C-string has been dynamically allocated and should be freed by
- * 	user
+ * 	most likely encryption/decryption key
+ * side-effect:
+ * 	`bits` has been altered to contain the likely decrypted result
  */
-char *decrypt_singlebytexor_on_hex(const char *hex, const float lang_freq[26])
+uint8_t decrypt_singlebytexor(uint8_t *bits, size_t size, const int lang_freq[27])
 {
-	char *plain;
-	uint8_t *bin;
-	unsigned int byte;
-	size_t binsize;
-	uint8_t *xor_res;
-	float min_freqscore, curr;
-	uint8_t min_key;
+	uint8_t likely_key;
+	int byte;
+	int max_score, curr_score;
 
-	if (!hex || !lang_freq || hex[0] == '\0')
-		return NULL;
+	if (!bits || size == 0 || !lang_freq)
+		return 0;
 
-	bin = hex_decode(hex);
-	if (!bin)
-		return NULL;
-
-	binsize = b2fromhex_size(hex);
-
-	min_freqscore = FLT_MAX;
-	for (byte = 1; byte < 256; ++byte) {
-		xor_res = xor_binary_singlebyte(bin, binsize, byte);
-		curr = freq_score_from_binary(xor_res, binsize, lang_freq);
-		free(xor_res);
-		if (curr < min_freqscore) {
-			min_freqscore = curr;
-			min_key = byte;
+	max_score = 0;
+	for (byte = 0; byte < 256; byte++) {
+		xor_binary_singlebyte(bits, size, byte);
+		curr_score = freq_score(bits, size, lang_freq);
+		xor_binary_singlebyte(bits, size, byte);
+		if (max_score < curr_score) {
+			max_score = curr_score;
+			likely_key = byte;
 		}
 	}
+	xor_binary_singlebyte(bits, size, likely_key);
 
-	xor_res = xor_binary_singlebyte(bin, binsize, min_key);
-	free(bin);
-
-	replace_null_w_space(xor_res, binsize);
-
-	plain = hex_encode(xor_res, binsize);
-	free(xor_res);
-
-	return plain;
+	return likely_key;
 }

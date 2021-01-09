@@ -3,14 +3,8 @@
 
 #include <stdint.h>
 
-extern const float ENGLISH_LETTER_FREQ[26];
+extern const int ENGLISH_LETTER_FREQ[27];
 
-float *freqmap_from_binary(const uint8_t *bits, size_t size);
-
-float freq_score(const float actual_freq[26], const float lang_freq[26]);
-
-float freq_score_from_binary(const uint8_t *bits, size_t size, const float lang_freq[26]);
-
-float freq_score_from_hex(const char *hex, const float lang_freq[26]);
+int freq_score(const uint8_t *bits, size_t size, const int lang_freq[27]);
 
 #endif
