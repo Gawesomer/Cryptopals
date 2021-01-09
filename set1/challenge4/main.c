@@ -26,36 +26,44 @@ int main(void)
 	FILE *input_file;
 	char *lineptr = NULL;
 	size_t linesize = 0;
-	float curr_score;
-	float min_score = FLT_MAX;
-	char *decrypted = NULL;
-	char *ascii;
+	uint8_t *binary;
+	size_t binary_size;
+	uint8_t *likely_decrypted = NULL;
+	int max_score, curr_score;
+	int i;
 
 	lineptr = calloc(linesize, sizeof(char));
 	input_file = fopen("./input", "r");
 	if (!input_file)
 		perror("fopen");
 
+	max_score = 0;
 	while (getline(&lineptr, &linesize, input_file) != -1) {
 		strip_newline(lineptr);
-		curr_score = freq_score_from_hex(lineptr, ENGLISH_LETTER_FREQ);
-		if (curr_score < min_score) {
-			min_score = curr_score;
-			if (decrypted)
-				free(decrypted);
-			decrypted = decrypt_singlebytexor_on_hex(lineptr, \
-					ENGLISH_LETTER_FREQ);
-		}
+
+		binary = hex_decode(lineptr);
+		binary_size = b2fromhex_size(lineptr);
+
+		decrypt_singlebytexor(binary, binary_size, ENGLISH_LETTER_FREQ);
+		curr_score = freq_score(binary, binary_size, ENGLISH_LETTER_FREQ);
+
+		if (max_score < curr_score) {
+			max_score = curr_score;
+			if (likely_decrypted)
+				free(likely_decrypted);
+			likely_decrypted = binary;
+		} else
+			free(binary);
 	}
 
 	free(lineptr);
 	fclose(input_file);
 
-	ascii = hextoascii(decrypted);
-	free(decrypted);
-
-	printf("min_score: %f\tdecrypted: '%s'\n", min_score, ascii);
-	free(ascii);
+	printf("max_score: %d\tdecrypted: '", max_score);
+	for (i = 0; (size_t)i < binary_size; i++)
+		printf("%c", likely_decrypted[i]);
+	printf("'\n");
+	free(likely_decrypted);
 
 	return EXIT_SUCCESS;
 }
