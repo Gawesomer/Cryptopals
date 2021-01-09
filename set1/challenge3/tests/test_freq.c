@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <float.h>
 
 #include "cTest.h"
 #include "../freq.c"
@@ -10,474 +9,122 @@
 /* English letter frequency duplicate of `ENGLISH_LETTER_FREQ` from `freq.h`
  * so that tests do not fail if `ENGLISH_LETTER_FREQ` is changed
  */
-const float TEST_LETTER_FREQ[26] = {
-	8.12f,	// A
-	1.49f,	// B
-	2.71f,	// C
-	4.32f,	// D
-	12.02f,	// E
-	2.30f,	// F
-	2.03f,	// G
-	5.92f,	// H
-	7.31f,	// I
-	0.10f,	// J
-	0.69f,	// K
-	3.98f,	// L
-	2.61f,	// M
-	6.95f,	// N
-	7.68f,	// O
-	1.82f,	// P
-	0.11f,	// Q
-	6.02f,	// R
-	6.28f,	// S
-	9.10f,	// T
-	2.88f,	// U
-	1.11f,	// V
-	2.09f,	// W
-	0.17f,	// X
-	2.11f,	// Y
-	0.07f,	// Z
+const int TEST_LETTER_FREQ[27] = {
+	812,	// A
+	149,	// B
+	271,	// C
+	432,	// D
+	1202,	// E
+	230,	// F
+	203,	// G
+	592,	// H
+	731,	// I
+	10,	// J
+	69,	// K
+	398,	// L
+	261,	// M
+	695,	// N
+	768,	// O
+	182,	// P
+	11,	// Q
+	602,	// R
+	628,	// S
+	910,	// T
+	288,	// U
+	111,	// V
+	209,	// W
+	17,	// X
+	211,	// Y
+	7,	// Z
+	1800,	// Space
 };
-
-/*** occmap_from_binary ***/
-
-int test_occmap_from_binary_null(void)
-{
-	return TEST_INT_ARR_EQ(occmap_from_binary(NULL, 0), NULL, 0);
-}
-
-int test_occmap_from_binary_empty(void)
-{
-	int status;
-	uint8_t bits[] = {0};
-	int *actual_map;
-	int expected_map[26] = {0};
-
-	actual_map = occmap_from_binary(bits, 0);
-
-	status = TEST_INT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
-
-int test_occmap_from_binary_single_byte(void)
-{
-	int status;
-	uint8_t bits[] = {'E'};
-	int *actual_map;
-	int expected_map[26] = {0};
-	expected_map[4] = 1;
-
-	actual_map = occmap_from_binary(bits, 1);
-
-	status = TEST_INT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
-
-int test_occmap_from_binary_lowercase(void)
-{
-	int status;
-	uint8_t bits[] = {'e'};
-	int *actual_map;
-	int expected_map[26] = {0};
-	expected_map[4] = 1;
-
-	actual_map = occmap_from_binary(bits, 1);
-
-	status = TEST_INT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
-
-int test_occmap_from_binary_nonletter(void)
-{
-	int status;
-	uint8_t bits[] = {'7'};
-	int *actual_map;
-	int expected_map[26] = {0};
-
-	actual_map = occmap_from_binary(bits, 1);
-
-	status = TEST_INT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
-
-int test_occmap_from_binary_multiple_bytes(void)
-{
-	int status;
-	uint8_t bits[] = {'h', 'e', 'y', ',', ' ', 'b', 'y', 'e', '.'};
-	int *actual_map;
-	int expected_map[26] = {0};
-	expected_map[1] = 1;
-	expected_map[4] = 2;
-	expected_map[7] = 1;
-	expected_map[24] = 2;
-
-	actual_map = occmap_from_binary(bits, 9);
-
-	status = TEST_INT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
-
-/*** occmap_to_freqmap ***/
-
-int test_occmap_to_freqmap_null(void)
-{
-	return TEST_FLOAT_ARR_EQ(occmap_to_freqmap(NULL), NULL, 0);
-}
-
-int test_occmap_to_freqmap_empty(void)
-{
-	int status;
-	int occmap[26] = {0};
-	float *actual_freq;
-	float expected_freq[26] = {0.00f};
-
-	actual_freq = occmap_to_freqmap(occmap);
-
-	status = TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, 26);
-
-	free(actual_freq);
-
-	return status;
-}
-
-int test_occmap_to_freqmap_single_letter(void)
-{
-	int status;
-	int occmap[26] = {0};
-	occmap[4] = 1;
-	float *actual_freq;
-	float expected_freq[26] = {0.00f};
-	expected_freq[4] = 100.00f;
-
-	actual_freq = occmap_to_freqmap(occmap);
-
-	status = TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, 26);
-
-	free(actual_freq);
-
-	return status;
-}
-
-int test_occmap_to_freqmap_negative_occ(void)
-{
-	int occmap[26] = {0};
-	occmap[4] = -1;
-
-	return TEST_FLOAT_ARR_EQ(occmap_to_freqmap(occmap), NULL, 0);
-}
-
-int test_occmap_to_freqmap_multiple_bytes(void)
-{
-	int status;
-	int occmap[26] = {0};
-	occmap[1] = 1;
-	occmap[4] = 2;
-	occmap[7] = 1;
-	occmap[24] = 2;
-	float *actual_freq;
-	float expected_freq[26] = {0.00f};
-	expected_freq[1] = 16.67f;
-	expected_freq[4] = 33.33f;
-	expected_freq[7] = 16.67f;
-	expected_freq[24] = 33.33f;
-
-	actual_freq = occmap_to_freqmap(occmap);
-
-	status = TEST_FLOAT_ARR_EQ(expected_freq, actual_freq, 26);
-
-	free(actual_freq);
-
-	return status;
-}
-
-/*** freqmap_from_binary ***/
-
-int test_freqmap_from_binary_null(void)
-{
-	return TEST_FLOAT_ARR_EQ(freqmap_from_binary(NULL, 0), NULL, 0);
-}
-
-int test_freqmap_from_binary_empty(void)
-{
-	int status;
-	uint8_t bits[] = {0};
-	float *actual_map;
-	float expected_map[26] = {0.00f};
-
-	actual_map = freqmap_from_binary(bits, 0);
-
-	status = TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
-
-int test_freqmap_from_binary_single_byte(void)
-{
-	int status;
-	uint8_t bits[] = {'E'};
-	float *actual_map;
-	float expected_map[26] = {0.00f};
-	expected_map[4] = 100.00f;
-
-	actual_map = freqmap_from_binary(bits, 1);
-
-	status = TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
-
-int test_freqmap_from_binary_lowercase(void)
-{
-	int status;
-	uint8_t bits[] = {'e'};
-	float *actual_map;
-	float expected_map[26] = {0.00f};
-	expected_map[4] = 100.00f;
-
-	actual_map = freqmap_from_binary(bits, 1);
-
-	status = TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
-
-int test_freqmap_from_binary_nonletter(void)
-{
-	int status;
-	uint8_t bits[] = {'7'};
-	float *actual_map;
-	float expected_map[26] = {0.00f};
-
-	actual_map = freqmap_from_binary(bits, 1);
-
-	status = TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
-
-int test_freqmap_from_binary_multiple_bytes(void)
-{
-	int status;
-	uint8_t bits[] = {'h', 'e', 'y', ',', ' ', 'b', 'y', 'e', '.'};
-	float *actual_map;
-	float expected_map[26] = {0.00f};
-	expected_map[1] = 16.67f;
-	expected_map[4] = 33.33f;
-	expected_map[7] = 16.67f;
-	expected_map[24] = 33.33f;
-
-	actual_map = freqmap_from_binary(bits, 9);
-
-	status = TEST_FLOAT_ARR_EQ(expected_map, actual_map, 26);
-
-	free(actual_map);
-
-	return status;
-}
 
 /*** freq_score ***/
 
-int test_freq_score_null(void)
+int test_freq_score_null_returns_zero(void)
 {
 	int status = 0;
-	float freq[26] = {0.00f};
-	
-	status += TEST_FLOAT_EQ(freq_score(freq, NULL), FLT_MAX);
-	status += TEST_FLOAT_EQ(freq_score(NULL, freq), FLT_MAX);
-	status += TEST_FLOAT_EQ(freq_score(NULL, NULL), FLT_MAX);
+	uint8_t bits[] = {0};
+
+	status += TEST_INT_EQ(freq_score(NULL, 1, TEST_LETTER_FREQ), 0);
+	status += TEST_INT_EQ(freq_score(bits, 1, NULL), 0);
+	status += TEST_INT_EQ(freq_score(NULL, 1, NULL), 0);
 
 	return status;
 }
 
-int test_freq_score_empty(void)
-{
-	float freq[26] = {0.00f};
-	float actual_score;
-	float expected_score = 99.99f;
-
-	actual_score = freq_score(freq, TEST_LETTER_FREQ);
-
-	return TEST_FLOAT_EQ(expected_score, actual_score);
-}
-
-int test_freq_score_single_letter(void)
-{
-	float freq[26] = {0.00f};
-	freq[4] = 100.00f;
-	float actual_score;
-	float expected_score = 175.95f;
-
-	actual_score = freq_score(freq, TEST_LETTER_FREQ);
-
-	return TEST_FLOAT_EQ(expected_score, actual_score);
-}
-
-int test_freq_score_multiple_letters(void)
-{
-	float freq[26] = {0.00f};
-	freq[1] = 16.67f;
-	freq[4] = 33.33f;
-	freq[7] = 16.67f;
-	freq[24] = 33.33f;
-	float actual_score;
-	float expected_score = 156.91f;
-
-	actual_score = freq_score(freq, TEST_LETTER_FREQ);
-
-	return TEST_FLOAT_EQ(expected_score, actual_score);
-}
-
-/*** freq_score_from_binary ***/
-
-int test_freq_score_from_binary_null_returns_fltmax(void)
-{
-	return TEST_FLOAT_EQ(freq_score_from_binary(NULL, 0, TEST_LETTER_FREQ), FLT_MAX);
-}
-
-int test_freq_score_from_binary_empty_returns_zero(void)
+int test_freq_score_empty_returns_zero(void)
 {
 	uint8_t bits[] = {0};
-	float actual_score;
-	float expected_score = 99.99f;
 
-	actual_score = freq_score_from_binary(bits, 0, TEST_LETTER_FREQ);
-
-	return TEST_FLOAT_EQ(expected_score, actual_score);
+	return TEST_INT_EQ(freq_score(bits, 0, TEST_LETTER_FREQ), 0);
 }
 
-int test_freq_score_from_binary_single_letter(void)
+int test_freq_score_single_lowercase(void)
 {
-	uint8_t bits[] = {0x45};
-	float actual_score;
-	float expected_score = 175.95f;
+	uint8_t bits[] = {'a'};
+	int actual_score;
+	int expected_score = TEST_LETTER_FREQ[0];
 
-	actual_score = freq_score_from_binary(bits, 1, TEST_LETTER_FREQ);
+	actual_score = freq_score(bits, 1, TEST_LETTER_FREQ);
 
-	return TEST_FLOAT_EQ(expected_score, actual_score);
+	return TEST_INT_EQ(expected_score, actual_score);
 }
 
-int test_freq_score_from_binary_multiple_uppercase_letters(void)
+int test_freq_score_single_uppercase(void)
 {
-	uint8_t bits[] = {0x42, 0x45, 0x45, 0x48, 0x59, 0x59};
-	float actual_score;
-	float expected_score = 156.91f;
+	uint8_t bits[] = {'A'};
+	int actual_score;
+	int expected_score = TEST_LETTER_FREQ[0];
 
-	actual_score = freq_score_from_binary(bits, 6, TEST_LETTER_FREQ);
+	actual_score = freq_score(bits, 1, TEST_LETTER_FREQ);
 
-	return TEST_FLOAT_EQ(expected_score, actual_score);
+	return TEST_INT_EQ(expected_score, actual_score);
 }
 
-int test_freq_score_from_binary_multiple_bothcases_letters(void)
+int test_freq_score_space(void)
 {
-	uint8_t bits[] = {0x42, 0x45, 0x65, 0x48, 0x59, 0x79};
-	float actual_score;
-	float expected_score = 156.91f;
+	uint8_t bits[] = {' '};
+	int actual_score;
+	int expected_score = TEST_LETTER_FREQ[26];
 
-	actual_score = freq_score_from_binary(bits, 6, TEST_LETTER_FREQ);
+	actual_score = freq_score(bits, 1, TEST_LETTER_FREQ);
 
-	return TEST_FLOAT_EQ(expected_score, actual_score);
+	return TEST_INT_EQ(expected_score, actual_score);
 }
 
-/*** freq_score_from_hex ***/
-
-int test_freq_score_from_hex_null_returns_fltmax(void)
+int test_freq_score_invalid_character(void)
 {
-	return TEST_FLOAT_EQ(freq_score_from_hex(NULL, TEST_LETTER_FREQ), FLT_MAX);
+	uint8_t bits[] = {'*'};
+	int actual_score;
+	int expected_score = 0;
+
+	actual_score = freq_score(bits, 1, TEST_LETTER_FREQ);
+
+	return TEST_INT_EQ(expected_score, actual_score);
 }
 
-int test_freq_score_from_hex_single_letter(void)
+int test_freq_score_multiple_letters_bothcases(void)
 {
-	char hex[] = "45";
-	float actual_score;
-	float expected_score = 175.95f;
+	uint8_t bits[] = {'H', 'i', ' ', 'y', 'o', 'u', '!'};
+	int actual_score;
+	int expected_score = 4390;
 
-	actual_score = freq_score_from_hex(hex, TEST_LETTER_FREQ);
+	actual_score = freq_score(bits, sizeof(bits), TEST_LETTER_FREQ);
 
-	return TEST_FLOAT_EQ(expected_score, actual_score);
-}
-
-int test_freq_score_from_hex_multiple_uppercase_letters(void)
-{
-	char hex[] = "424545485959";
-	float actual_score;
-	float expected_score = 156.91f;
-
-	actual_score = freq_score_from_hex(hex, TEST_LETTER_FREQ);
-
-	return TEST_FLOAT_EQ(expected_score, actual_score);
-}
-
-int test_freq_score_from_hex_multiple_bothcases_letters(void)
-{
-	char hex[] = "424565485979";
-	float actual_score;
-	float expected_score = 156.91f;
-
-	actual_score = freq_score_from_hex(hex, TEST_LETTER_FREQ);
-
-	return TEST_FLOAT_EQ(expected_score, actual_score);
+	return TEST_INT_EQ(expected_score, actual_score);
 }
 
 int main(void)
 {
-	REGISTER_TEST(test_occmap_from_binary_null);
-	REGISTER_TEST(test_occmap_from_binary_empty);
-	REGISTER_TEST(test_occmap_from_binary_single_byte);
-	REGISTER_TEST(test_occmap_from_binary_lowercase);
-	REGISTER_TEST(test_occmap_from_binary_nonletter);
-	REGISTER_TEST(test_occmap_from_binary_multiple_bytes);
-
-	REGISTER_TEST(test_occmap_to_freqmap_null);
-	REGISTER_TEST(test_occmap_to_freqmap_empty);
-	REGISTER_TEST(test_occmap_to_freqmap_single_letter);
-	REGISTER_TEST(test_occmap_to_freqmap_negative_occ);
-	REGISTER_TEST(test_occmap_to_freqmap_multiple_bytes);
-
-	REGISTER_TEST(test_freqmap_from_binary_null);
-	REGISTER_TEST(test_freqmap_from_binary_empty);
-	REGISTER_TEST(test_freqmap_from_binary_single_byte);
-	REGISTER_TEST(test_freqmap_from_binary_lowercase);
-	REGISTER_TEST(test_freqmap_from_binary_nonletter);
-	REGISTER_TEST(test_freqmap_from_binary_multiple_bytes);
-
-	REGISTER_TEST(test_freq_score_null);
-	REGISTER_TEST(test_freq_score_empty);
-	REGISTER_TEST(test_freq_score_single_letter);
-	REGISTER_TEST(test_freq_score_multiple_letters);
-
-	REGISTER_TEST(test_freq_score_from_binary_null_returns_fltmax);
-	REGISTER_TEST(test_freq_score_from_binary_empty_returns_zero);
-	REGISTER_TEST(test_freq_score_from_binary_single_letter);
-	REGISTER_TEST(test_freq_score_from_binary_multiple_uppercase_letters);
-	REGISTER_TEST(test_freq_score_from_binary_multiple_bothcases_letters);
-
-	REGISTER_TEST(test_freq_score_from_hex_null_returns_fltmax);
-	REGISTER_TEST(test_freq_score_from_hex_single_letter);
-	REGISTER_TEST(test_freq_score_from_hex_multiple_uppercase_letters);
-	REGISTER_TEST(test_freq_score_from_hex_multiple_bothcases_letters);
+	REGISTER_TEST(test_freq_score_null_returns_zero);
+	REGISTER_TEST(test_freq_score_empty_returns_zero);
+	REGISTER_TEST(test_freq_score_single_lowercase);
+	REGISTER_TEST(test_freq_score_single_uppercase);
+	REGISTER_TEST(test_freq_score_space);
+	REGISTER_TEST(test_freq_score_invalid_character);
+	REGISTER_TEST(test_freq_score_invalid_character);
+	REGISTER_TEST(test_freq_score_multiple_letters_bothcases);
 
 	return RUN_TESTS();
 }
