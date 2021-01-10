@@ -15,3 +15,4 @@ set1/challenge4/main
 set1/challenge5/main
 set1/challenge5/tests/test_repeat_xor
 util/tests/test_div
+util/tests/test_arr
