@@ -6,102 +6,22 @@
 #include "div.h"
 #include "hex.h"
 
-/* Returns size in bytes of base64 translation from binary for given
+/* Return size in bytes of base64 translation from binary for given
  * `numbytes`
  */
-size_t base64frombinary_size(size_t numbytes)
+size_t b64fromb2_size(size_t numbytes)
 {
-	return round_up_div(numbytes*4, 3);
+	size_t res;
+
+	res = round_up_div(numbytes*4, 3);
+	while (res%4 != 0)
+		res++;
+
+	return res;
 }
 
-/* Convert binary representation to base64
- * params:
- * 	- bits: bits to translate to base64
- * 	- numbytes: size of `bits` array
- * returns:
- * 	uint8_t array of size `base64frombinary_size` representing base64
- * 	translation of `bits` or NULL if `bits` is NULL
- * 	returned array has been dynamically allocated and should be freed by
- * 	user
- */
-uint8_t *binarytobase64(const uint8_t *bits, size_t numbytes)
-{
-	uint8_t *base64;
-	size_t base64size;
-	uint8_t base64mask, binarymask;
-	int ibase64, ibin;
-
-	if (!bits || numbytes == 0)
-		return NULL;
-
-	base64size = base64frombinary_size(numbytes);
-	base64 = calloc(base64size, sizeof(uint8_t));
-
-	base64mask = 1<<5;
-	binarymask = 1<<7;
-	ibase64 = ibin = 0;
-	while ((size_t)ibin < numbytes) {
-		if (bits[ibin]&binarymask)
-			base64[ibase64] |= base64mask;
-		base64mask >>= 1;
-		if (!base64mask) {
-			base64mask = 1<<5;
-			++ibase64;
-		}
-		binarymask >>= 1;
-		if (!binarymask) {
-			binarymask = 1<<7;
-			++ibin;
-		}
-	}
-
-	return base64;
-}
-
-/* Returns size in bytes of binary translation from base64 for given
- * `numbytes`
- */
-size_t binaryfrombase64_size(size_t numbytes)
-{
-	return round_up_div(numbytes*3, 4);
-}
-
-uint8_t *base64tobinary(const uint8_t *bits, size_t numbytes)
-{
-	uint8_t *binary;
-	size_t binarysize;
-	uint8_t base64mask, binarymask;
-	int ibase64, ibinary;
-
-	if (!bits || numbytes == 0)
-		return NULL;
-
-	binarysize = binaryfrombase64_size(numbytes);
-	binary = calloc(binarysize, sizeof(uint8_t));
-
-	base64mask = 1<<5;
-	binarymask = 1<<7;
-	ibase64 = ibinary = 0;
-	while ((size_t)ibase64 < numbytes) {
-		if (bits[ibase64]&base64mask)
-			binary[ibinary] |= binarymask;
-		binarymask >>= 1;
-		if (!binarymask) {
-			binarymask = 1<<7;
-			++ibinary;
-		}
-		base64mask >>= 1;
-		if (!base64mask) {
-			base64mask = 1<<5;
-			++ibase64;
-		}
-	}
-
-	return binary;
-}
-
-/* Returns char representation of `i` if within range [0, 63], otherwise '\0' */
-char base64_inttochar(uint8_t i)
+/* Return char representation of `i` if within range [0, 63], otherwise '\0' */
+char base64char_encode(uint8_t i)
 {
 	if (i <= 25)
 		return i+'A';
@@ -116,46 +36,187 @@ char base64_inttochar(uint8_t i)
 	return '\0';
 }
 
-/* Encodes uint8_t array in base64 representation to base64 encoding
+/* Convert binary data to base64 string
  * params:
- * 	- base64: uint8_t array in base64 representation (i.e. all elements are
- * 		  in the range [0-63])
- * 	- numbytes: size in bytes of `base64`
+ * 	- bits: bits to translate to base64
+ * 	- numbytes: size of `bits` array
  * returns:
- * 	C-string base64 encoding of `base64`, or NULL if `base64` is NULL or
- * 	contains elements not in range [0-63]
- * 	returned C-string has been dynamically allocated and should be freed by
+ * 	C-string with characters in range
+ * 	[A, ..., Z, a, ..., z, 0, ..., 9, +, /]
+ * 	corresponding to base64 representation of `bits`,
+ * 	or NULL if `bits` is NULL
+ * 	returned C-string has been dynamically allocated and should be freed
+ * 	by user
+ */
+char *base64_encode(const uint8_t *bits, size_t numbytes)
+{
+	char *base64;
+	char base64char;
+	size_t base64size;
+	uint8_t base64mask, bitsmask;
+	int ibase64, ibits, i;
+
+	if (!bits || numbytes == 0)
+		return NULL;
+
+	base64size = b64fromb2_size(numbytes);
+	base64 = calloc(base64size+1, sizeof(char));
+
+	/* split into right-padded sextets */
+	base64mask = 1<<5;
+	bitsmask = 1<<7;
+	ibase64 = ibits = 0;
+	while ((size_t)ibits < numbytes) {
+		if (bits[ibits]&bitsmask)
+			base64[ibase64] |= base64mask;
+		base64mask >>= 1;
+		if (!base64mask) {
+			base64mask = 1<<5;
+			++ibase64;
+		}
+		bitsmask >>= 1;
+		if (!bitsmask) {
+			bitsmask = 1<<7;
+			++ibits;
+		}
+	}
+
+	/* translate to ASCII characters */
+	if (base64mask < (1<<5))
+		ibase64++;
+
+	for (i = 0; i < ibase64; ++i) {
+		base64char = base64char_encode(base64[i]);
+		if (base64char == '\0') {
+			free(base64);
+			return NULL;
+		}
+		base64[i] = base64char;
+	}
+
+	/* add padding */
+	for (; (size_t)i < base64size; i++)
+		base64[i] = '=';
+	base64[i] = '\0';
+
+	return base64;
+}
+
+/* Return size in bytes of binary translation from base64 for given
+ * `numbytes`
+ */
+size_t b2fromb64_size(const char *base64)
+{
+	size_t len;
+	size_t res;
+
+	if (!base64)
+		return 0;
+
+	len = strlen(base64);
+	if (len <= 1)
+		return 0;
+
+	if ((len%4) != 0)
+		return (len*3)/4;	// round down
+
+	res = (len*3)/4;
+	if (base64[len-1] == '=') {
+		res--;
+		if (base64[len-2] == '=')
+			res--;
+	}
+
+	return res;
+}
+
+/* Return base64 value of `c` if within range
+ * [A, ..., Z, a, ..., z, 0, ..., 9, +, /],
+ * otherwise 255 */
+uint8_t base64char_decode(char c)
+{
+	if ('A' <= c && c <= 'Z')
+		return c-'A';
+	if ('a' <= c && c <= 'z')
+		return c-'a'+26;
+	if ('0' <= c && c <= '9')
+		return c-'0'+52;
+	if (c == '+')
+		return 62;
+	if (c == '/')
+		return 63;
+	if (c == '=')
+		return 0;
+	return 255;
+}
+
+/* Convert base64 string to binary data
+ * Accounts for padding
+ * In the case where `base64`'s length is not a multiple of four, only the
+ * first valid octets are converted, extraneous bits are disreguarded
+ * params:
+ * 	- base64: C-string with characters in range
+ * 		  [A, ..., Z, a, ..., z, 0, ..., 9, +, /],
+ * 		  representing a hex string
+ * returns:
+ * 	uint8_t array of size `b2fromb64_size` representing binary
+ * 	representation of `base64`, or NULL if `base64` is NULL or contains
+ * 	invalid base64 codes.
+ * 	returned array has been dynamically allocated and should be freed by
  * 	user
  */
-char *base64_tostring(const uint8_t *base64, size_t numbytes)
+uint8_t *base64_decode(const char *base64)
 {
-	char *base64str;
-	char base64char;
-	int i;
+	uint8_t *bits, *base64_raw;
+	size_t len;
+	uint8_t base64char;
+	size_t binarysize;
+	uint8_t base64mask, binarymask;
+	int ibase64, ibits, i;
 
 	if (!base64)
 		return NULL;
 
-	base64str = calloc(numbytes+1, sizeof(char));
+	len = strlen(base64);
+	binarysize = b2fromb64_size(base64);
+	if (binarysize == 0)
+		return NULL;
 
-	for (i = 0; (size_t)i < numbytes; ++i) {
-		base64char = base64_inttochar(base64[i]);
-		if (base64char == '\0') {
-			free(base64str);
+	base64_raw = calloc(len, sizeof(uint8_t));
+
+	/* translate from ASCII */
+	for (i = 0; (size_t)i < len; i++) {
+		base64char = base64char_decode(base64[i]);
+		if (base64char > 63) {
+			free(base64_raw);
 			return NULL;
 		}
-		base64str[i] = base64char;
+		base64_raw[i] = base64char;
 	}
-	base64str[i] = '\0';
 
-	return base64str;
-}
+	bits = calloc(binarysize, sizeof(uint8_t));
 
-/* Returns amount of padding that should be added to a base64 string of length
- * `base64len` */
-size_t base64padding_len(size_t base64len)
-{
-	return (base64len%4) ? 4-(base64len%4) : 0;
+	/* split into octets */
+	base64mask = 1<<5;
+	binarymask = 1<<7;
+	ibase64 = ibits = 0;
+	while ((size_t)ibits < binarysize) {
+		if (base64_raw[ibase64]&base64mask)
+			bits[ibits] |= binarymask;
+		binarymask >>= 1;
+		if (!binarymask) {
+			binarymask = 1<<7;
+			++ibits;
+		}
+		base64mask >>= 1;
+		if (!base64mask) {
+			base64mask = 1<<5;
+			++ibase64;
+		}
+	}
+	free(base64_raw);
+
+	return bits;
 }
 
 /* Convert hex string to base64 string
@@ -170,37 +231,13 @@ size_t base64padding_len(size_t base64len)
  */
 char *hextobase64(const char *hexstr)
 {
-	size_t hexlen, binarysize, base64size, base64padding;
-	uint8_t *binary, *base64;
-	char *base64str, *base64padded;
-	int i;
+	uint8_t *binary;
+	char *base64;
 
-	if (!hexstr)
-		return NULL;
-	hexlen = strlen(hexstr);
+	binary = hex_decode(hexstr);
 
-	binarysize = binaryfromhex_size(hexlen);
-	binary = hextobinary(hexstr);
-
-	base64size = base64frombinary_size(binarysize);
-	base64 = binarytobase64(binary, binarysize);
+	base64 = base64_encode(binary, b2fromhex_size(hexstr));
 	free(binary);
 
-	base64str = base64_tostring(base64, base64size);
-	free(base64);
-
-	if (!base64str)
-		return NULL;
-
-	base64padding = base64padding_len(base64size);
-	if (base64padding != 0)
-		base64padded = realloc(base64str, base64size+base64padding+1);
-	else
-		base64padded = base64str;
-
-	for (i = 0; (size_t)i < base64padding; ++i)
-		base64padded[base64size+i] = '=';
-	base64padded[base64size+base64padding] = '\0';
-
-	return base64padded;
+	return base64;
 }

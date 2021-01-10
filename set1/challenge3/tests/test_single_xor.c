@@ -8,151 +8,128 @@
 /* English letter frequency duplicate of `ENGLISH_LETTER_FREQ` from `freq.h`
  * so that tests do not fail if `ENGLISH_LETTER_FREQ` is changed
  */
-const float TEST_LETTER_FREQ[26] = {
-	8.12f,	// A
-	1.49f,	// B
-	2.71f,	// C
-	4.32f,	// D
-	12.02f,	// E
-	2.30f,	// F
-	2.03f,	// G
-	5.92f,	// H
-	7.31f,	// I
-	0.10f,	// J
-	0.69f,	// K
-	3.98f,	// L
-	2.61f,	// M
-	6.95f,	// N
-	7.68f,	// O
-	1.82f,	// P
-	0.11f,	// Q
-	6.02f,	// R
-	6.28f,	// S
-	9.10f,	// T
-	2.88f,	// U
-	1.11f,	// V
-	2.09f,	// W
-	0.17f,	// X
-	2.11f,	// Y
-	0.07f,	// Z
+const int TEST_LETTER_FREQ[27] = {
+	812,	// A
+	149,	// B
+	271,	// C
+	432,	// D
+	1202,	// E
+	230,	// F
+	203,	// G
+	592,	// H
+	731,	// I
+	10,	// J
+	69,	// K
+	398,	// L
+	261,	// M
+	695,	// N
+	768,	// O
+	182,	// P
+	11,	// Q
+	602,	// R
+	628,	// S
+	910,	// T
+	288,	// U
+	111,	// V
+	209,	// W
+	17,	// X
+	211,	// Y
+	7,	// Z
+	1800,	// Space
 };
 
-/*** xor_binary_singlebyte ***/
+/*** xor_singlebyte ***/
 
-int test_xor_binary_singlebyte_null(void)
+int test_xor_singlebyte_null(void)
 {
-	return TEST_BYTE_ARR_EQ(xor_binary_singlebyte(NULL, 0, 0x00), NULL, 0);
+	xor_singlebyte(NULL, 0, 0x00);
+
+	return 0;
 }
 
-int test_xor_binary_singlebyte_empty(void)
+int test_xor_singlebyte_empty(void)
 {
 	uint8_t bits[] = {0};
 
-	return TEST_BYTE_ARR_EQ(xor_binary_singlebyte(bits, 0, 0x00), NULL, 0);
+	xor_singlebyte(bits, 0, 0x00);
+
+	return 0;
 }
 
-int test_xor_binary_singlebyte_single_byte(void)
+int test_xor_singlebyte_single_byte(void)
 {
-	int status;
 	uint8_t bits[] = {0xFF};
 	uint8_t byte = 0xAA;
-	uint8_t *actual;
 	uint8_t expected[] = {0x55};
 
-	actual = xor_binary_singlebyte(bits, 1, byte);
+	xor_singlebyte(bits, 1, byte);
 
-	status = TEST_BYTE_ARR_EQ(expected, actual, 1);
-
-	free(actual);
-
-	return status;
+	return TEST_BYTE_ARR_EQ(expected, bits, 1);
 }
 
-int test_xor_binary_singlebyte_multiple_bytes(void)
+int test_xor_singlebyte_multiple_bytes(void)
 {
-	int status;
 	uint8_t bits[] = {0x12, 0x34, 0xFF, 0xAA};
 	uint8_t byte = 0xAA;
-	uint8_t *actual;
 	uint8_t expected[] = {0xB8, 0x9E, 0x55, 0x00};
 
-	actual = xor_binary_singlebyte(bits, 4, byte);
+	xor_singlebyte(bits, 4, byte);
 
-	status = TEST_BYTE_ARR_EQ(expected, actual, 4);
-
-	free(actual);
-
-	return status;
+	return TEST_BYTE_ARR_EQ(expected, bits, 4);
 }
 
-/*** decrypt_singlebytexor_on_hex ***/
+/*** decrypt_singlebytexor ***/
 
-int test_decrypt_singlebytexor_on_hex_null(void)
+int test_decrypt_singlebytexor_null(void)
 {
 	int status = 0;
-	char hex[] = "00";
+	uint8_t bits[] = {0};
 
-	status += TEST_STR_EQ(decrypt_singlebytexor_on_hex(NULL, TEST_LETTER_FREQ), \
-			NULL);
-	status += TEST_STR_EQ(decrypt_singlebytexor_on_hex(hex, NULL), NULL);
-	status += TEST_STR_EQ(decrypt_singlebytexor_on_hex(NULL, NULL), NULL);
+	status += TEST_INT_EQ(decrypt_singlebytexor(NULL, 1, TEST_LETTER_FREQ), 0);
+	status += TEST_INT_EQ(decrypt_singlebytexor(bits, 1, NULL), 0);
+	status += TEST_INT_EQ(decrypt_singlebytexor(NULL, 1, NULL), 0);
 
 	return status;
 }
 
-int test_decrypt_singlebytexor_on_hex_empty(void)
+int test_decrypt_singlebytexor_empty(void)
 {
-	return TEST_STR_EQ(decrypt_singlebytexor_on_hex("", TEST_LETTER_FREQ), \
-			NULL);
+	uint8_t bits[] = {0};
+
+	return TEST_INT_EQ(decrypt_singlebytexor(bits, 0, TEST_LETTER_FREQ), 0);
 }
 
-int test_decrypt_singlebytexor_on_hex_all_letters(void)
+int test_decrypt_singlebytexor_all_letters(void)
 {
-	int status;
-	// "THISISARANDOMENGLISHSENTENCE" ^ 'A'
-	char hex[] = "1509081208120013000F050E0C040F060D08120912040F15040F0204";
-	char *actual;
+	int status = 0;
+	// "THIS IS A RANDOM ENGLISH SENTENCE" ^ 'A'
+	uint8_t bits[] = {0x15, 0x9, 0x8, 0x12, 0x61, 0x8, 0x12, 0x61, 0x0, \
+		0x61, 0x13, 0x0, 0xF, 0x5, 0xE, 0xC, 0x61, 0x4, 0xF, 0x6, \
+		0xD, 0x8, 0x12, 0x9, 0x61, 0x12, 0x4, 0xF, 0x15, 0x4, 0xF, \
+		0x2, 0x4};
 	// "THISISARANDOMENGLISHSENTENCE"
-	char expected[] = "5448495349534152414E444F4D454E474C49534853454E54454E4345";
+	char expected[] = "THIS IS A RANDOM ENGLISH SENTENCE";
+	uint8_t actual_key;
+	uint8_t expected_key = 'A';
 
-	actual = decrypt_singlebytexor_on_hex(hex, TEST_LETTER_FREQ);
+	actual_key = decrypt_singlebytexor(bits, sizeof(bits), TEST_LETTER_FREQ);
 
-	status = TEST_STR_EQ(expected, actual);
-
-	free(actual);
-
-	return status;
-}
-
-int test_decrypt_singlebytexor_on_hex_some_null_chars(void)
-{
-	int status;
-	// "nOWTHATTHEPARTYISJUMPING*" ^ 'F'
-	char hex[] = "7b5a4215415d544115415d5015455447414c155c46155f4058455c5b523f";
-	char *actual;
-	// "nOWTHATTHEPARTYISJUMPING*"
-	char expected[] = "6E4F57145448415414544845145041525459144953144A554D50494E472A";
-
-	actual = decrypt_singlebytexor_on_hex(hex, TEST_LETTER_FREQ);
-
-	status = TEST_STR_EQ(expected, actual);
-
-	free(actual);
+	status += TEST_INT_EQ(expected_key, actual_key);
+	status += TEST_BYTE_ARR_EQ(expected, bits, sizeof(bits));
 
 	return status;
 }
 
 int main(void)
 {
-	REGISTER_TEST(test_xor_binary_singlebyte_null);
-	REGISTER_TEST(test_xor_binary_singlebyte_empty);
-	REGISTER_TEST(test_xor_binary_singlebyte_single_byte);
-	REGISTER_TEST(test_xor_binary_singlebyte_multiple_bytes);
+	REGISTER_TEST(test_xor_singlebyte_null);
+	REGISTER_TEST(test_xor_singlebyte_empty);
+	REGISTER_TEST(test_xor_singlebyte_single_byte);
+	REGISTER_TEST(test_xor_singlebyte_multiple_bytes);
 
-	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_null);
-	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_empty);
-	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_all_letters);
-	REGISTER_TEST(test_decrypt_singlebytexor_on_hex_some_null_chars);
+	REGISTER_TEST(test_decrypt_singlebytexor_null);
+	REGISTER_TEST(test_decrypt_singlebytexor_empty);
+	REGISTER_TEST(test_decrypt_singlebytexor_all_letters);
 
 	return RUN_TESTS();
 }

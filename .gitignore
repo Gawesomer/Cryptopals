@@ -18,3 +18,4 @@ set1/challenge6/main
 set1/challenge6/tests/test_ham
 set1/challenge6/tests/test_break_repeatxor
 util/tests/test_div
+util/tests/test_arr

@@ -8,65 +8,59 @@
 
 int test_xor_repeating_null(void)
 {
-	int status = 0;
-	char s[] = "something";
+	uint8_t bits[] = {0};
+	uint8_t expected[] = {0};
 
-	status += TEST_STR_EQ(xor_repeating(NULL, NULL), NULL);
-	status += TEST_STR_EQ(xor_repeating(s, NULL), NULL);
-	status += TEST_STR_EQ(xor_repeating(NULL, s), NULL);
+	xor_repeating(NULL, 1, bits, 1);
+	xor_repeating(bits, 1, NULL, 1);
+	xor_repeating(NULL, 1, NULL, 1);
 
-	return status;
+	return TEST_BYTE_ARR_EQ(expected, bits, 1);
+}
+
+int test_xor_repeating_empty(void)
+{
+	uint8_t bits[] = {0};
+	uint8_t expected[] = {0};
+
+	xor_repeating(bits, 0, bits, 1);
+	xor_repeating(bits, 1, bits, 0);
+	xor_repeating(bits, 0, bits, 0);
+
+	return TEST_BYTE_ARR_EQ(expected, bits, 1);
 }
 
 int test_xor_repeating_single_input_byte(void)
 {
-	int status;
-	char plain[] = "B";
-	char key[] = "I";
-	char *actual;
-	char expected[] = {0x0B, 0x00};
+	uint8_t bits[] = {'B'};
+	uint8_t key[] = {'I'};
+	uint8_t expected[] = {0x0B};
 
-	actual = xor_repeating(plain, key);
+	xor_repeating(bits, 1, key, 1);
 
-	status = TEST_STR_EQ(expected, actual);
-
-	free(actual);
-
-	return status;
+	return TEST_BYTE_ARR_EQ(expected, bits, 1);
 }
 
 int test_xor_repeating_multiple_input_bytes_single_key_byte(void)
 {
-	int status;
-	char plain[] = "Burn";
-	char key[] = "I";
-	char *actual;
-	char expected[] = {0x0B, 0x3C, 0x3B, 0x27, 0x00};
+	uint8_t bits[] = {'B', 'u', 'r', 'n'};
+	uint8_t key[] = {'I'};
+	uint8_t expected[] = {0x0B, 0x3C, 0x3B, 0x27};
 
-	actual = xor_repeating(plain, key);
+	xor_repeating(bits, 4, key, 1);
 
-	status = TEST_STR_EQ(expected, actual);
-
-	free(actual);
-
-	return status;
+	return TEST_BYTE_ARR_EQ(expected, bits, 4);
 }
 
 int test_xor_repeating_multiple_input_bytes_multiple_key_bytes(void)
 {
-	int status;
-	char bits[] = "Burning";
-	char key[] = "ICE";
-	char *actual;
-	char expected[] = {0x0b, 0x36, 0x37, 0x27, 0x2a, 0x2b, 0x2e, 0x00};
+	uint8_t bits[] = {'B', 'u', 'r', 'n', 'i', 'n', 'g'};
+	uint8_t key[] = {'I', 'C', 'E'};
+	uint8_t expected[] = {0x0b, 0x36, 0x37, 0x27, 0x2a, 0x2b, 0x2e};
 
-	actual = xor_repeating(bits, key);
+	xor_repeating(bits, 7, key, 3);
 
-	status = TEST_STR_EQ(expected, actual);
-
-	free(actual);
-
-	return status;
+	return TEST_BYTE_ARR_EQ(expected, bits, 7);
 }
 
 int main(void)
