@@ -1,5 +1,8 @@
 #include <stdint.h>
 
+#include "ham.h"
+
+
 /* Compute hamming distance between two bytes
  * params:
  * 	b1: byte
@@ -21,30 +24,26 @@ int hamming_dist_byte(uint8_t b1, uint8_t b2)
 	return res;
 }
 
-/* Compute Hamming Distance between two strings of equal length
- * If strings are not of equal length, only compares them for length of
- * the shortest string.
+/* Compute Hamming Distance between two binary arrays of equal size
  * params:
- * 	s1: C-String
- * 	s2: C-String
+ * 	arr1: binary array
+ * 	arr2: binary array
+ * 	size: size of arrays
  * returns:
- * 	Number of differing bits between s1 and s2
- * 	-1 if either s1 or s2 is NULL
+ * 	Number of differing bits between `arr1` and `arr2`
+ * 	-1 if either `arr1` or `arr2` is NULL
  */
-int hamming_dist_str(const char *s1, const char *s2)
+int hamming_dist(const uint8_t *arr1, const uint8_t *arr2, size_t size)
 {
 	int res;
 	int i;
 
-	if (!s1 || !s2)
+	if (!arr1 || !arr2)
 		return -1;
 
 	res = 0;
-	i = 0;
-	while (s1[i] != '\0' && s2[i] != '\0') {
-		res += hamming_dist_byte(s1[i], s2[i]);
-		i += 1;
-	}
+	for (i = 0; (size_t)i < size; i++)
+		res += hamming_dist_byte(arr1[i], arr2[i]);
 
 	return res;
 }

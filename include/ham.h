@@ -1,6 +1,9 @@
 #ifndef _HAM_H_
 #define _HAM_H_
 
-int hamming_dist_str(const char *s1, const char *s2);
+#include <stdint.h>
+#include <stdlib.h>
+
+int hamming_dist(const uint8_t *arr1, const uint8_t *arr2, size_t size);
 
 #endif

@@ -52,12 +52,12 @@ int find_keysize(const uint8_t *encrypted, size_t size)
 			free(blk4);
 			break;
 		}
-		h1 = hamming_dist_str((char *)blk1, (char *)blk2)/curr_keysize;
-		h2 = hamming_dist_str((char *)blk1, (char *)blk3)/curr_keysize;
-		h3 = hamming_dist_str((char *)blk1, (char *)blk4)/curr_keysize;
-		h4 = hamming_dist_str((char *)blk2, (char *)blk3)/curr_keysize;
-		h5 = hamming_dist_str((char *)blk2, (char *)blk4)/curr_keysize;
-		h6 = hamming_dist_str((char *)blk3, (char *)blk4)/curr_keysize;
+		h1 = hamming_dist(blk1, blk2, curr_keysize)/curr_keysize;
+		h2 = hamming_dist(blk1, blk3, curr_keysize)/curr_keysize;
+		h3 = hamming_dist(blk1, blk4, curr_keysize)/curr_keysize;
+		h4 = hamming_dist(blk2, blk3, curr_keysize)/curr_keysize;
+		h5 = hamming_dist(blk2, blk4, curr_keysize)/curr_keysize;
+		h6 = hamming_dist(blk3, blk4, curr_keysize)/curr_keysize;
 		curr_norm = (h1+h2+h3+h4+h5+h6)/6;
 		if (curr_norm < min_norm) {
 			min_norm = curr_norm;

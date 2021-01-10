@@ -44,7 +44,7 @@ int main(void)
 
 	printf("%s\n", wholestr);
 
-	decodedstr = base64tobinary((uint8_t *)wholestr, strlen(wholestr));
+	decodedstr = base64_decode(wholestr);
 
 	printf("%s\n", decodedstr);
 	free(decodedstr);
