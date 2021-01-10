@@ -18,7 +18,7 @@
  * side-effect:
  * 	`bits` has been updated to contain the result of `bits` XORed with `byte`
  */
-void xor_binary_singlebyte(uint8_t *bits, size_t size, uint8_t byte)
+void xor_singlebyte(uint8_t *bits, size_t size, uint8_t byte)
 {
 	uint8_t *operand;
 
@@ -56,15 +56,15 @@ uint8_t decrypt_singlebytexor(uint8_t *bits, size_t size, const int lang_freq[27
 
 	max_score = 0;
 	for (byte = 0; byte < 256; byte++) {
-		xor_binary_singlebyte(bits, size, byte);
+		xor_singlebyte(bits, size, byte);
 		curr_score = freq_score(bits, size, lang_freq);
-		xor_binary_singlebyte(bits, size, byte);
+		xor_singlebyte(bits, size, byte);
 		if (max_score < curr_score) {
 			max_score = curr_score;
 			likely_key = byte;
 		}
 	}
-	xor_binary_singlebyte(bits, size, likely_key);
+	xor_singlebyte(bits, size, likely_key);
 
 	return likely_key;
 }

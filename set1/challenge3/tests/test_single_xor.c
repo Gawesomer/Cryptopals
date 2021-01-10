@@ -38,42 +38,42 @@ const int TEST_LETTER_FREQ[27] = {
 	1800,	// Space
 };
 
-/*** xor_binary_singlebyte ***/
+/*** xor_singlebyte ***/
 
-int test_xor_binary_singlebyte_null(void)
+int test_xor_singlebyte_null(void)
 {
-	xor_binary_singlebyte(NULL, 0, 0x00);
+	xor_singlebyte(NULL, 0, 0x00);
 
 	return 0;
 }
 
-int test_xor_binary_singlebyte_empty(void)
+int test_xor_singlebyte_empty(void)
 {
 	uint8_t bits[] = {0};
 
-	xor_binary_singlebyte(bits, 0, 0x00);
+	xor_singlebyte(bits, 0, 0x00);
 
 	return 0;
 }
 
-int test_xor_binary_singlebyte_single_byte(void)
+int test_xor_singlebyte_single_byte(void)
 {
 	uint8_t bits[] = {0xFF};
 	uint8_t byte = 0xAA;
 	uint8_t expected[] = {0x55};
 
-	xor_binary_singlebyte(bits, 1, byte);
+	xor_singlebyte(bits, 1, byte);
 
 	return TEST_BYTE_ARR_EQ(expected, bits, 1);
 }
 
-int test_xor_binary_singlebyte_multiple_bytes(void)
+int test_xor_singlebyte_multiple_bytes(void)
 {
 	uint8_t bits[] = {0x12, 0x34, 0xFF, 0xAA};
 	uint8_t byte = 0xAA;
 	uint8_t expected[] = {0xB8, 0x9E, 0x55, 0x00};
 
-	xor_binary_singlebyte(bits, 4, byte);
+	xor_singlebyte(bits, 4, byte);
 
 	return TEST_BYTE_ARR_EQ(expected, bits, 4);
 }
@@ -122,10 +122,10 @@ int test_decrypt_singlebytexor_all_letters(void)
 
 int main(void)
 {
-	REGISTER_TEST(test_xor_binary_singlebyte_null);
-	REGISTER_TEST(test_xor_binary_singlebyte_empty);
-	REGISTER_TEST(test_xor_binary_singlebyte_single_byte);
-	REGISTER_TEST(test_xor_binary_singlebyte_multiple_bytes);
+	REGISTER_TEST(test_xor_singlebyte_null);
+	REGISTER_TEST(test_xor_singlebyte_empty);
+	REGISTER_TEST(test_xor_singlebyte_single_byte);
+	REGISTER_TEST(test_xor_singlebyte_multiple_bytes);
 
 	REGISTER_TEST(test_decrypt_singlebytexor_null);
 	REGISTER_TEST(test_decrypt_singlebytexor_empty);
