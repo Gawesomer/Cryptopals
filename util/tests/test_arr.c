@@ -61,7 +61,7 @@ int test_slice_negative_block_num(void)
 	return status;
 }
 
-int test_slice_block_num_too_large(void)
+int test_slice_block_num_exactly_over_bounds(void)
 {
 	int status = 0;
 	int arr[] = {1, 2, 3};
@@ -71,6 +71,23 @@ int test_slice_block_num_too_large(void)
 	size_t res_size = 1;
 
 	actual = slice(arr, 3, sizeof(int), 1, 3, &res_size);
+
+	status += TEST_INT_EQ(expected_size, res_size);
+	status += TEST_INT_ARR_EQ(expected, actual, expected_size);
+
+	return status;
+}
+
+int test_slice_block_num_way_over_bounds(void)
+{
+	int status = 0;
+	int arr[] = {1, 2, 3};
+	int *expected = NULL;
+	int *actual;
+	size_t expected_size = 0;
+	size_t res_size = 1;
+
+	actual = slice(arr, 3, sizeof(int), 1, 4, &res_size);
 
 	status += TEST_INT_EQ(expected_size, res_size);
 	status += TEST_INT_ARR_EQ(expected, actual, expected_size);
@@ -153,7 +170,8 @@ int main(void)
 	REGISTER_TEST(test_slice_zero_data_size);
 	REGISTER_TEST(test_slice_empty_block);
 	REGISTER_TEST(test_slice_negative_block_num);
-	REGISTER_TEST(test_slice_block_num_too_large);
+	REGISTER_TEST(test_slice_block_num_exactly_over_bounds);
+	REGISTER_TEST(test_slice_block_num_way_over_bounds);
 	REGISTER_TEST(test_slice_get_whole_array);
 	REGISTER_TEST(test_slice_get_first_block);
 	REGISTER_TEST(test_slice_get_middle_block);

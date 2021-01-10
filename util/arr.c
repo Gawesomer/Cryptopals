@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "arr.h"
 
 
@@ -31,10 +33,13 @@ void *slice(void *arr, size_t arr_size, size_t data_size, size_t blk_size, int b
 		return NULL;
 	}
 
-	*res_size = arr_size - blk_size*blk_num;
-	if (*res_size == 0)
+	if (blk_size*blk_num >= arr_size) {
+		*res_size = 0;
 		return NULL;
-	else if (*res_size > blk_size)
+	}
+
+	*res_size = arr_size - blk_size*blk_num;
+	if (*res_size > blk_size)
 		*res_size = blk_size;
 
 	index = data_size * blk_size * blk_num;
