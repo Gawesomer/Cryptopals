@@ -1,39 +1,34 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "arr.h"
+#include "xor.h"
 
-/* XOR string with repeating key
+
+/* XOR binary array with repeating key
  * params:
- * 	- plain: plain text to encrypt
- * 	- key: key to use for encryption
+ * 	- bits: binary array
+ * 	- bits_size: size of `bits`
+ * 	- key: binary array
+ *	- key_size: size of `key`
  * returns:
- * 	C-String of same size of `plain` containing the result of XORing every
- * 	byte of `plain` with `key` by cycling through the key
- * 	or NULL if `plain` or `key` is NULL
- * 	returned string has been dynamically allocated and should be freed by
- * 	user
+ * 	nothing
+ * side-effect:
+ * 	`bits` has been updated to contain the result of `bits` XORed with
+ * 	`key` by cycling through the key
  */
-char *xor_repeating(const char *plain, const char *key)
+void xor_repeating(uint8_t *bits, size_t bits_size, const uint8_t *key, size_t key_size)
 {
-	char *res;
-	size_t input_size, key_size;
-	int i, j;
+	uint8_t *blk;
+	size_t res_size;
+	int i;
 
-	if (!plain || !key)
-		return NULL;
-
-	input_size = strlen(plain);
-	key_size = strlen(key);
-
-	res = calloc(input_size+1, sizeof(char));
+	if (!bits || bits_size == 0 || !key || key_size == 0)
+		return;
 
 	i = 0;
-	j = 0;
-	while ((size_t)i < input_size) {
-		res[i] = plain[i] ^ key[j];
-		j = (j+1)%key_size;
+	while ((blk = slice(bits, bits_size, sizeof(uint8_t), key_size, i, &res_size)) != NULL) {
+		xor_binary(blk, key, res_size);
 		i++;
 	}
-
-	return res;
 }
