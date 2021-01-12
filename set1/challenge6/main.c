@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "base64.h"
+#include "break_repeatxor.h"
 
 #define MSGSIZE	60*64
 
@@ -25,9 +26,12 @@ int main(void)
 {
 	FILE *input_file;
 	char wholestr[MSGSIZE] = {0};	// base64 encoded
-	uint8_t *decodedstr;
+	uint8_t *binary;		// decoded binary data
+	size_t binary_size;
 	char *lineptr = NULL;
 	size_t linesize = 0;
+	int likely_keysize;
+	int i;
 
 	lineptr = calloc(linesize, sizeof(char));
 	input_file = fopen("./input", "r");
@@ -42,12 +46,22 @@ int main(void)
 	free(lineptr);
 	fclose(input_file);
 
+	printf("--- base64 encoded string ---\n");
 	printf("%s\n", wholestr);
 
-	decodedstr = base64_decode(wholestr);
+	binary = base64_decode(wholestr);
+	binary_size = b2fromb64_size(wholestr);
 
-	printf("%s\n", decodedstr);
-	free(decodedstr);
+	printf("--- base64 decoded ---\n");
+	for (i = 0; (size_t)i < binary_size; i++)
+		printf("%c", binary[i]);
+	printf("\n");
+
+	likely_keysize = find_keysize(binary, binary_size);
+	printf("--- likely_keysize ---\n");
+	printf("%d\n", likely_keysize);
+
+	free(binary);
 
 	return EXIT_SUCCESS;
 }

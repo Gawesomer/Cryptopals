@@ -1,69 +1,47 @@
 #include <limits.h>
+#include <float.h>
+#include <stdint.h>
+#include <stdlib.h>
 
+#include "arr.h"
+#include "break_repeatxor.h"
 #include "ham.h"
 
 #define MIN_KEYSIZE	2
 #define MAX_KEYSIZE	40
 
 
-/* Return nth block of `blk_size` in `arr` */
-uint8_t *get_block(const uint8_t *arr, size_t arr_size, size_t blk_size, int n)
+int find_keysize(uint8_t *encrypted, size_t size)
 {
-	uint8_t *res;
-	int i, j;
-
-	if (!arr || n < 0 || blk_size == 0)
-		return NULL;
-
-	i = blk_size*n;
-	if ((size_t)i >= arr_size || blk_size > arr_size)
-		return NULL;
-
-	res = calloc(blk_size, sizeof(uint8_t));
-
-	j = 0;
-	do {
-		res[j] = arr[i];
-		i++;
-		j++;
-	} while (i%blk_size != 0 && (size_t)i < arr_size);
-
-	return res;
-}
-
-int find_keysize(const uint8_t *encrypted, size_t size)
-{
-	int curr_keysize = MIN_KEYSIZE;
-	int curr_norm;
-	int min_key;
-	int min_norm = INT_MAX;
+	int curr_keysize;
+	float curr_norm;
+	int min_key = 0;
+	float min_norm = FLT_MAX;
 	uint8_t *blk1, *blk2, *blk3, *blk4;
-	int h1, h2, h3, h4, h5, h6;
+	size_t blk1_size, blk2_size, blk3_size, blk4_size;
 
-	while (curr_keysize <= MAX_KEYSIZE) {
-		blk1 = get_block(encrypted, size, curr_keysize, 0);
-		blk2 = get_block(encrypted, size, curr_keysize, 1);
-		blk3 = get_block(encrypted, size, curr_keysize, 2);
-		blk4 = get_block(encrypted, size, curr_keysize, 3);
-		if (!blk4) {
-			free(blk1);
-			free(blk2);
-			free(blk3);
-			free(blk4);
+	if (!encrypted || size == 0)
+		return 0;
+
+	for (curr_keysize = MIN_KEYSIZE; curr_keysize <= MAX_KEYSIZE; curr_keysize++) {
+		blk1 = slice(encrypted, size, sizeof(uint8_t), curr_keysize, 0, &blk1_size);
+		blk2 = slice(encrypted, size, sizeof(uint8_t), curr_keysize, 1, &blk2_size);
+		blk3 = slice(encrypted, size, sizeof(uint8_t), curr_keysize, 2, &blk3_size);
+		blk4 = slice(encrypted, size, sizeof(uint8_t), curr_keysize, 3, &blk4_size);
+		if ((int)blk4_size != curr_keysize)
 			break;
-		}
-		h1 = hamming_dist(blk1, blk2, curr_keysize)/curr_keysize;
-		h2 = hamming_dist(blk1, blk3, curr_keysize)/curr_keysize;
-		h3 = hamming_dist(blk1, blk4, curr_keysize)/curr_keysize;
-		h4 = hamming_dist(blk2, blk3, curr_keysize)/curr_keysize;
-		h5 = hamming_dist(blk2, blk4, curr_keysize)/curr_keysize;
-		h6 = hamming_dist(blk3, blk4, curr_keysize)/curr_keysize;
-		curr_norm = (h1+h2+h3+h4+h5+h6)/6;
+		curr_norm = (
+			hamming_dist(blk1, blk2, curr_keysize)+
+			hamming_dist(blk2, blk3, curr_keysize)+
+			hamming_dist(blk3, blk4, curr_keysize)+
+			hamming_dist(blk1, blk3, curr_keysize)+
+			hamming_dist(blk1, blk4, curr_keysize)+
+			hamming_dist(blk2, blk4, curr_keysize)
+			)/(6.0f*curr_keysize);
 		if (curr_norm < min_norm) {
 			min_norm = curr_norm;
 			min_key = curr_keysize;
 		}
-		curr_keysize++;
 	}
 
 	return min_key;
