@@ -75,7 +75,6 @@ int find_keysize(uint8_t *bits, size_t size)
  * 	i.e. some blocks may be smaller than should be
  * 	this is to use the same size for all blocks
  */
-#include <stdio.h>
 uint8_t **transpose_blocks(uint8_t *bits, size_t bits_size, size_t blk_size)
 {
 	uint8_t **res;
