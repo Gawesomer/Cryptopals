@@ -31,6 +31,7 @@ int main(void)
 	char *lineptr = NULL;
 	size_t linesize = 0;
 	int likely_keysize;
+	uint8_t *likely_key;
 	int i;
 
 	lineptr = calloc(linesize, sizeof(char));
@@ -61,6 +62,18 @@ int main(void)
 	printf("--- likely_keysize ---\n");
 	printf("%d\n", likely_keysize);
 
+	likely_key = decrypt_repeatxor(binary, binary_size, likely_keysize);
+	printf("--- likely_key ---\n");
+	for (i = 0; i < likely_keysize; i++)
+		printf("%c", likely_key[i]);
+	printf("\n");
+
+	printf("--- likely decrypted message ---\n");
+	for (i = 0; (size_t)i < binary_size; i++)
+		printf("%c", binary[i]);
+	printf("\n");
+
+	free(likely_key);
 	free(binary);
 
 	return EXIT_SUCCESS;

@@ -6,4 +6,6 @@
 
 int find_keysize(uint8_t *encrypted, size_t size);
 
+uint8_t *decrypt_repeatxor(uint8_t *bits, size_t bits_size, int key_size);
+
 #endif
