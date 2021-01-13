@@ -2,6 +2,7 @@
 #define _BASE64_H_
 
 #include <stdint.h>
+#include <stdlib.h>
 
 size_t b64fromb2_size(size_t numbytes);
 
